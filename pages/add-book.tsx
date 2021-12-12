@@ -1,8 +1,9 @@
-import type { NextPage } from 'next'
-import Editor from '../components/editor'
+import type { NextPage } from 'next';
+// import Editor from '../components/editor';
+import SelectBook from '../components/selectBook';
 
 const AddBook: NextPage = () => {
-  return <Editor />
-}
+  return <SelectBook />;
+};
 
-export default AddBook
+export default AddBook;

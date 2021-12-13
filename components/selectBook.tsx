@@ -1,26 +1,24 @@
 import React from 'react';
 import Creatable from 'react-select/creatable';
 import db from '../firebase';
-import {
-  collection,
-  query,
-  where,
-  startAt,
-  endAt,
-  getDocs,
-  onSnapshot,
-  doc,
-} from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import { Service, Books, BookOption } from '../types/JSONresponse';
 import { ActionMeta, OnChangeValue } from 'react-select';
+import { ErrorBoundary } from 'react-error-boundary';
+import ErrorFallback from './ErrorFallback';
+import AddNewBook from './AddNewBook';
 
 const SelectBook = () => {
-  const [selectedBook, setSelectedBook] = React.useState('');
+  const [selectedBook, setSelectedBook] = React.useState<BookOption | null>(
+    null
+  );
   const [books, setBooks] = React.useState<Service<Books>>({
     status: 'loading',
   });
-
   const [bookOptions, setBookOptions] = React.useState<BookOption[]>([]);
+  const [input, setInput] = React.useState<string>('');
+  const [createNewBook, setCreateNewBook] = React.useState(false);
+  const inputRef = React.useRef(null);
 
   React.useEffect(() => {
     setBooks({
@@ -65,47 +63,61 @@ const SelectBook = () => {
         }
       });
       setBookOptions(newBookOptions);
-      console.log(bookOptions);
     }
   }, [books]);
-
-  const loadOptions = async (input: string) => {
-    // 1. Move newBooks into state.
-    // 2. Status should be bound to AsyncSelect.
-    // 3. Create Error Boundary
-    // 4. Resolve https://stackoverflow.com/questions/61290173/react-select-how-do-i-resolve-warning-prop-id-did-not-match
-    // 5. Remove .then statements into async await
-    // 6. Create styles for React Select
-    // 7. Input should be able to handle multiwords.
-    // Hook into firebase
-  };
 
   const handleSelectChange = (
     newValue: OnChangeValue<BookOption, false>,
     actionMeta: ActionMeta<BookOption>
   ) => {
-    // TODO Set selected option value
-    // TODO Create selected option and push it to firebase
-    console.group('Value Changed');
-    console.log(newValue);
-    console.log(`action: ${actionMeta.action}`);
-    console.groupEnd();
+    // TODO Push selected option along with content when saved
+    console.log(actionMeta.action);
+    if (actionMeta.action === 'select-option') {
+      setSelectedBook(newValue);
+    } else if (actionMeta.action === 'create-option') {
+      if (newValue?.value) {
+        setInput(newValue.value);
+      }
+      setCreateNewBook(true);
+      // Clear the select
+      // https://thewebdev.info/2021/02/06/how-to-programmatically-clear-or-reset-a-react-select-dropdown/
+      setSelectedBook(null);
+    } else if (actionMeta.action === 'clear') {
+      setSelectedBook(null);
+    }
+  };
+
+  const resetError = () => {
+    setBooks({ status: 'init' });
+    setInput('');
+    setSelectedBook(null);
+  };
+
+  const submitForm = ({ name, author }: { name: string; author: string }) => {
+    console.log(name, author);
+    // On submit, add that value into firebase and select it.
   };
 
   return (
-    <div style={{ maxWidth: '680px', margin: '0 auto' }}>
-      {/* DONE Change style of options */}
-      {/* TODO Paginate */}
-      <Creatable
-        isClearable
-        onChange={handleSelectChange}
-        options={bookOptions}
-        instanceId={'books'}
-        className="book-select-container"
-        classNamePrefix="book-select"
-        defaultMenuIsOpen={true}
-      />
-    </div>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={resetError}
+      resetKeys={[input]}
+    >
+      <div style={{ maxWidth: '680px', margin: '0 auto' }}>
+        {createNewBook && <AddNewBook input={input} submit={submitForm} />}
+        <Creatable
+          isClearable
+          onChange={handleSelectChange}
+          options={bookOptions}
+          instanceId={'books'}
+          className="book-select-container"
+          classNamePrefix="book-select"
+          defaultMenuIsOpen={true}
+          value={selectedBook}
+        />
+      </div>
+    </ErrorBoundary>
   );
 };
 

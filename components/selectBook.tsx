@@ -1,7 +1,7 @@
 import React from 'react';
 import Creatable from 'react-select/creatable';
 import db from '../firebase';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, onSnapshot } from 'firebase/firestore';
 import { Service, Books, BookOption } from '../types/JSONresponse';
 import { ActionMeta, OnChangeValue } from 'react-select';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -93,9 +93,25 @@ const SelectBook = () => {
     setSelectedBook(null);
   };
 
-  const submitForm = ({ name, author }: { name: string; author: string }) => {
+  const submitForm = async ({
+    name,
+    author,
+  }: {
+    name: string;
+    author: string;
+  }) => {
     console.log(name, author);
-    // On submit, add that value into firebase and select it.
+    // On submit, add that value into firebase
+    const newBook = { title: name, author, processed: false }; // Processed false means back-end func will run and fetch book data from Open Library API.
+    const docRef = await addDoc(collection(db, 'books'), newBook);
+    console.log('Document written with ID:', docRef.id);
+    // Select the newly created value
+    const newBookOption = bookOptions.filter(
+      (book) => book.value === name.toLowerCase().replace(/ /g, '-')
+    );
+    if (newBookOption.length > 0 && newBookOption.length < 2) {
+      setSelectedBook(newBookOption[0]);
+    }
   };
 
   return (

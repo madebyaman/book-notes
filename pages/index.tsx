@@ -1,11 +1,11 @@
 import type { NextPage } from 'next';
 import Link from 'next/link';
 
-const Home: NextPage = () => {
+const Home: NextPage = function () {
   return (
     <div>
       <Link href="/add-book">
-        <a>Add a new book</a>
+        <a className="text-lg">Add a new book</a>
       </Link>
     </div>
   );

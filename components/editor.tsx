@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import db from '../firebase';
 import { doc, setDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useEditor, EditorContent } from '@tiptap/react';
@@ -20,6 +20,7 @@ import {
   BsTypeItalic,
 } from 'react-icons/bs';
 import { Editor } from '@tiptap/core';
+import { ErrorContext } from '../pages/add-book';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -112,12 +113,17 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
     // So we need to get book notes with book docID and noteTakerID.
     // First thing for that is point to the reference of document.
     const cleanup = async () => {
-      const docRef = doc(db, `book-notes/${docID}`);
-      const document = await getDoc(docRef);
-      if (document.exists()) {
-        console.log('Document data:', document.data());
-      } else {
-        console.log('No such document');
+      try {
+        const docRef = doc(db, `book-notes/${docID}`);
+        const document = await getDoc(docRef);
+        if (document.exists()) {
+          console.log('Document data:', document.data());
+        } else {
+          console.log('No such document');
+        }
+      } catch (e) {
+        const { setError } = useContext(ErrorContext);
+        setError(e);
       }
     };
     cleanup();

@@ -1,11 +1,5 @@
 import type { NextPage } from 'next';
-import {
-  useState,
-  useContext,
-  createContext,
-  SetStateAction,
-  Dispatch,
-} from 'react';
+import { useState, createContext, SetStateAction, Dispatch } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import BookSelect from '../components/BookSelect';
 import {
@@ -15,31 +9,9 @@ import {
   YearField,
 } from '../components/DateFields';
 import Editor from '../components/editor';
-import { FaRegStar, FaStar } from 'react-icons/fa';
-
-const NoteEditor = (props: { children: JSX.Element | JSX.Element[] }) => (
-  <div>{props.children}</div>
-);
-const Recommendation = () => {
-  const [rating, setRating] = useState(0);
-
-  return (
-    <div>
-      {[...Array(5)].map((star, id) => {
-        id += 1;
-        return (
-          <span
-            key={id}
-            className={id <= rating ? 'on' : 'off'}
-            onClick={() => setRating(+id)}
-          >
-            {id <= rating ? <FaStar /> : <FaRegStar />}
-          </span>
-        );
-      })}
-    </div>
-  );
-};
+import Ratings from '../components/Ratings';
+import NoteEditor from '../components/NoteEditor';
+import Title from '../components/Title';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
@@ -73,6 +45,7 @@ const AddBook: NextPage = () => {
       >
         <ErrorContext.Provider value={{ error, setError }}>
           <NoteEditor>
+            <Title />
             <BookSelect />
             <Editor />
             <DateFields value={startDate} onChange={setStartDate}>
@@ -80,7 +53,7 @@ const AddBook: NextPage = () => {
               <DayField aria-label="Start Day" /> /{' '}
               <YearField start={1990} end={2022} aria-label="Start year" />
             </DateFields>
-            <Recommendation />
+            <Ratings />
           </NoteEditor>
         </ErrorContext.Provider>
       </ErrorBoundary>

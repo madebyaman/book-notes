@@ -2,16 +2,21 @@ import type { NextPage } from 'next';
 import { useState, createContext, SetStateAction, Dispatch } from 'react';
 import { ErrorBoundary, FallbackProps } from 'react-error-boundary';
 import BookSelect from '../components/BookSelect';
-import {
-  DateFields,
-  DayField,
-  MonthField,
-  YearField,
-} from '../components/DateFields';
 import Editor from '../components/editor';
 import Ratings from '../components/Ratings';
 import NoteEditor from '../components/NoteEditor';
 import Title from '../components/Title';
+import DateOfBookRead from '../components/DatePicker';
+import {
+  Flex,
+  Box,
+  Button,
+  Stack,
+  Heading,
+  Spacer,
+  Container,
+} from '@chakra-ui/react';
+import { FaArchive, FaPaperPlane } from 'react-icons/fa';
 
 function ErrorFallback({ error, resetErrorBoundary }: FallbackProps) {
   return (
@@ -44,17 +49,40 @@ const AddBook: NextPage = () => {
         onReset={() => setError(null)}
       >
         <ErrorContext.Provider value={{ error, setError }}>
-          <NoteEditor>
-            <Title />
-            <BookSelect />
-            <Editor />
-            <DateFields value={startDate} onChange={setStartDate}>
-              <MonthField aria-label="Start Month" /> /{' '}
-              <DayField aria-label="Start Day" /> /{' '}
-              <YearField start={1990} end={2022} aria-label="Start year" />
-            </DateFields>
-            <Ratings />
-          </NoteEditor>
+          <Container maxW={'container.lg'}>
+            <NoteEditor>
+              <Flex color="white" align={'end'}>
+                <Box py="4" textColor={'teal'}>
+                  <Title />
+                </Box>
+                <Spacer />
+                <Box py="4">
+                  <Stack direction={'row'} spacing={6}>
+                    <Button
+                      leftIcon={<FaPaperPlane />}
+                      variant={'solid'}
+                      colorScheme={'teal'}
+                    >
+                      Publish
+                    </Button>
+                    <Button
+                      leftIcon={<FaArchive />}
+                      variant={'outline'}
+                      colorScheme={'teal'}
+                    >
+                      Save
+                    </Button>
+                  </Stack>
+                </Box>
+              </Flex>
+              <BookSelect />
+              <Editor />
+              <Flex justify={'space-between'}>
+                <Ratings />
+                <DateOfBookRead />
+              </Flex>
+            </NoteEditor>
+          </Container>
         </ErrorContext.Provider>
       </ErrorBoundary>
     </div>

@@ -91,6 +91,7 @@ const BookSelect = () => {
         formatOptionLabel={formatOptionLabel}
         onChange={handleSelectChange}
         value={selectedBook}
+        placeholder="Select Book"
         filterOption={null}
       />
     </div>

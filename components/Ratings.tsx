@@ -1,11 +1,12 @@
 import { FaStar } from 'react-icons/fa';
 import { useState } from 'react';
+import { Box } from '@chakra-ui/react';
 
 const Ratings = () => {
   const [rating, setRating] = useState(0);
 
   return (
-    <div>
+    <Box w={'100px'}>
       {[...Array(5)].map((star, id) => {
         id += 1;
         return (
@@ -14,11 +15,14 @@ const Ratings = () => {
             className={id <= rating ? 'on' : 'off'}
             onClick={() => setRating(+id)}
           >
-            <FaStar fill={id <= rating ? '#1abc9c' : '#bdc3c7'} />
+            <FaStar
+              style={{ display: 'inline' }}
+              fill={id <= rating ? '#3182CE' : '#EDF2F7'}
+            />
           </span>
         );
       })}
-    </div>
+    </Box>
   );
 };
 

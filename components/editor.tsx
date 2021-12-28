@@ -4,12 +4,10 @@ import { doc, setDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
+import { FaQuoteLeft, FaUndo, FaRedo } from 'react-icons/fa';
 import {
-  BsChatQuote,
   BsCode,
   BsCodeSquare,
-  BsFillArrowLeftCircleFill,
-  BsFillArrowRightCircleFill,
   BsListOl,
   BsListUl,
   BsDash,
@@ -21,6 +19,8 @@ import {
 } from 'react-icons/bs';
 import { Editor } from '@tiptap/core';
 import { ErrorContext } from '../pages/add-book';
+import { Box, IconButton } from '@chakra-ui/react';
+import '../styles/Editor.module.css';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -28,77 +28,122 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   }
 
   return (
-    <>
-      <button
+    <Box pb={'2'}>
+      <IconButton
         onClick={() => editor.chain().focus().toggleBold().run()}
-        className={editor.isActive('bold') ? 'is-active' : ''}
-      >
-        <BsTypeBold />
-      </button>
-      <button
+        aria-label="Bold"
+        isActive={editor.isActive('bold')}
+        icon={<BsTypeBold style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleItalic().run()}
-        className={editor.isActive('italic') ? 'is-active' : ''}
-      >
-        <BsTypeItalic />
-      </button>
-      <button
+        aria-label="Italic"
+        isActive={editor.isActive('italic')}
+        icon={<BsTypeItalic style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleCode().run()}
-        className={editor.isActive('code') ? 'is-active' : ''}
-      >
-        <BsCode />
-      </button>
-      <button
+        aria-label="Code"
+        isActive={editor.isActive('code')}
+        icon={<BsCode style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
-      >
-        <BsTypeH1 />
-      </button>
-      <button
+        aria-label="Heading 1"
+        isActive={editor.isActive('heading', { level: 1 })}
+        icon={<BsTypeH1 style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
-      >
-        <BsTypeH2 />
-      </button>
-      <button
+        aria-label="Heading 2"
+        isActive={editor.isActive('heading', { level: 2 })}
+        icon={<BsTypeH2 style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
-      >
-        <BsTypeH3 />
-      </button>
-      <button
+        aria-label="Heading 3"
+        isActive={editor.isActive('heading', { level: 3 })}
+        icon={<BsTypeH3 style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive('bulletList') ? 'is-active' : ''}
-      >
-        <BsListUl />
-      </button>
-      <button
+        aria-label="Unordered List"
+        isActive={editor.isActive('bulletList')}
+        icon={<BsListUl style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive('orderedList') ? 'is-active' : ''}
-      >
-        <BsListOl />
-      </button>
-      <button
+        aria-label="Ordered List"
+        isActive={editor.isActive('orderedList')}
+        icon={<BsListOl style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={editor.isActive('codeBlock') ? 'is-active' : ''}
-      >
-        <BsCodeSquare />
-      </button>
-      <button
+        aria-label="Code Block"
+        isActive={editor.isActive('codeBlock')}
+        icon={<BsCodeSquare style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive('blockquote') ? 'is-active' : ''}
-      >
-        <BsChatQuote />
-      </button>
-      <button onClick={() => editor.chain().focus().setHorizontalRule().run()}>
-        <BsDash />
-      </button>
-      <button onClick={() => editor.chain().focus().undo().run()}>
-        <BsFillArrowLeftCircleFill />
-      </button>
-      <button onClick={() => editor.chain().focus().redo().run()}>
-        <BsFillArrowRightCircleFill />
-      </button>
-    </>
+        aria-label="Blockquote"
+        isActive={editor.isActive('blockquote')}
+        icon={<FaQuoteLeft style={{ fontSize: '14px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
+        onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        aria-label="Horizontal Rule"
+        icon={<BsDash style={{ fontSize: '18px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
+        onClick={() => editor.chain().focus().undo().run()}
+        aria-label="Undo"
+        icon={<FaUndo style={{ fontSize: '14px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+      <IconButton
+        onClick={() => editor.chain().focus().redo().run()}
+        aria-label="Redo"
+        icon={<FaRedo style={{ fontSize: '14px' }} />}
+        size={'sm'}
+        variant={'ghost'}
+        p="1"
+      />
+    </Box>
   );
 };
 
@@ -163,11 +208,12 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
   };
 
   return (
-    <div>
+    <Box py={'8'}>
       <MenuBar editor={editor} />
-      <EditorContent editor={editor} />
-      <button onClick={saveContent}>Save</button>
-    </div>
+      <Box minH={'16'}>
+        <EditorContent editor={editor} />
+      </Box>
+    </Box>
   );
 };
 

@@ -6,8 +6,9 @@ const Ratings = () => {
   const [rating, setRating] = useState(0);
 
   return (
-    <Box w={'100px'}>
-      {[...Array(5)].map((star, id) => {
+    <Box w="100%">
+      <h2>How strongly would you recommend it?</h2>
+      {[...Array(5)].map((_star, id) => {
         id += 1;
         return (
           <span

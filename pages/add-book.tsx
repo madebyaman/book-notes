@@ -51,11 +51,10 @@ const AddBook: NextPage = () => {
         <ErrorContext.Provider value={{ error, setError }}>
           <Container maxW={'container.lg'}>
             <NoteEditor>
-              <Flex color="white" align={'end'}>
-                <Box py="4" textColor={'teal'}>
+              <Flex color="white" align={'center'} justify={'space-between'}>
+                <Box py="4" color={'blackAlpha.900'}>
                   <Title />
                 </Box>
-                <Spacer />
                 <Box py="4">
                   <Stack direction={'row'} spacing={6}>
                     <Button

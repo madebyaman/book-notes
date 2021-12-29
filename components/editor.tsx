@@ -20,7 +20,6 @@ import {
 import { Editor } from '@tiptap/core';
 import { ErrorContext } from '../pages/add-book';
 import { Box, IconButton } from '@chakra-ui/react';
-import '../styles/Editor.module.css';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {

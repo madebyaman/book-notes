@@ -1,1 +1,120 @@
 /* ./styles/globals.css */
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror {
+  outline: none;
+  min-height: 64px;
+  border: 1px solid #e2e8f0;
+  border-radius: 4px;
+  padding: 15px;
+}
+.ProseMirror a {
+  color: #0073e5;
+  text-decoration: underline;
+  transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+
+.ProseMirror a:focus,
+.ProseMirror a:hover {
+  color: #333;
+  text-decoration: none;
+}
+
+.ProseMirror p {
+  margin: 0 0 28px;
+  padding: 0;
+}
+
+.ProseMirror ol,
+.ProseMirror ul {
+  margin: 30px 40px;
+  padding: 0;
+}
+
+.ProseMirror li p {
+  margin-bottom: 10px;
+}
+
+.ProseMirror hr {
+  border: 0;
+  border-collapse: collapse;
+  border-bottom: 1px solid currentColor;
+  clear: both;
+  color: #eee;
+  margin: 1.65em auto;
+}
+
+.ProseMirror b,
+.ProseMirror strong {
+  font-weight: 700;
+}
+
+.ProseMirror blockquote,
+.ProseMirror cite,
+.ProseMirror em,
+.ProseMirror i {
+  font-style: italic;
+}
+
+.ProseMirror mark {
+  background: #ddd;
+  color: #333;
+}
+
+.ProseMirror blockquote {
+  margin: 10px 5px;
+  padding-left: 10px;
+  border-left: 5px solid #ddd;
+}
+
+/* TODO style code */
+.ProseMirror p code {
+  background-color: rgba(135, 131, 120, 0.15);
+  color: #eb5757;
+  border-radius: 3px;
+  padding: 0.2em 0.4em;
+}
+
+.ProseMirror pre {
+  padding: 34px 16px 32px 32px;
+  min-height: 1em;
+  color: rgb(55, 53, 47);
+  white-space: pre-wrap;
+  background-color: rgba(135, 131, 120, 0.15);
+}
+
+/* Headings
+--------------------------------------------- */
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3,
+.ProseMirror h4,
+.ProseMirror h5,
+.ProseMirror h6 {
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0 0 20px;
+}
+
+.ProseMirror h1 {
+  font-size: 30px;
+}
+
+.ProseMirror h2 {
+  font-size: 27px;
+}
+
+.ProseMirror h3 {
+  font-size: 24px;
+}
+
+.ProseMirror h4 {
+  font-size: 20px;
+}

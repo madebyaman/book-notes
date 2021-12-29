@@ -8,9 +8,9 @@ const Title = () => {
     <Input
       placeholder="Enter title"
       value={bookTitle}
-      variant={'filled'}
-      colorScheme={'teal'}
+      variant={'outline'}
       onChange={(e) => setBookTitle(e.target.value)}
+      size="lg"
     />
   );
 };

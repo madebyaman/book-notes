@@ -1,29 +1,36 @@
 import { FaStar } from 'react-icons/fa';
 import { useState } from 'react';
-import { Box } from '@chakra-ui/react';
+import { Heading, Flex, Box, IconButton } from '@chakra-ui/react';
 
 const Ratings = () => {
   const [rating, setRating] = useState(0);
 
   return (
-    <Box w="100%">
-      <h2>How strongly would you recommend it?</h2>
-      {[...Array(5)].map((_star, id) => {
-        id += 1;
-        return (
-          <span
-            key={id}
-            className={id <= rating ? 'on' : 'off'}
-            onClick={() => setRating(+id)}
-          >
-            <FaStar
-              style={{ display: 'inline' }}
-              fill={id <= rating ? '#3182CE' : '#EDF2F7'}
+    <Flex w="100%" align="center">
+      <Heading as="h2" size={'md'} mr="15px">
+        How strongly would you recommend it?
+      </Heading>
+      <Box>
+        {[...Array(5)].map((_star, id) => {
+          id += 1;
+          return (
+            <IconButton
+              aria-label={`Set rating: ${id}`}
+              key={id}
+              onClick={() => setRating(+id)}
+              isActive={id <= rating ? true : false}
+              variant={'unstyled'}
+              icon={
+                <FaStar
+                  style={{ display: 'inline' }}
+                  fill={id <= rating ? '#3182CE' : '#EDF2F7'}
+                />
+              }
             />
-          </span>
-        );
-      })}
-    </Box>
+          );
+        })}
+      </Box>
+    </Flex>
   );
 };
 

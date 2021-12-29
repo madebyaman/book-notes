@@ -76,10 +76,7 @@ const AddBook: NextPage = () => {
               </Flex>
               <BookSelect />
               <Editor />
-              <Flex justify={'space-between'}>
-                <Ratings />
-                <DateOfBookRead />
-              </Flex>
+              <Ratings />
             </NoteEditor>
           </Container>
         </ErrorContext.Provider>

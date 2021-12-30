@@ -15,13 +15,13 @@ import {
   IconButton,
   Spacer,
 } from '@chakra-ui/react';
-import Image from 'next/image';
 import { FaArchive, FaPaperPlane } from 'react-icons/fa';
 import ErrorFallback from './ErrorFallback';
 import { BookOption } from '../types/JSONresponse';
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import db from '../firebase';
 import { ArrowBackIcon } from '@chakra-ui/icons';
+import { useRouter } from 'next/router';
 
 type EDITORSTATE = {
   error: null | Error;
@@ -82,6 +82,7 @@ const NoteEditor = () => {
   const [state, dispatch] = useReducer(reducer, initialEditorState);
   const { selectedBook, bookNote, rating, isLoading } = state;
   const toast = useToast();
+  const router = useRouter();
 
   const onPublish = () => {
     // Show error if no title | no book selected | no notes | no rating
@@ -169,6 +170,7 @@ const NoteEditor = () => {
                     aria-label="Go back"
                     variant={'unstyled'}
                     icon={<ArrowBackIcon color={'blackAlpha.700'} />}
+                    onClick={() => router.back()}
                   />
                 </Box>
                 <Box py="4" color={'blackAlpha.900'}>

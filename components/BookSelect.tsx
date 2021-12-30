@@ -38,7 +38,6 @@ const BookSelect = () => {
           setBooks({ status: 'loaded', payload: newBooks });
         })
         .catch((e) => {
-          const { dispatch } = useContext(NoteEditorContext);
           dispatch({ type: 'ERROR_FOUND', payload: e });
         });
     }, 1000);

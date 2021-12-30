@@ -1,6 +1,4 @@
 import React, { useContext } from 'react';
-import db from '../firebase';
-import { doc, setDoc, addDoc, collection, getDoc } from 'firebase/firestore';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -18,8 +16,21 @@ import {
   BsTypeItalic,
 } from 'react-icons/bs';
 import { Editor } from '@tiptap/core';
-import { Box, IconButton } from '@chakra-ui/react';
+import { Box, Flex, IconButton } from '@chakra-ui/react';
 import { NoteEditorContext } from './NoteEditor';
+
+const VerticalRule = () => (
+  <hr
+    style={{
+      width: '1px',
+      height: '30px',
+      display: 'inline-block',
+      backgroundColor: '#e9ebf0',
+      marginLeft: '5px',
+      marginRight: '5px',
+    }}
+  />
+);
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -27,7 +38,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
   }
 
   return (
-    <Box pb={'2'}>
+    <Flex py="4" borderBottom={'1px solid #e9ebf0'}>
       <IconButton
         onClick={() => editor.chain().focus().toggleBold().run()}
         aria-label="Bold"
@@ -35,7 +46,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         icon={<BsTypeBold style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
+        mr={'2'}
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleItalic().run()}
@@ -44,7 +55,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         icon={<BsTypeItalic style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
+        mx={'2'}
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleCode().run()}
@@ -53,8 +64,9 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         icon={<BsCode style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
+        mx={'2'}
       />
+      <VerticalRule />
       <IconButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         aria-label="Heading 1"
@@ -62,7 +74,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         icon={<BsTypeH1 style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
+        mx={'2'}
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -71,7 +83,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         icon={<BsTypeH2 style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
+        mx={'2'}
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
@@ -79,102 +91,77 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         isActive={editor.isActive('heading', { level: 3 })}
         icon={<BsTypeH3 style={{ fontSize: '18px' }} />}
         size={'sm'}
+        mx={'2'}
         variant={'ghost'}
-        p="1"
       />
+      <VerticalRule />
       <IconButton
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         aria-label="Unordered List"
         isActive={editor.isActive('bulletList')}
         icon={<BsListUl style={{ fontSize: '18px' }} />}
+        mx={'2'}
         size={'sm'}
         variant={'ghost'}
-        p="1"
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         aria-label="Ordered List"
+        mx={'2'}
         isActive={editor.isActive('orderedList')}
         icon={<BsListOl style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         aria-label="Code Block"
         isActive={editor.isActive('codeBlock')}
+        mx={'2'}
         icon={<BsCodeSquare style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
       />
       <IconButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         aria-label="Blockquote"
         isActive={editor.isActive('blockquote')}
-        icon={<FaQuoteLeft style={{ fontSize: '14px' }} />}
+        icon={<FaQuoteLeft style={{ fontSize: '12px' }} />}
+        mx={'2'}
         size={'sm'}
         variant={'ghost'}
-        p="1"
       />
       <IconButton
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
         aria-label="Horizontal Rule"
+        mx={'2'}
         icon={<BsDash style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
-        p="1"
       />
+      <VerticalRule />
       <IconButton
         onClick={() => editor.chain().focus().undo().run()}
         aria-label="Undo"
-        icon={<FaUndo style={{ fontSize: '14px' }} />}
+        icon={<FaUndo style={{ fontSize: '13px' }} />}
         size={'sm'}
+        mx={'2'}
         variant={'ghost'}
-        p="1"
       />
       <IconButton
         onClick={() => editor.chain().focus().redo().run()}
         aria-label="Redo"
-        icon={<FaRedo style={{ fontSize: '14px' }} />}
+        icon={<FaRedo style={{ fontSize: '13px' }} />}
         size={'sm'}
+        mx={'2'}
         variant={'ghost'}
-        p="1"
       />
-    </Box>
+    </Flex>
   );
 };
 
 const ContentEditor = ({ docID }: { docID?: string }) => {
   const { state, dispatch } = useContext(NoteEditorContext);
-
-  React.useEffect(() => {
-    // If no docID is passed that means this is not Edit screen, but Add New Book Note screen.
-    // Hence we don't need to get content from firebase. So return.
-    if (!docID) return;
-    // If there is docID, that means this is an Edit Book Note screen.
-    // So we need to get book notes with book docID and noteTakerID.
-    // First thing for that is point to the reference of document.
-    const cleanup = async () => {
-      try {
-        const docRef = doc(db, `book-notes/${docID}`);
-        const document = await getDoc(docRef);
-        if (document.exists()) {
-          console.log('Document data:', document.data());
-        } else {
-          console.log('No such document');
-        }
-      } catch (e) {
-        const { dispatch } = useContext(NoteEditorContext);
-        dispatch({ type: 'ERROR_FOUND', payload: e });
-      }
-    };
-    cleanup();
-    return () => {
-      cleanup();
-    };
-  }, [docID]);
 
   const editor = useEditor({
     extensions: [
@@ -190,9 +177,9 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
   });
 
   return (
-    <Box py={'8'}>
+    <Box>
       <MenuBar editor={editor} />
-      <Box minH={'16'}>
+      <Box minH={'16'} mt="8">
         <EditorContent editor={editor} />
       </Box>
     </Box>

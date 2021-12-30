@@ -18,8 +18,8 @@ import {
   BsTypeItalic,
 } from 'react-icons/bs';
 import { Editor } from '@tiptap/core';
-import { ErrorContext } from '../pages/add-book';
 import { Box, IconButton } from '@chakra-ui/react';
+import { NoteEditorContext } from './NoteEditor';
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -147,7 +147,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
 };
 
 const ContentEditor = ({ docID }: { docID?: string }) => {
-  const [content, setContent] = React.useState(null);
+  const { state, dispatch } = useContext(NoteEditorContext);
 
   React.useEffect(() => {
     // If no docID is passed that means this is not Edit screen, but Add New Book Note screen.
@@ -166,8 +166,8 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
           console.log('No such document');
         }
       } catch (e) {
-        const { setError } = useContext(ErrorContext);
-        setError(e);
+        const { dispatch } = useContext(NoteEditorContext);
+        dispatch({ type: 'ERROR_FOUND', payload: e });
       }
     };
     cleanup();
@@ -183,28 +183,11 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
         placeholder: 'Write something ...',
       }),
     ],
-    content,
+    content: state.bookNote,
+    onBlur({ editor }) {
+      dispatch({ type: 'CHANGE_CONTENT', payload: editor.getHTML() });
+    },
   });
-
-  const saveContent = async () => {
-    // First get editor content
-    const newContent = editor?.getHTML();
-    // now if content is present, then push the content into firebase
-    if (newContent) {
-      // If docID is present, then push content to that document
-      if (docID) {
-        const noteRef = doc(db, `book-notes/${docID}`);
-        await setDoc(noteRef, {
-          content: newContent,
-        });
-      } else {
-        // Otherwise push content to new Document
-        // TODO: add book id and user id to newNote.
-        const newNote = { content: newContent };
-        await addDoc(collection(db, 'book-notes'), newNote);
-      }
-    }
-  };
 
   return (
     <Box py={'8'}>

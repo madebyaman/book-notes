@@ -10,6 +10,9 @@ const Home: NextPage = function () {
       <Link href={'/login'}>
         <a>Login</a>
       </Link>
+      <Link href={'/dashboard'}>
+        <a>Dashboard</a>
+      </Link>
     </div>
   );
 };

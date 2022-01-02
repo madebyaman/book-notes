@@ -12,13 +12,15 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  FormErrorMessage,
 } from '@chakra-ui/react';
-import { FormEvent, useReducer } from 'react';
+import { FormEvent, useContext, useEffect, useReducer } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import ChakraNextLinkButton from '../components/ChakraNextLink';
+import UserContextProvider, { useUserContext } from '../components/UserContext';
+import { useRouter } from 'next/router';
+import { registerUser } from '../components/AuthFunctions';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
-import ChakraNextLinkButton from '../components/ChakraNextLink';
 
 interface SIGNUPFORMSTATE {
   firstName: string;
@@ -63,139 +65,151 @@ const initalSignupFormState = {
 export default function Signup() {
   const [state, dispatch] = useReducer(reducer, initalSignupFormState);
   const { firstName, lastName, email, password, showPassword } = state;
+  const router = useRouter();
+  const { state: userState, setState } = useUserContext();
+
+  // useEffect(() => {
+  //   if (userState.user) {
+  //     router.push('/dashboard');
+  //   }
+  // }, [userState.user]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(async (userCredential) => {
-        const { user } = userCredential;
-        console.log(user);
-        if (user) {
-          await user.updateProfile({
-            displayName: `${firstName} ${lastName}`,
-          });
-        }
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    console.log('registering');
+    if (email && password) {
+      registerUser(
+        userState,
+        setState,
+        email,
+        firstName + ' ' + lastName,
+        password
+      );
+    }
   };
 
   return (
-    <Flex
-      minH={'100vh'}
-      align={'center'}
-      justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}
-    >
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-        <Stack align={'center'}>
-          <Heading fontSize={'4xl'} textAlign={'center'}>
-            Sign up
-          </Heading>
-          <Text fontSize={'lg'} color={'gray.600'}>
-            to enjoy all of our cool features ✌️
-          </Text>
-        </Stack>
-        <Box
-          rounded={'lg'}
-          bg={useColorModeValue('white', 'gray.700')}
-          boxShadow={'lg'}
-          p={8}
-        >
-          <Stack spacing={4}>
-            <form onSubmit={handleSubmit}>
-              <HStack my={'6'}>
-                <Box>
-                  <FormControl id="firstName" isRequired>
-                    <FormLabel>First Name</FormLabel>
-                    <Input
-                      type="text"
-                      value={firstName}
-                      onChange={(e) =>
-                        dispatch({
-                          type: 'CHANGE_FIRST_NAME',
-                          payload: e.target.value,
-                        })
-                      }
-                    />
-                  </FormControl>
-                </Box>
-                <Box>
-                  <FormControl id="lastName">
-                    <FormLabel>Last Name</FormLabel>
-                    <Input
-                      type="text"
-                      value={lastName}
-                      onChange={(e) =>
-                        dispatch({
-                          type: 'CHANGE_LAST_NAME',
-                          payload: e.target.value,
-                        })
-                      }
-                    />
-                  </FormControl>
-                </Box>
-              </HStack>
-              <FormControl id="email" isRequired>
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type="email"
-                  value={email}
-                  onChange={(e) =>
-                    dispatch({ type: 'CHANGE_EMAIL', payload: e.target.value })
-                  }
-                />
-              </FormControl>
-              <FormControl my={'6'} id="password" isRequired>
-                <FormLabel>Password</FormLabel>
-                <InputGroup>
+    <UserContextProvider>
+      <Flex
+        minH={'100vh'}
+        align={'center'}
+        justify={'center'}
+        bg={useColorModeValue('gray.50', 'gray.800')}
+      >
+        <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+          <Stack align={'center'}>
+            <Heading fontSize={'4xl'} textAlign={'center'}>
+              Sign up
+            </Heading>
+            <Text fontSize={'lg'} color={'gray.600'}>
+              to enjoy all of our cool features ✌️
+            </Text>
+          </Stack>
+          <Box
+            rounded={'lg'}
+            bg={useColorModeValue('white', 'gray.700')}
+            boxShadow={'lg'}
+            p={8}
+          >
+            <Stack spacing={4}>
+              <form onSubmit={handleSubmit}>
+                <HStack my={'6'}>
+                  <Box>
+                    <FormControl id="firstName" isRequired>
+                      <FormLabel>First Name</FormLabel>
+                      <Input
+                        type="text"
+                        value={firstName}
+                        onChange={(e) =>
+                          dispatch({
+                            type: 'CHANGE_FIRST_NAME',
+                            payload: e.target.value,
+                          })
+                        }
+                      />
+                    </FormControl>
+                  </Box>
+                  <Box>
+                    <FormControl id="lastName">
+                      <FormLabel>Last Name</FormLabel>
+                      <Input
+                        type="text"
+                        value={lastName}
+                        onChange={(e) =>
+                          dispatch({
+                            type: 'CHANGE_LAST_NAME',
+                            payload: e.target.value,
+                          })
+                        }
+                      />
+                    </FormControl>
+                  </Box>
+                </HStack>
+                <FormControl id="email" isRequired>
+                  <FormLabel>Email address</FormLabel>
                   <Input
-                    type={showPassword ? 'text' : 'password'}
-                    value={password}
+                    type="email"
+                    value={email}
                     onChange={(e) =>
                       dispatch({
-                        type: 'CHANGE_PASSWORD',
+                        type: 'CHANGE_EMAIL',
                         payload: e.target.value,
                       })
                     }
                   />
-                  <InputRightElement h={'full'}>
-                    <Button
-                      variant={'ghost'}
-                      onClick={() => dispatch({ type: 'CHANGE_SHOW_PASSWORD' })}
-                    >
-                      {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                    </Button>
-                  </InputRightElement>
-                </InputGroup>
-              </FormControl>
-              <Stack spacing={10} pt={2}>
-                <Button
-                  loadingText="Submitting"
-                  size="lg"
-                  bg={'blue.400'}
-                  color={'white'}
-                  _hover={{
-                    bg: 'blue.500',
-                  }}
-                  type="submit"
-                >
-                  Sign up
-                </Button>
-              </Stack>
-              <Stack pt={6}>
-                <Text align={'center'}>
-                  Already a user?{' '}
-                  <ChakraNextLinkButton color={'blue.400'} href="/login">
-                    Login
-                  </ChakraNextLinkButton>
-                </Text>
-              </Stack>
-            </form>
-          </Stack>
-        </Box>
-      </Stack>
-    </Flex>
+                </FormControl>
+                <FormControl my={'6'} id="password" isRequired>
+                  <FormLabel>Password</FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) =>
+                        dispatch({
+                          type: 'CHANGE_PASSWORD',
+                          payload: e.target.value,
+                        })
+                      }
+                    />
+                    <InputRightElement h={'full'}>
+                      <Button
+                        variant={'ghost'}
+                        onClick={() =>
+                          dispatch({ type: 'CHANGE_SHOW_PASSWORD' })
+                        }
+                      >
+                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+                </FormControl>
+                <Stack spacing={10} pt={2}>
+                  <Button
+                    loadingText="Submitting"
+                    size="lg"
+                    bg={'blue.400'}
+                    color={'white'}
+                    _hover={{
+                      bg: 'blue.500',
+                    }}
+                    type="submit"
+                  >
+                    Sign up
+                  </Button>
+                </Stack>
+                <Stack pt={6}>
+                  <Text align={'center'}>
+                    Already a user?{' '}
+                    <ChakraNextLinkButton color={'blue.400'} href="/login">
+                      Login
+                    </ChakraNextLinkButton>
+                  </Text>
+                </Stack>
+              </form>
+            </Stack>
+          </Box>
+        </Stack>
+      </Flex>
+    </UserContextProvider>
   );
 }

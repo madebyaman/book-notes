@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { FaArchive, FaPaperPlane } from 'react-icons/fa';
 import ErrorFallback from './ErrorFallback';
-import { BookOption } from '../types/JSONresponse';
+import { BookOption } from '../types/BookTypes';
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import db from '../firebase';
 import { ArrowBackIcon } from '@chakra-ui/icons';

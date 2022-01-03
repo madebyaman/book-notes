@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Service, BookOption, BookJSON } from '../types/JSONresponse';
+import { Service, BookOption, BookJSON } from '../types/BookTypes';
 import Select, { ActionMeta } from 'react-select';
 import { NoteEditorContext } from './NoteEditor';
 

@@ -16,13 +16,26 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import ChakraNextLinkButton from '../components/ChakraNextLink';
+import { useAuth } from '../utils/useAuth';
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
+  const { signIn } = useAuth();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {};
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!signIn) {
+      console.log('No method');
+      return;
+    }
+    signIn({ email, password })
+      .then(() => {
+        router.push('/dashboard');
+      })
+      .catch((err: any) => console.log(err));
+  };
 
   return (
     <Flex

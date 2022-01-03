@@ -50,8 +50,9 @@ const DashboardCards = ({
             icon={<ChevronLeftIcon boxSize={'10'} />}
           />
         </Grid>
-        {cards.map((item) => (
+        {cards.map((item, id) => (
           <GridItem
+            key={id}
             p={5}
             shadow="md"
             borderWidth={'1px'}
@@ -62,7 +63,10 @@ const DashboardCards = ({
             <Heading fontSize="xl">{item.heading}</Heading>
             <Text mt={4}>{item.content}</Text>
             {[...Array(5)].map((_i, id) => (
-              <StarIcon color={id < item.stars ? 'gray.500' : 'gray.100'} />
+              <StarIcon
+                key={id}
+                color={id < item.stars ? 'gray.500' : 'gray.100'}
+              />
             ))}
           </GridItem>
         ))}

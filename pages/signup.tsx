@@ -16,6 +16,8 @@ import {
 import { FormEvent, useReducer } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 import ChakraNextLinkButton from '../components/ChakraNextLink';
+import { useAuth } from '../utils/useAuth';
+import { useRouter } from 'next/router';
 
 interface SIGNUPFORMSTATE {
   firstName: string;
@@ -60,9 +62,21 @@ const initalSignupFormState = {
 export default function Signup() {
   const [state, dispatch] = useReducer(reducer, initalSignupFormState);
   const { firstName, lastName, email, password, showPassword } = state;
+  const auth = useAuth();
+  const router = useRouter();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const name = firstName + ' ' + lastName;
+    // After signing up, show loading state and success state
+    auth
+      .signUp({ email, password, name })
+      .then((user: any) => {
+        router.push('/dashboard');
+      })
+      .catch((err: any) => {
+        console.log(err);
+      });
   };
 
   return (

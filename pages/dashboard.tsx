@@ -1,7 +1,9 @@
 import { AddIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Center,
   Circle,
+  CircularProgress,
   Container,
   Flex,
   Heading,
@@ -16,16 +18,39 @@ import data from '../utils/data.json';
 import { useAuth } from '../utils/useAuth';
 import { FiLogOut } from 'react-icons/fi';
 import { useEffect } from 'react';
+import ChakraNextLink from '../components/ChakraNextLink';
 
 const Dashboard: NextPage = function () {
   const auth = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    let timer: NodeJS.Timeout;
+
     if (!auth.user) {
-      router.push('/login');
+      timer = setTimeout(() => {
+        router.push('/login');
+      }, 3000);
     }
+
+    return () => clearTimeout(timer);
   }, [auth]);
+
+  if (!auth.user) {
+    return (
+      <Container maxW="container.lg" mt="24">
+        <Center flexDir={'column'}>
+          <Text>
+            You are not logged in. Redirecting you back to{' '}
+            <ChakraNextLink href="/login">login page.</ChakraNextLink>
+          </Text>
+          <Box mt="8">
+            <CircularProgress isIndeterminate />
+          </Box>
+        </Center>
+      </Container>
+    );
+  }
 
   return (
     <Flex justify={'space-between'}>
@@ -36,6 +61,7 @@ const Dashboard: NextPage = function () {
             icon={<FiLogOut />}
             onClick={auth.handleSignout}
           />
+          {/* Send some message for signed out users. */}
         </Flex>
       </Box>
       <Container maxW="container.lg">

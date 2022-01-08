@@ -82,7 +82,11 @@ const useAuthProvider = () => {
 
       console.log(`updating token...`);
       const token = await user.getIdToken();
-      setUser(user);
+      const docRef = await doc(db, 'users', user.uid);
+      const docSnap = (await getDoc(docRef)) as DocumentSnapshot<CustomUser>;
+      if (docSnap.exists()) {
+        setUser(docSnap.data());
+      }
       nookies.destroy(null, 'token');
       nookies.set(null, 'token', token, { path: '/' });
     });
@@ -102,7 +106,6 @@ const useAuthProvider = () => {
     return setDoc(doc(db, 'users', user.uid), user)
       .then(() => {
         // Verify your email message
-        setUser(user);
         return user;
       })
       .catch((err) => {

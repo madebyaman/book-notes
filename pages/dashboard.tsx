@@ -1,26 +1,27 @@
-import { AddIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Box,
   Center,
-  Circle,
   CircularProgress,
   Container,
   Flex,
   Heading,
-  IconButton,
+  Image,
   Text,
-  VStack,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import DashboardCards from '../components/DashboardCards';
 import data from '../utils/data.json';
 import { useAuth } from '../utils/useAuth';
-import { FiLogOut } from 'react-icons/fi';
-import { useEffect } from 'react';
+import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
+import { useEffect, useState } from 'react';
 import ChakraNextLink from '../components/ChakraNextLink';
+import md5 from 'md5';
+import Tab from '../components/Tab';
+import BookNotesCards from '../components/BookNotesCards';
 
 const Dashboard: NextPage = function () {
+  const [gravatarHash, setGravatarHash] = useState<String | null>(null);
+  const [activeTab, setActiveTab] = useState(0);
   const auth = useAuth();
   const router = useRouter();
 
@@ -36,7 +37,14 @@ const Dashboard: NextPage = function () {
     return () => clearTimeout(timer);
   }, [auth]);
 
+  useEffect(() => {
+    if (gravatarHash === null && auth.user) {
+      setGravatarHash(md5(auth.user.email.toLowerCase()));
+    }
+  }, [auth]);
+
   if (!auth.user) {
+    // Sometimes it takes a second to load initial state
     return (
       <Container maxW="container.lg" mt="24">
         <Center flexDir={'column'}>
@@ -53,42 +61,46 @@ const Dashboard: NextPage = function () {
   }
 
   return (
-    <Flex justify={'space-between'}>
-      <Box backgroundColor={'gray.800'} padding={'5px 20px'} h={'100vh'}>
-        <Flex justify={'space-between'} flexDir={'column'}>
-          <IconButton
-            aria-label="Logout"
-            icon={<FiLogOut />}
-            onClick={auth.handleSignout}
-          />
-          {/* Send some message for signed out users. */}
-        </Flex>
-      </Box>
-      <Container maxW="container.lg">
-        <Flex justify={'space-between'} mt="12" align={'center'}>
-          <Box>
-            <Heading as="h1">Dashboard</Heading>
-            <Text color={'gray.400'} as="strong">
-              Placeholder for some dashboard dangly task.
-            </Text>
-          </Box>
-          <Box>
-            <IconButton
-              aria-label="Add a new book"
-              variant="outline"
-              borderRadius={'50%'}
-              icon={
-                <Circle size="40px" bg="gray.700">
-                  <AddIcon color={'white'} />
-                </Circle>
-              }
-              onClick={() => router.push('/add-book')}
+    <Box>
+      <Box backgroundColor={'gray.50'}>
+        <Container maxW="container.lg" pt={'16'}>
+          <Flex justify="center">
+            <Image
+              borderRadius={'full'}
+              src={`https://www.gravatar.com/avatar/${gravatarHash}`}
             />
-          </Box>
-        </Flex>
-        <DashboardCards initialLoad={3} cardContents={data} />
+            <Box ml={8}>
+              <Heading as="h1">Hello {auth.user.name}</Heading>
+              <Text ml={1} mt={'2'}>
+                Here are book notes
+              </Text>
+            </Box>
+          </Flex>
+          <Flex mt={12} justify={'center'}>
+            <Tab
+              icon={<FiBook />}
+              active={activeTab === 0}
+              onClick={() => setActiveTab(0)}
+            >
+              Book Notes
+            </Tab>
+            <Tab
+              icon={<FiUser />}
+              active={activeTab === 1}
+              onClick={() => setActiveTab(1)}
+            >
+              Profile
+            </Tab>
+            <Tab icon={<FiLogOut />} onClick={auth.handleSignout}>
+              Logout
+            </Tab>
+          </Flex>
+        </Container>
+      </Box>
+      <Container maxW="container.lg" mt={16} mb={12}>
+        {activeTab === 0 && <BookNotesCards cardContents={data} />}
       </Container>
-    </Flex>
+    </Box>
   );
 };
 

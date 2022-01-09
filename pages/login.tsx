@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import ChakraNextLinkButton from '../components/ChakraNextLink';
 import { useAuth } from '../utils/useAuth';
 
@@ -22,19 +22,30 @@ const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const router = useRouter();
-  const { signIn } = useAuth();
+  const { signIn, authState } = useAuth();
+  const [showError, setShowError] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (authState.useStatusState.status === 'loaded') {
+      if (authState.useStatusState.state) {
+        router.push('/dashboard');
+      }
+    }
+  }, []);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!signIn) {
       console.log('No method');
       return;
     }
-    signIn({ email, password })
-      .then(() => {
-        router.push('/dashboard');
-      })
-      .catch((err: any) => console.log(err));
+    await signIn({ email, password });
+    if (authState.useStatusState.status === 'error') {
+      setShowError(true);
+    } else if (authState.useStatusState.status === 'loaded') {
+      console.log('redirecting to dashboard');
+      router.push('/dashboard');
+    }
   };
 
   return (
@@ -91,10 +102,16 @@ const Login: NextPage = () => {
                 _hover={{ bg: 'blue.500' }}
                 type="submit"
                 my={4}
+                isLoading={authState.useStatusState.status === 'loading'}
               >
-                Sign in
+                Log in
               </Button>
             </form>
+            {authState.useStatusState.status === 'error' && showError && (
+              <Text align={'center'} color={'red.400'} fontWeight={'bold'}>
+                Error {authState.useStatusState.error.code}
+              </Text>
+            )}
             <Text align={'center'}>
               Not a user?{' '}
               <ChakraNextLinkButton color={'blue.400'} href="/signup">

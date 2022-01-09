@@ -25,6 +25,7 @@ interface SIGNUPFORMSTATE {
   email: string;
   password: string;
   showPassword: boolean;
+  showError: boolean;
 }
 
 type SIGNUPFORMACTIONS =
@@ -32,7 +33,8 @@ type SIGNUPFORMACTIONS =
   | { type: 'CHANGE_LAST_NAME'; payload: string }
   | { type: 'CHANGE_EMAIL'; payload: string }
   | { type: 'CHANGE_PASSWORD'; payload: string }
-  | { type: 'CHANGE_SHOW_PASSWORD' };
+  | { type: 'CHANGE_SHOW_PASSWORD' }
+  | { type: 'CHANGE_ERROR' };
 
 const reducer = (state: SIGNUPFORMSTATE, action: SIGNUPFORMACTIONS) => {
   switch (action.type) {
@@ -46,6 +48,8 @@ const reducer = (state: SIGNUPFORMSTATE, action: SIGNUPFORMACTIONS) => {
       return { ...state, password: action.payload };
     case 'CHANGE_SHOW_PASSWORD':
       return { ...state, showPassword: !state.showPassword };
+    case 'CHANGE_ERROR':
+      return { ...state, showError: !state.showError };
     default:
       return state;
   }
@@ -57,26 +61,31 @@ const initalSignupFormState = {
   email: '',
   password: '',
   showPassword: false,
+  showError: false,
 };
 
 export default function Signup() {
   const [state, dispatch] = useReducer(reducer, initalSignupFormState);
-  const { firstName, lastName, email, password, showPassword } = state;
+  const { showError, firstName, lastName, email, password, showPassword } =
+    state;
   const auth = useAuth();
   const router = useRouter();
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const name = firstName + ' ' + lastName;
+    let name = firstName;
+    if (lastName) {
+      name += ' ' + lastName;
+    }
     // After signing up, show loading state and success state
-    auth
-      .signUp({ email, password, name })
-      .then((user: any) => {
-        router.push('/dashboard');
-      })
-      .catch((err: any) => {
-        console.log(err);
-      });
+    await auth.signUp({ email, password, name });
+    if (auth.authState.useStatusState.status === 'loaded') {
+      router.push('/dashboard');
+      // Instead of dashboard, push to a page where user is asked to verify email
+      // Another todo is get firebase to redirect to login once user has verified the email. see https://firebase.google.com/docs/auth/web/passing-state-in-email-actions
+    } else if (auth.authState.useStatusState.status === 'error') {
+      dispatch({ type: 'CHANGE_ERROR' });
+    }
   };
 
   return (
@@ -174,6 +183,7 @@ export default function Signup() {
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
+                  isLoading={auth.authState.useStatusState.status === 'loading'}
                   size="lg"
                   bg={'blue.400'}
                   color={'white'}
@@ -194,6 +204,11 @@ export default function Signup() {
                 </Text>
               </Stack>
             </form>
+            {auth.authState.useStatusState.status === 'error' && showError && (
+              <Text fontWeight={'bold'} align={'center'} color={'red.400'}>
+                Error: {auth.authState.useStatusState.error.code}
+              </Text>
+            )}
           </Stack>
         </Box>
       </Stack>

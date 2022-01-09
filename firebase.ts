@@ -1,6 +1,6 @@
 import * as firebase from 'firebase/app';
 import { initializeFirestore } from 'firebase/firestore';
-import { getAuth } from 'firebase/auth';
+import { getAuth, initializeAuth, prodErrorMap } from 'firebase/auth';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyA174aEiZHJWzPLox77Cwvn9ElRsYmJ57A',
@@ -10,5 +10,5 @@ const firebaseConfig = {
 
 export const fb = firebase.initializeApp(firebaseConfig);
 const db = initializeFirestore(fb, {});
-export const auth = getAuth(fb);
+export const auth = initializeAuth(fb, { errorMap: prodErrorMap });
 export default db;

@@ -22,6 +22,7 @@ import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
 import db from '../firebase';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import { useRouter } from 'next/router';
+import { useAuth } from '../utils/useAuth';
 
 type EDITORSTATE = {
   error: null | Error;
@@ -29,6 +30,7 @@ type EDITORSTATE = {
   bookNote: string | null;
   rating: number | null;
   isLoading: boolean;
+  title: string | undefined;
 };
 
 type EDITORACTIONS =
@@ -38,7 +40,8 @@ type EDITORACTIONS =
   | { type: 'RESET_SELECTED_BOOK' }
   | { type: 'CHANGE_CONTENT'; payload: string }
   | { type: 'CHANGE_RATING'; payload: number }
-  | { type: 'CHANGE_IS_LOADING' };
+  | { type: 'CHANGE_IS_LOADING' }
+  | { type: 'CHANGE_TITLE'; payload: string };
 
 const reducer = (state: EDITORSTATE, action: EDITORACTIONS) => {
   switch (action.type) {
@@ -56,6 +59,8 @@ const reducer = (state: EDITORSTATE, action: EDITORACTIONS) => {
       return { ...state, rating: action.payload };
     case 'CHANGE_IS_LOADING':
       return { ...state, isLoading: !state.isLoading };
+    case 'CHANGE_TITLE':
+      return { ...state, title: action.payload };
     default:
       return state;
   }
@@ -65,9 +70,10 @@ const reducer = (state: EDITORSTATE, action: EDITORACTIONS) => {
 const initialEditorState = {
   error: null,
   selectedBook: null,
-  bookNote: '<h1>Add a new book</h1>',
+  bookNote: '',
   rating: null,
   isLoading: false,
+  title: undefined,
 };
 
 export const NoteEditorContext = createContext<{
@@ -81,6 +87,7 @@ export const NoteEditorContext = createContext<{
 const NoteEditor = () => {
   const [state, dispatch] = useReducer(reducer, initialEditorState);
   const { selectedBook, bookNote, rating, isLoading } = state;
+  const auth = useAuth();
   const toast = useToast();
   const router = useRouter();
 
@@ -120,7 +127,7 @@ const NoteEditor = () => {
   };
 
   const onSave = async ({
-    publish,
+    publish = false,
     docID,
   }: {
     publish: Boolean;
@@ -134,8 +141,8 @@ const NoteEditor = () => {
         content: bookNote,
         rating: rating || null,
         published: publish,
+        userId: auth.user.uid,
       });
-      console.log('Document written with ID:', docRef.id);
     } else {
       // If docID set the document
       const documentRef = doc(db, 'book-notes', docID);
@@ -144,6 +151,7 @@ const NoteEditor = () => {
         content: state.bookNote,
         rating: state.rating || null,
         published: publish,
+        userId: auth.user.uid,
       });
       console.log('updated doc', documentRef.id);
     }
@@ -162,6 +170,7 @@ const NoteEditor = () => {
             w="100%"
             top="0"
             borderBottom={'1px solid #e9ebf0'}
+            backgroundColor={'white'}
           >
             <Container maxW={'container.xl'}>
               <Flex color="white" align={'center'} justify={'space-between'}>
@@ -194,6 +203,7 @@ const NoteEditor = () => {
                       variant={'outline'}
                       colorScheme={'teal'}
                       isLoading={isLoading}
+                      onClick={onSave}
                     >
                       Save
                     </Button>

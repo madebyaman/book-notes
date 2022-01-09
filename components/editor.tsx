@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -191,10 +191,16 @@ const MenuBar = ({
   );
 };
 
-const ContentEditor = ({ docID }: { docID?: string }) => {
+const ContentEditor = () => {
   const [showMenu, setShowMenu] = useState(false);
   const { state, dispatch } = useContext(NoteEditorContext);
   const { title } = state;
+
+  useEffect(() => {
+    if (editor && editor.commands) {
+      editor.commands.setContent(state.bookNote);
+    }
+  }, [state.bookNote]);
 
   const editor = useEditor({
     extensions: [
@@ -203,9 +209,8 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
         placeholder: 'Write something ...',
       }),
     ],
-    content: state.bookNote,
+    content: '',
     onBlur({ editor }) {
-      setShowMenu(false);
       dispatch({ type: 'CHANGE_CONTENT', payload: editor.getHTML() });
     },
     onFocus() {
@@ -224,9 +229,10 @@ const ContentEditor = ({ docID }: { docID?: string }) => {
           mb="4"
           fontSize={'4xl'}
           value={title}
-          onChange={(e) =>
-            dispatch({ type: 'CHANGE_TITLE', payload: e.target.value })
-          }
+          onChange={(e) => {
+            setShowMenu(false);
+            dispatch({ type: 'CHANGE_TITLE', payload: e.target.value });
+          }}
         />
         <EditorContent editor={editor} />
       </Box>

@@ -6,11 +6,11 @@ import {
   Grid,
   GridItem,
   IconButton,
-  Button,
   Image,
   Flex,
 } from '@chakra-ui/react';
 import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import db from '../firebase';
@@ -36,7 +36,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
       const newCards = [];
       snap.forEach((doc) => {
         // Here push only relavant data like title, stars, book Id, publish status etc.
-        newCards.push(doc.data());
+        newCards.push({ id: doc.id, ...doc.data() });
       });
       setCards(newCards);
     });
@@ -59,7 +59,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
               minW={'250px'}
             >
               <Flex>
-                <Box mr={6} mb={4}>
+                <Box mr={6} mb={4} w={'150px'}>
                   {/* Show default book cover ONLY IF no book ID, else get cover from Open Library */}
                   <DefaultBookCover />
                 </Box>
@@ -78,18 +78,23 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                     {item.published ? 'Published' : 'Draft'}
                   </Heading>
                   <Heading as="h2" fontSize="3xl" mt={2} mb={4}>
-                    {item.heading || 'Untitled'}
+                    {item.title || 'Untitled'}
                   </Heading>
                   <Box mb={4}>
-                    {item.stars
-                      ? [...Array(item.stars)].map((_i, id) => (
+                    {item.rating
+                      ? [...Array(item.rating)].map((_i, id) => (
                           <StarIcon key={id} color="gray.500" />
                         ))
                       : 'No rating'}
                   </Box>
-                  <Button display={'inline-block'} colorScheme={'blackAlpha'}>
-                    Edit
-                  </Button>
+                  <Link
+                    href={{
+                      pathname: '/edit/[id]',
+                      query: { id: item.id },
+                    }}
+                  >
+                    <a>Edit</a>
+                  </Link>
                 </Box>
               </Flex>
             </GridItem>

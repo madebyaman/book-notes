@@ -1,4 +1,8 @@
 /* ./styles/globals.css */
+
+html {
+}
+
 .ProseMirror p.is-editor-empty:first-child::before {
   color: #adb5bd;
   content: attr(data-placeholder);

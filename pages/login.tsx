@@ -26,8 +26,8 @@ const Login: NextPage = () => {
   const [showError, setShowError] = useState(false);
 
   useEffect(() => {
-    if (authState.useStatusState.status === 'loaded') {
-      if (authState.useStatusState.state) {
+    if (authState.status === 'loaded') {
+      if (authState.state) {
         router.push('/dashboard');
       }
     }
@@ -40,9 +40,9 @@ const Login: NextPage = () => {
       return;
     }
     await signIn({ email, password });
-    if (authState.useStatusState.status === 'error') {
+    if (authState.status === 'error') {
       setShowError(true);
-    } else if (authState.useStatusState.status === 'loaded') {
+    } else if (authState.status === 'loaded') {
       console.log('redirecting to dashboard');
       router.push('/dashboard');
     }
@@ -102,14 +102,15 @@ const Login: NextPage = () => {
                 _hover={{ bg: 'blue.500' }}
                 type="submit"
                 my={4}
-                isLoading={authState.useStatusState.status === 'loading'}
+                isLoading={authState.status === 'loading'}
               >
                 Log in
               </Button>
             </form>
-            {authState.useStatusState.status === 'error' && showError && (
+            {authState.status === 'error' && showError && (
               <Text align={'center'} color={'red.400'} fontWeight={'bold'}>
-                Error {authState.useStatusState.error.code}
+                {/* Do something about this error message */}
+                Error {authState.error}
               </Text>
             )}
             <Text align={'center'}>

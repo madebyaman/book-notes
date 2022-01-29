@@ -79,11 +79,11 @@ export default function Signup() {
     }
     // After signing up, show loading state and success state
     await auth.signUp({ email, password, name });
-    if (auth.authState.useStatusState.status === 'loaded') {
+    if (auth.authState.status === 'loaded') {
       router.push('/dashboard');
       // Instead of dashboard, push to a page where user is asked to verify email
       // Another todo is get firebase to redirect to login once user has verified the email. see https://firebase.google.com/docs/auth/web/passing-state-in-email-actions
-    } else if (auth.authState.useStatusState.status === 'error') {
+    } else if (auth.authState.status === 'error') {
       dispatch({ type: 'CHANGE_ERROR' });
     }
   };
@@ -183,7 +183,7 @@ export default function Signup() {
               <Stack spacing={10} pt={2}>
                 <Button
                   loadingText="Submitting"
-                  isLoading={auth.authState.useStatusState.status === 'loading'}
+                  isLoading={auth.authState.status === 'loading'}
                   size="lg"
                   bg={'blue.400'}
                   color={'white'}
@@ -204,9 +204,9 @@ export default function Signup() {
                 </Text>
               </Stack>
             </form>
-            {auth.authState.useStatusState.status === 'error' && showError && (
+            {auth.authState.status === 'error' && showError && (
               <Text fontWeight={'bold'} align={'center'} color={'red.400'}>
-                Error: {auth.authState.useStatusState.error.code}
+                Error: {auth.authState.error}
               </Text>
             )}
           </Stack>

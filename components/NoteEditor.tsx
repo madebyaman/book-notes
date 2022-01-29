@@ -97,7 +97,7 @@ export const NoteEditorContext = createContext<{
   dispatch: () => undefined,
 });
 
-const NoteEditor = ({ docId }: { docId: string }) => {
+const NoteEditor = ({ docId }: { docId?: string }) => {
   const [state, dispatch] = useReducer(reducer, initialEditorState);
   const { title, bookID, selectedBook, bookNote, rating, isLoading } = state;
   const auth = useAuth();
@@ -177,7 +177,11 @@ const NoteEditor = ({ docId }: { docId: string }) => {
       content: bookNote,
       rating: rating || null,
       published: publish,
-      userId: auth.authState.useStatusState.state.uid,
+      userId:
+        // This whole thing can be moved to util
+        auth.authState.status === 'loaded' && auth.authState.state !== null
+          ? auth.authState.state.uid
+          : null,
       title: title,
       bookID,
     };

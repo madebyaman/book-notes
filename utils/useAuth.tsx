@@ -40,10 +40,7 @@ type Signup = ({ name, email, password }: SignupProps) => Promise<any>;
 type Signin = ({ email, password }: SigninProps) => Promise<void>;
 
 type AUTHCONTEXT = {
-  authState: {
-    useStatusState: STATUSSTATE<CustomUser | null>;
-    setStatusState: Dispatch<SetStateAction<STATUSSTATE<CustomUser | null>>>;
-  };
+  authState: STATUSSTATE<CustomUser | null>;
   signUp: Signup;
   signIn: Signin;
   handleSignout: () => Promise<void>;
@@ -158,7 +155,7 @@ const useAuthProvider = () => {
   };
 
   return {
-    authState,
+    authState: authState.useStatusState,
     signUp,
     signIn,
     handleSignout,

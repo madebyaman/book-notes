@@ -21,20 +21,23 @@ import { useAuth } from '../utils/useAuth';
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
   const { signIn } = useAuth();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!signIn) {
-      console.log('No method');
-      return;
-    }
-    signIn({ email, password })
-      .then(() => {
+    setLoading(true);
+    console.log('submitting');
+    if (!signIn) return;
+    signIn({ email, password }).then((res) => {
+      if (res.type === 'SUCCESS') {
         router.push('/dashboard');
-      })
-      .catch((err: any) => console.log(err));
+      } else {
+        setError(res.message);
+      }
+    });
   };
 
   return (
@@ -91,10 +94,12 @@ const Login: NextPage = () => {
                 _hover={{ bg: 'blue.500' }}
                 type="submit"
                 my={4}
+                isLoading={loading}
               >
                 Sign in
               </Button>
             </form>
+            {error !== '' && <Text color={'tomato'}>{error}</Text>}
             <Text align={'center'}>
               Not a user?{' '}
               <ChakraNextLinkButton color={'blue.400'} href="/signup">

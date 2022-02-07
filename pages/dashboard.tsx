@@ -1,4 +1,4 @@
-import { AddIcon, StarIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Center,

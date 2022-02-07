@@ -8,7 +8,18 @@ const firebaseConfig = {
   projectId: 'book-notes-app-9ea54',
 };
 
+/**
+ * Firebase initializer
+ */
 export const fb = firebase.initializeApp(firebaseConfig);
+
+/**
+ * Firebase Firestore initializer
+ */
 const db = initializeFirestore(fb, {});
+
+/**
+ * Firebase Auth
+ */
 export const auth = getAuth(fb);
 export default db;

@@ -22,4 +22,5 @@ export type Signin = ({ email, password }: SigninProps) => Promise<
       type: 'FAILURE';
       message: string;
     }
+  | undefined
 >;

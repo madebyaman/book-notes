@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useState } from 'react';
 import ChakraNextLinkButton from '../components/ChakraNextLink';
 import { useAuth } from '../utils/useAuth';
 
@@ -24,8 +24,7 @@ const Login: NextPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-  const { signIn, authState } = useAuth();
-  const [showError, setShowError] = useState(false);
+  const { signIn } = useAuth();
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,7 +96,7 @@ const Login: NextPage = () => {
                 my={4}
                 isLoading={loading}
               >
-                Log in
+                Sign in
               </Button>
             </form>
             {error !== '' && <Text color={'tomato'}>{error}</Text>}

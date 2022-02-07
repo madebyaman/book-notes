@@ -27,6 +27,24 @@ const Login: NextPage = () => {
   const { signIn, authState } = useAuth();
   const [showError, setShowError] = useState(false);
 
+<<<<<<< HEAD
+  useEffect(() => {
+    if (authState.status === 'loaded') {
+      if (authState.state) {
+        router.push('/dashboard');
+      }
+    }
+  }, []);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    console.log('submitting');
+    if (!signIn) return;
+    signIn({ email, password }).then((res) => {
+      if (res.type === 'SUCCESS') {
+        router.push('/dashboard');
+=======
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -35,6 +53,7 @@ const Login: NextPage = () => {
       setLoading(false);
       if (res.type === 'SUCCESS') {
         router.push('/dashboard');
+>>>>>>> main
       } else {
         setError(res.message);
       }

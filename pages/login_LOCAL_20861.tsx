@@ -27,12 +27,20 @@ const Login: NextPage = () => {
   const { signIn, authState } = useAuth();
   const [showError, setShowError] = useState(false);
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (authState.status === 'loaded') {
+      if (authState.state) {
+        router.push('/dashboard');
+      }
+    }
+  }, []);
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+    console.log('submitting');
     if (!signIn) return;
     signIn({ email, password }).then((res) => {
-      setLoading(false);
       if (res.type === 'SUCCESS') {
         router.push('/dashboard');
       } else {

@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Center,
@@ -28,27 +27,21 @@ const Dashboard: NextPage = function () {
   useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    if (auth.authState.status === 'loaded') {
-      if (!auth.authState.state) {
+    if (auth.status === 'loaded') {
+      if (!auth.user) {
         timer = setTimeout(() => {
           router.push('/login');
         }, 3000);
+      } else if (gravatarHash === null && auth.user.email) {
+        setGravatarHash(md5(auth.user.email.toLocaleLowerCase()));
       }
     }
 
     return () => clearTimeout(timer);
   }, [auth]);
 
-  useEffect(() => {
-    if (gravatarHash === null && auth.authState.status === 'loaded') {
-      if (auth.authState.state !== null) {
-        setGravatarHash(md5(auth.authState.state.email.toLowerCase()));
-      }
-    }
-  }, [auth]);
-
-  if (auth.authState.status === 'loaded') {
-    if (!auth.authState.state) {
+  if (auth.status === 'loaded') {
+    if (!auth.user) {
       // Sometimes it takes a second to load initial state
       return (
         <Container maxW="container.lg" mt="24">
@@ -74,7 +67,9 @@ const Dashboard: NextPage = function () {
                   src={`https://www.gravatar.com/avatar/${gravatarHash}`}
                 />
                 <Box ml={8}>
-                  <Heading as="h1">Hello {auth.authState.state.name}</Heading>
+                  <Heading as="h1">
+                    Hello {auth.user.displayName || 'Name not found'}
+                  </Heading>
                   <Text ml={1} mt={'2'}>
                     Here are book notes
                   </Text>
@@ -102,17 +97,13 @@ const Dashboard: NextPage = function () {
             </Container>
           </Box>
           <Container maxW="container.lg" mt={16} mb={12}>
-            {activeTab === 0 && (
-              <BookNotesCards userID={auth.authState.state.uid} />
-            )}
+            {activeTab === 0 && <BookNotesCards userID={auth.user.uid} />}
           </Container>
         </Box>
       );
     }
-  } else if (auth.authState.status === 'loading') {
-    return <p>Loading...</p>;
   } else {
-    return <p>Error</p>;
+    return <p>Loading...</p>;
   }
 };
 

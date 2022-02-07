@@ -10,24 +10,24 @@ import {
 } from 'firebase/auth';
 import {
   createContext,
-  Dispatch,
   ReactNode,
-  SetStateAction,
   useContext,
   useEffect,
+  useState,
 } from 'react';
 import { auth } from '../firebase';
-import { Signin, SigninProps, Signup, SignupProps } from '../types';
+import { Signin, Signup, SignupProps } from '../types';
 
 /**
  * Auth Context containing user, signup, signin, and signout methods
  */
 const AuthContext = createContext<{
+  status: 'loading' | 'loaded';
   user: User | null;
   signUp?: Signup;
   signIn?: Signin;
   handleSignout?: () => Promise<void>;
-}>({ user: null });
+}>({ user: null, status: 'loaded' });
 const { Provider } = AuthContext;
 
 export function AuthProvider(props: { children: ReactNode }): JSX.Element {
@@ -47,13 +47,19 @@ export const useAuth = () => {
  */
 const useAuthState = () => {
   const [user, setUser] = useState<User | null>(null);
+  const [authStateStatus, setAuthStateStatus] = useState<'loading' | 'loaded'>(
+    'loaded'
+  );
 
   useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      setAuthStateStatus('loading');
       if (user) setUser(user);
       if (!user) setUser(null);
+      setAuthStateStatus('loaded');
     });
-  });
+    return () => unsub();
+  }, []);
 
   /**
    * Signin function. Takes email and password and signs in the user. It also persists the user using local browser persistence.
@@ -77,11 +83,7 @@ const useAuthState = () => {
   /**
    * Signup function. It creates a new user. It also persists the user using local browser persistence.
    */
-  const signUp = ({ name, email, password }: SignupProps) => {
-    let status: 'SUCCESS' | 'FAILURE' | 'LOADING' = 'LOADING';
-    let errorMessage: string = '';
-    setPersistence(auth, browserLocalPersistence)
-      .then(async () => {
+  const signUp = async async ({ name, email, password }: SignupProps) => {
         try {
           await createUserWithEmailAndPassword(auth, email, password);
           if (auth.currentUser) {
@@ -96,28 +98,18 @@ const useAuthState = () => {
           status = 'FAILURE';
           errorMessage = e.message;
         }
-      })
-      .catch((e) => {
-        status = 'FAILURE';
-        errorMessage = e.message;
-      });
-    return { status, errorMessage };
   };
 
   /**
    * Signout function. It signs out the user.
    */
   const handleSignout = async () => {
-    authState.setStatusState({ status: 'loading' });
     await signOut(auth);
-    authState.setStatusState({
-      status: 'loaded',
-      state: null,
-    });
   };
 
   return {
-    authState: authState.useStatusState,
+    user,
+    status: authStateStatus,
     signUp,
     signIn,
     handleSignout,

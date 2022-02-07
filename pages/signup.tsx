@@ -77,6 +77,7 @@ export default function Signup() {
     if (lastName) {
       name += ' ' + lastName;
     }
+    if (!auth.signUp) return;
     // After signing up, show loading state and success state
     await auth.signUp({ email, password, name });
     if (auth.authState.status === 'loaded') {

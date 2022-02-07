@@ -67,11 +67,9 @@ const useAuthState = () => {
       if (userCredential.user) {
         setUser({ ...userCredential.user });
         return { type: 'SUCCESS' };
-      } else {
-        return { type: 'FAILURE', message: 'Invalid email or password' };
       }
     } catch (e) {
-      return { type: 'FAILURE', message: 'User not found' };
+      return { type: 'FAILURE', message: 'Invalid email or password' };
     }
   };
 

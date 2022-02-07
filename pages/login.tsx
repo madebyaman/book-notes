@@ -29,9 +29,9 @@ const Login: NextPage = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    console.log('submitting');
     if (!signIn) return;
     signIn({ email, password }).then((res) => {
+      setLoading(false);
       if (res.type === 'SUCCESS') {
         router.push('/dashboard');
       } else {

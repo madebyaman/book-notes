@@ -21,6 +21,8 @@ import { useAuth } from '../utils/useAuth';
 const Login: NextPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const router = useRouter();
   const { signIn, authState } = useAuth();
   const [showError, setShowError] = useState(false);
@@ -35,17 +37,16 @@ const Login: NextPage = () => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!signIn) {
-      console.log('No method');
-      return;
-    }
-    await signIn({ email, password });
-    if (authState.status === 'error') {
-      setShowError(true);
-    } else if (authState.status === 'loaded') {
-      console.log('redirecting to dashboard');
-      router.push('/dashboard');
-    }
+    setLoading(true);
+    console.log('submitting');
+    if (!signIn) return;
+    signIn({ email, password }).then((res) => {
+      if (res.type === 'SUCCESS') {
+        router.push('/dashboard');
+      } else {
+        setError(res.message);
+      }
+    });
   };
 
   return (
@@ -102,17 +103,12 @@ const Login: NextPage = () => {
                 _hover={{ bg: 'blue.500' }}
                 type="submit"
                 my={4}
-                isLoading={authState.status === 'loading'}
+                isLoading={loading}
               >
                 Log in
               </Button>
             </form>
-            {authState.status === 'error' && showError && (
-              <Text align={'center'} color={'red.400'} fontWeight={'bold'}>
-                {/* Do something about this error message */}
-                Error {authState.error}
-              </Text>
-            )}
+            {error !== '' && <Text color={'tomato'}>{error}</Text>}
             <Text align={'center'}>
               Not a user?{' '}
               <ChakraNextLinkButton color={'blue.400'} href="/signup">

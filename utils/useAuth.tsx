@@ -1,11 +1,13 @@
 import {
+  browserLocalPersistence,
   createUserWithEmailAndPassword,
-  onIdTokenChanged,
-  sendEmailVerification,
+  onAuthStateChanged,
+  setPersistence,
   signInWithEmailAndPassword,
   signOut,
+  updateProfile,
+  User,
 } from 'firebase/auth';
-import { doc, DocumentSnapshot, getDoc, setDoc } from 'firebase/firestore';
 import {
   createContext,
   Dispatch,
@@ -14,137 +16,99 @@ import {
   useContext,
   useEffect,
 } from 'react';
-import nookies from 'nookies';
-import db, { auth } from '../firebase';
-import { STATUSSTATE, useStatus } from './useStatus';
-import { useRouter } from 'next/router';
+import { auth } from '../firebase';
+import { Signin, SigninProps, Signup, SignupProps } from '../types';
 
-interface CustomUser {
-  uid: string;
-  email: string;
-  name: string;
-}
-
-type SignupProps = {
-  name: string;
-  email: string;
-  password: string;
-};
-
-type SigninProps = {
-  email: string;
-  password: string;
-};
-
-type Signup = ({ name, email, password }: SignupProps) => Promise<any>;
-type Signin = ({ email, password }: SigninProps) => Promise<void>;
-
-type AUTHCONTEXT = {
-  authState: STATUSSTATE<CustomUser | null>;
-  signUp: Signup;
-  signIn: Signin;
-  handleSignout: () => Promise<void>;
-};
-
-const authContext = createContext({} as AUTHCONTEXT);
-const { Provider } = authContext;
+/**
+ * Auth Context containing user, signup, signin, and signout methods
+ */
+const AuthContext = createContext<{
+  user: User | null;
+  signUp?: Signup;
+  signIn?: Signin;
+  handleSignout?: () => Promise<void>;
+}>({ user: null });
+const { Provider } = AuthContext;
 
 export function AuthProvider(props: { children: ReactNode }): JSX.Element {
-  const auth = useAuthProvider();
+  const auth = useAuthState();
   return <Provider value={auth}>{props.children}</Provider>;
 }
 
+/**
+ * Hook to get the current user with signup, signing, signout methods
+ */
 export const useAuth = () => {
-  return useContext(authContext);
+  return useContext(AuthContext);
 };
 
-const useAuthProvider = () => {
-  const authState = useStatus<CustomUser | null>();
+/**
+ * Auth state function which returns the current user and signup, signing, signout methods
+ */
+const useAuthState = () => {
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    authState.setStatusState({ status: 'loading' });
-    if (typeof window !== 'undefined') {
-      (window as any).nookies = nookies;
-    }
-    return onIdTokenChanged(auth, async (user) => {
-      console.log(`token changed!`);
-      if (!user) {
-        console.log(`no token found...`);
-        authState.setStatusState({
-          status: 'loaded',
-          state: null,
-        });
-        nookies.destroy(null, 'token');
-        nookies.set(null, 'token', '', { path: '/' });
-        return;
-      }
-
-      console.log(`updating token...`);
-      const token = await user.getIdToken();
-      const docRef = doc(db, 'users', user.uid);
-      const docSnap = (await getDoc(docRef)) as DocumentSnapshot<CustomUser>;
-      if (docSnap.exists()) {
-        authState.setStatusState({
-          status: 'loaded',
-          state: docSnap.data(),
-        });
-      }
-      nookies.destroy(null, 'token');
-      nookies.set(null, 'token', token, { path: '/' });
+    onAuthStateChanged(auth, (user) => {
+      if (user) setUser(user);
+      if (!user) setUser(null);
     });
-  }, []);
+  });
 
-  useEffect(() => {
-    const handle = setInterval(async () => {
-      const user = auth.currentUser;
-      if (user) await user.getIdToken(true);
-    }, 10 * 60 * 1000);
-
-    // clean up setInterval
-    return () => clearInterval(handle);
-  }, []);
-
-  const createUser = async (user: CustomUser) => {
+  /**
+   * Signin function. Takes email and password and signs in the user. It also persists the user using local browser persistence.
+   */
+  const signIn: Signin = async ({ email, password }) => {
     try {
-      await setDoc(doc(db, 'users', user.uid), user);
-    } catch (err) {
-      authState.setStatusState({
-        status: 'error',
-        error: err,
-      });
-    }
-  };
-
-  const signIn = async ({ email, password }: SigninProps) => {
-    authState.setStatusState({ status: 'loading' });
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-    } catch (err) {
-      authState.setStatusState({
-        status: 'error',
-        error: err,
-      });
-    }
-  };
-
-  const signUp = async ({ name, email, password }: SignupProps) => {
-    authState.setStatusState({ status: 'loading' });
-    try {
-      const response = await createUserWithEmailAndPassword(
+      const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
         password
       );
-      await sendEmailVerification(response.user);
-      return createUser({ uid: response.user.uid, email, name });
-    } catch (err) {
-      authState.setStatusState({
-        status: 'error',
-        error: err,
-      });
+      if (userCredential.user) {
+        setUser({ ...userCredential.user });
+        return { type: 'SUCCESS' };
+      } else {
+        return { type: 'FAILURE', message: 'Invalid email or password' };
+      }
+    } catch (e) {
+      return { type: 'FAILURE', message: 'User not found' };
     }
   };
 
+  /**
+   * Signup function. It creates a new user. It also persists the user using local browser persistence.
+   */
+  const signUp = ({ name, email, password }: SignupProps) => {
+    let status: 'SUCCESS' | 'FAILURE' | 'LOADING' = 'LOADING';
+    let errorMessage: string = '';
+    setPersistence(auth, browserLocalPersistence)
+      .then(async () => {
+        try {
+          await createUserWithEmailAndPassword(auth, email, password);
+          if (auth.currentUser) {
+            status = `SUCCESS`;
+            await updateProfile(auth.currentUser, { displayName: name });
+            setUser({
+              ...auth.currentUser,
+              displayName: auth.currentUser.displayName,
+            });
+          }
+        } catch (e: any) {
+          status = 'FAILURE';
+          errorMessage = e.message;
+        }
+      })
+      .catch((e) => {
+        status = 'FAILURE';
+        errorMessage = e.message;
+      });
+    return { status, errorMessage };
+  };
+
+  /**
+   * Signout function. It signs out the user.
+   */
   const handleSignout = async () => {
     authState.setStatusState({ status: 'loading' });
     await signOut(auth);

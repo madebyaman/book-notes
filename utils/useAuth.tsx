@@ -1,8 +1,6 @@
 import {
-  browserLocalPersistence,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  setPersistence,
   signInWithEmailAndPassword,
   signOut,
   updateProfile,
@@ -16,7 +14,7 @@ import {
   useState,
 } from 'react';
 import { auth } from '../firebase';
-import { Signin, Signup, SignupProps } from '../types';
+import { Signin, Signup } from '../types';
 
 /**
  * Auth Context containing user, signup, signin, and signout methods
@@ -62,42 +60,20 @@ const useAuthState = () => {
   }, []);
 
   /**
-   * Signin function. Takes email and password and signs in the user. It also persists the user using local browser persistence.
+   * Signin function. Takes email and password and signs in the user.
    */
   const signIn: Signin = async ({ email, password }) => {
-    try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      if (userCredential.user) {
-        setUser({ ...userCredential.user });
-        return { type: 'SUCCESS' };
-      }
-    } catch (e) {
-      return { type: 'FAILURE', message: 'Invalid email or password' };
-    }
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   /**
-   * Signup function. It creates a new user. It also persists the user using local browser persistence.
+   * Signup function. It creates a new user.
    */
-  const signUp = async async ({ name, email, password }: SignupProps) => {
-        try {
-          await createUserWithEmailAndPassword(auth, email, password);
-          if (auth.currentUser) {
-            status = `SUCCESS`;
-            await updateProfile(auth.currentUser, { displayName: name });
-            setUser({
-              ...auth.currentUser,
-              displayName: auth.currentUser.displayName,
-            });
-          }
-        } catch (e: any) {
-          status = 'FAILURE';
-          errorMessage = e.message;
-        }
+  const signUp: Signup = async ({ name, email, password }) => {
+    await createUserWithEmailAndPassword(auth, email, password);
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, { displayName: name });
+    }
   };
 
   /**

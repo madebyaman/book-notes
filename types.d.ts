@@ -9,18 +9,6 @@ export type SigninProps = {
   password: string;
 };
 
-export type Signup = ({ name, email, password }: SignupProps) => {
-  status: 'LOADING' | 'SUCCESS' | 'ERROR';
-  errorMessage: string;
-};
-export type Signin = ({ email, password }: SigninProps) => Promise<
-  | {
-      type: 'SUCCESS';
-      message?: undefined;
-    }
-  | {
-      type: 'FAILURE';
-      message: string;
-    }
-  | undefined
->;
+export type Signup = ({ name, email, password }: SignupProps) => Promise<void>;
+
+export type Signin = ({ email, password }: SigninProps) => Promise<void>;

@@ -1,5 +1,5 @@
-import { action, Action, createStore } from 'easy-peasy';
-import { BookOption } from '../types/BookTypes';
+import { action, Action, createStore, createTypedHooks } from 'easy-peasy';
+import { BookOption } from '../@types/BookTypes';
 
 interface StoreModel {
   selectedBook: BookOption | null;
@@ -12,7 +12,7 @@ interface StoreModel {
   updateTitle: Action<StoreModel, string>;
 }
 
-export const store = createStore<StoreModel>(
+export const NoteEditorStore = createStore<StoreModel>(
   {
     selectedBook: null,
     bookNote: '',
@@ -35,3 +35,9 @@ export const store = createStore<StoreModel>(
     name: 'Note Editing Store',
   }
 );
+
+const typedHooks = createTypedHooks<StoreModel>();
+
+export const useStoreActions = typedHooks.useStoreActions;
+export const useStoreDispatch = typedHooks.useStoreDispatch;
+export const useStoreState = typedHooks.useStoreState;

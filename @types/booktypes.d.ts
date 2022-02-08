@@ -1,22 +1,22 @@
-interface ServiceInit {
+interface BooksInitialized {
   status: 'init';
 }
-interface ServiceLoading {
+interface BooksLoading {
   status: 'loading';
 }
-interface ServiceLoaded<T> {
+interface BooksLoaded<T> {
   status: 'loaded';
   payload: T;
 }
-interface ServiceError {
+interface BooksError {
   status: 'error';
   error: Error;
 }
 export type Service<T> =
-  | ServiceInit
-  | ServiceLoading
-  | ServiceLoaded<T>
-  | ServiceError;
+  | BooksLoading
+  | BooksInitialized
+  | BooksLoaded<T>
+  | BooksError;
 
 export type Book = {
   title?: string;

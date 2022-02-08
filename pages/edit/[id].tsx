@@ -7,18 +7,11 @@ const EditBook = () => {
   // What if id is invalid and doesn't match any book note?
   const router = useRouter();
   const id: string = router.query.id as string;
-  const { authState } = useAuth();
-  const { useStatusState } = authState;
+  const auth = useAuth();
 
-  if (useStatusState.status === 'loading') {
+  if (auth.status === 'loading') {
     return 'Loading ...';
-  } else if (useStatusState.status === 'error') {
-    return (
-      <Text align={'center'} color={'red.400'} fontWeight={'bold'}>
-        Error {useStatusState.error.code}
-      </Text>
-    );
-  } else if (useStatusState.status === 'loaded') {
+  } else {
     return <NoteEditor docId={id} />;
   }
 };

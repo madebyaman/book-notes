@@ -1,5 +1,3 @@
-import { NextPage } from 'next';
-
 export type SignupProps = {
   name?: string;
   email: string;

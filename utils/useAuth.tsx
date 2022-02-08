@@ -15,7 +15,7 @@ import {
   useState,
 } from 'react';
 import { auth } from '../firebase';
-import { Signin, Signup } from '../types';
+import { Signin, Signup } from '../@types/types';
 
 /**
  * Auth Context containing user, signup, signin, and signout methods
@@ -40,6 +40,9 @@ export function AuthProvider(props: { children: ReactNode }): JSX.Element {
       !auth.user &&
       protectedPages.includes(router.pathname)
     ) {
+      console.log('redirecting');
+      console.log(auth);
+
       router.push('/login');
     }
     // Todo what about login and signup pages. You should not show them if the user is logged in.

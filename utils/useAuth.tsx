@@ -1,12 +1,4 @@
-import {
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  signInWithEmailAndPassword,
-  signOut,
-  updateProfile,
-  User,
-} from 'firebase/auth';
-import Router, { useRouter } from 'next/router';
+import { onAuthStateChanged, signOut, User } from 'firebase/auth';
 import {
   createContext,
   ReactNode,
@@ -16,6 +8,7 @@ import {
 } from 'react';
 import { auth } from '../firebase';
 import { Signin, Signup } from '../@types/types';
+import fetcher from './fetcher';
 
 /**
  * Auth Context containing user, signup, signin, and signout methods
@@ -31,23 +24,6 @@ const { Provider } = AuthContext;
 
 export function AuthProvider(props: { children: ReactNode }): JSX.Element {
   const auth = useAuthState();
-  const router = useRouter();
-  const protectedPages = ['/dashboard', '/add-book', '/edit-book'];
-
-  useEffect(() => {
-    if (
-      auth.status === 'loaded' &&
-      !auth.user &&
-      protectedPages.includes(router.pathname)
-    ) {
-      console.log('redirecting');
-      console.log(auth);
-
-      router.push('/login');
-    }
-    // Todo what about login and signup pages. You should not show them if the user is logged in.
-  }, [auth]);
-
   return <Provider value={auth}>{props.children}</Provider>;
 }
 
@@ -67,30 +43,35 @@ const useAuthState = () => {
     'loaded'
   );
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (user) => {
-      setAuthStateStatus('loading');
-      if (user) setUser(user);
-      if (!user) setUser(null);
-      setAuthStateStatus('loaded');
-    });
-    return () => unsub();
-  }, []);
-
   /**
    * Signin function. Takes email and password and signs in the user.
    */
-  const signIn: Signin = async ({ email, password }) => {
-    await signInWithEmailAndPassword(auth, email, password);
+  const signIn: Signin = async ({ email, password, remember = false }) => {
+    try {
+      const user = await fetcher<User>('/signin', {
+        email,
+        password,
+        remember,
+      });
+      setUser(user);
+    } catch (e) {
+      throw e;
+    }
   };
 
   /**
    * Signup function. It creates a new user.
    */
   const signUp: Signup = async ({ name, email, password }) => {
-    await createUserWithEmailAndPassword(auth, email, password);
-    if (auth.currentUser && name) {
-      await updateProfile(auth.currentUser, { displayName: name });
+    try {
+      const user = await fetcher<User>('/signup', {
+        email,
+        password,
+        name,
+      });
+      setUser(user);
+    } catch (e) {
+      throw e;
     }
   };
 

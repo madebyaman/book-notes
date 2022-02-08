@@ -1,5 +1,6 @@
 import { Text, Heading, Link, Checkbox, Stack } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import { Dispatch, SetStateAction, useState } from 'react';
 import AuthForm from '../components/AuthForm';
 
 const FormHeading = () => (
@@ -13,24 +14,45 @@ const FormHeading = () => (
   </>
 );
 
-const ContentBelowForm = () => (
-  <Stack
-    direction={{ base: 'column', sm: 'row' }}
-    align={'start'}
-    justify={'space-between'}
-    mt={4}
-  >
-    <Checkbox>Remember me</Checkbox>
-    <Link color={'blue.400'}>Forget password?</Link>
-  </Stack>
-);
+const ContentBelowForm = ({
+  rememberMe,
+  setRememberMe,
+}: {
+  rememberMe: boolean;
+  setRememberMe: Dispatch<SetStateAction<boolean>>;
+}) => {
+  return (
+    <Stack
+      direction={{ base: 'column', sm: 'row' }}
+      align={'start'}
+      justify={'space-between'}
+      mt={4}
+    >
+      <Checkbox
+        isChecked={rememberMe}
+        onChange={() => setRememberMe((rememberMe) => !rememberMe)}
+      >
+        Remember me
+      </Checkbox>
+      <Link color={'blue.400'}>Forget password?</Link>
+    </Stack>
+  );
+};
 
 const Login: NextPage = () => {
+  const [rememberMe, setRememberMe] = useState(false);
+
   return (
     <AuthForm
       mode="LOGIN"
+      rememberMe={rememberMe}
       TopHeading={<FormHeading />}
-      ContentBelowForm={<ContentBelowForm />}
+      ContentBelowForm={
+        <ContentBelowForm
+          rememberMe={rememberMe}
+          setRememberMe={setRememberMe}
+        />
+      }
     />
   );
 };

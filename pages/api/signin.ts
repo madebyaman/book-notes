@@ -10,22 +10,20 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { email, password, remember } = req.body as BodyCredentials;
     const user = await signInWithEmailAndPassword(auth, email, password);
     const token = await user.user.getIdToken();
-    if (remember) {
-      res.setHeader(
-        'Set-Cookie',
-        cookie.serialize('ACCESS_TOKEN', token, {
-          httpOnly: true,
-          maxAge: 60 * 60 * 24 * 7,
-          path: '/',
-          sameSite: 'lax',
-          secure: process.env.NODE_ENV === 'production',
-        })
-      );
-    }
+    res.setHeader(
+      'Set-Cookie',
+      cookie.serialize('ACCESS_TOKEN', token, {
+        httpOnly: true,
+        maxAge: remember ? 60 * 60 * 24 * 7 : 60 * 60 * 24,
+        path: '/',
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === 'production',
+      })
+    );
     return res.json(user.user);
   } catch (err) {
     res.status(401);
-    res.json('Email or password is incorrect');
+    res.json({ message: 'Email or password is incorrect' });
   }
 };
 

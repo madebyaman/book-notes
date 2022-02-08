@@ -21,6 +21,7 @@ interface AuthFormInterface {
   ContentBelowForm?: ReactNode;
   name?: string;
   FormElements?: ReactNode;
+  rememberMe?: boolean;
 }
 
 const AuthForm = ({
@@ -29,6 +30,7 @@ const AuthForm = ({
   name,
   ContentBelowForm = <></>,
   FormElements = <></>,
+  rememberMe = false,
 }: AuthFormInterface) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -45,10 +47,12 @@ const AuthForm = ({
       // Login mode
       if (!signIn) return;
       try {
-        await signIn({ email, password });
+        await signIn({ email, password, remember: true && rememberMe });
         router.push('/dashboard');
       } catch (e) {
-        setError('Invalid email or password');
+        let message = 'Error: ';
+        if (e instanceof Error) message = e.message;
+        setError(message);
       } finally {
         setLoading(false);
       }
@@ -58,13 +62,10 @@ const AuthForm = ({
       try {
         await signUp({ email, password, name });
         router.push('/dashboard');
-      } catch (e: any) {
-        if (e.code) {
-          setError(e.code);
-        } else {
-          setError('Something went wrong');
-          console.log(e);
-        }
+      } catch (e) {
+        let message = 'Error: ';
+        if (e instanceof Error) message = e.message;
+        setError(message);
       } finally {
         setLoading(false);
       }

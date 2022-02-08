@@ -7,6 +7,7 @@ export type SignupProps = {
 export type SigninProps = {
   email: string;
   password: string;
+  remember?: boolean;
 };
 
 export type Signup = ({ name, email, password }: SignupProps) => Promise<void>;

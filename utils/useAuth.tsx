@@ -6,6 +6,7 @@ import {
   updateProfile,
   User,
 } from 'firebase/auth';
+import Router, { useRouter } from 'next/router';
 import {
   createContext,
   ReactNode,
@@ -30,6 +31,20 @@ const { Provider } = AuthContext;
 
 export function AuthProvider(props: { children: ReactNode }): JSX.Element {
   const auth = useAuthState();
+  const router = useRouter();
+  const protectedPages = ['/dashboard', '/add-book', '/edit-book'];
+
+  useEffect(() => {
+    if (
+      auth.status === 'loaded' &&
+      !auth.user &&
+      protectedPages.includes(router.pathname)
+    ) {
+      router.push('/login');
+    }
+    // Todo what about login and signup pages. You should not show them if the user is logged in.
+  }, [auth]);
+
   return <Provider value={auth}>{props.children}</Provider>;
 }
 
@@ -71,7 +86,7 @@ const useAuthState = () => {
    */
   const signUp: Signup = async ({ name, email, password }) => {
     await createUserWithEmailAndPassword(auth, email, password);
-    if (auth.currentUser) {
+    if (auth.currentUser && name) {
       await updateProfile(auth.currentUser, { displayName: name });
     }
   };

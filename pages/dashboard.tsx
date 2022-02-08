@@ -9,7 +9,6 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
-import { useRouter } from 'next/router';
 import { useAuth } from '../utils/useAuth';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
@@ -22,22 +21,11 @@ const Dashboard: NextPage = function () {
   const [gravatarHash, setGravatarHash] = useState<String | null>(null);
   const [activeTab, setActiveTab] = useState(0);
   const auth = useAuth();
-  const router = useRouter();
 
   useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (auth.status === 'loaded') {
-      if (!auth.user) {
-        timer = setTimeout(() => {
-          router.push('/login');
-        }, 3000);
-      } else if (gravatarHash === null && auth.user.email) {
-        setGravatarHash(md5(auth.user.email.toLocaleLowerCase()));
-      }
+    if (gravatarHash === null && auth.user && auth.user.email) {
+      setGravatarHash(md5(auth.user.email.toLocaleLowerCase()));
     }
-
-    return () => clearTimeout(timer);
   }, [auth]);
 
   if (auth.status === 'loaded') {

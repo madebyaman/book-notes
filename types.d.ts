@@ -1,5 +1,7 @@
+import { NextPage } from 'next';
+
 export type SignupProps = {
-  name: string;
+  name?: string;
   email: string;
   password: string;
 };

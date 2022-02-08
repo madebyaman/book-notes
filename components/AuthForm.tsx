@@ -54,17 +54,20 @@ const AuthForm = ({
       }
     } else {
       // Signup mode
-      return async (name: string) => {
-        if (!signUp) return;
-        try {
-          await signUp({ email, password, name });
-          router.push('/dashboard');
-        } catch (e: any) {
+      if (!signUp) return;
+      try {
+        await signUp({ email, password, name });
+        router.push('/dashboard');
+      } catch (e: any) {
+        if (e.code) {
           setError(e.code);
-        } finally {
-          setLoading(false);
+        } else {
+          setError('Something went wrong');
+          console.log(e);
         }
-      };
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -85,7 +88,7 @@ const AuthForm = ({
           boxShadow={'lg'}
           p={8}
         >
-          <Stack>
+          <Stack spacing={'4'}>
             <form onSubmit={handleSubmit}>
               {FormElements}
               <FormControl id="email" isRequired>
@@ -108,7 +111,7 @@ const AuthForm = ({
               </FormControl>
 
               {ContentBelowForm}
-              <Stack spacing={10} py={2} my={4}>
+              <Stack spacing={10} py={2} mt={4}>
                 <Button
                   size="lg"
                   bg={'blue.400'}
@@ -121,11 +124,7 @@ const AuthForm = ({
                 </Button>
               </Stack>
             </form>
-            {error !== '' && (
-              <Text mb={4} color={'tomato'}>
-                {error}
-              </Text>
-            )}
+            {error !== '' && <Text color={'tomato'}>{error}</Text>}
             <Text align={'center'} display={'inline-block'}>
               Not a user?{' '}
               <ChakraNextLinkButton color={'blue.400'} href={href}>

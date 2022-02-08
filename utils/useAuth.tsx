@@ -1,4 +1,14 @@
-import { onAuthStateChanged, signOut, User } from 'firebase/auth';
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  setPersistence,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  User,
+} from 'firebase/auth';
 import {
   createContext,
   ReactNode,
@@ -8,7 +18,7 @@ import {
 } from 'react';
 import { auth } from '../firebase';
 import { Signin, Signup } from '../@types/types';
-import fetcher from './fetcher';
+import { useRouter } from 'next/router';
 
 /**
  * Auth Context containing user, signup, signin, and signout methods
@@ -24,6 +34,30 @@ const { Provider } = AuthContext;
 
 export function AuthProvider(props: { children: ReactNode }): JSX.Element {
   const auth = useAuthState();
+  const router = useRouter();
+  const protectedRoutes = ['/', '/dashboard', '/edit/:id', '/add'];
+  const authPages = ['/signin', '/signup'];
+
+  // Redirect to login page if user is not signed in. Else,
+  useEffect(() => {
+    if (
+      auth.status === 'loaded' &&
+      !auth.user &&
+      protectedRoutes.includes(router.pathname)
+    ) {
+      router.push('/signin');
+    }
+
+    // Redirect to dashboard if user is signed in.
+    if (
+      auth.status === 'loaded' &&
+      auth.user &&
+      authPages.includes(router.pathname)
+    ) {
+      router.push('/dashboard');
+    }
+  }, [auth.status, auth.user, router]);
+
   return <Provider value={auth}>{props.children}</Provider>;
 }
 
@@ -43,35 +77,35 @@ const useAuthState = () => {
     'loaded'
   );
 
+  // Hook to check if user is signed in
+  useEffect(() => {
+    setAuthStateStatus('loading');
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setAuthStateStatus('loaded');
+    });
+    return () => unsubscribe();
+  }, []);
+
   /**
    * Signin function. Takes email and password and signs in the user.
    */
-  const signIn: Signin = async ({ email, password, remember = false }) => {
-    try {
-      const user = await fetcher<User>('/signin', {
-        email,
-        password,
-        remember,
-      });
-      setUser(user);
-    } catch (e) {
-      throw e;
-    }
+  const signIn: Signin = async ({ email, password, remember }) => {
+    setPersistence(
+      auth,
+      remember ? browserLocalPersistence : browserSessionPersistence
+    );
+    await signInWithEmailAndPassword(auth, email, password);
   };
 
   /**
    * Signup function. It creates a new user.
    */
   const signUp: Signup = async ({ name, email, password }) => {
-    try {
-      const user = await fetcher<User>('/signup', {
-        email,
-        password,
-        name,
-      });
-      setUser(user);
-    } catch (e) {
-      throw e;
+    setPersistence(auth, browserLocalPersistence);
+    await createUserWithEmailAndPassword(auth, email, password);
+    if (auth.currentUser) {
+      await updateProfile(auth.currentUser, { displayName: name });
     }
   };
 

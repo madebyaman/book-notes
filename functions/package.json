@@ -20,5 +20,8 @@
     "typescript": "^3.8.0",
     "firebase-functions-test": "^0.2.0"
   },
+  "resolutions": {
+    "@types/react": "^17.0.39"
+  },
   "private": true
 }

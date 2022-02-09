@@ -17,6 +17,7 @@ import { Book, BookNoteInterface } from '../@types/booktypes';
 import db from '../firebase';
 import useStatus from '../utils/useState';
 import BookCover from './BookCover';
+import Status from './Status';
 
 const BookNotesCards = ({ userID }: { userID: string }) => {
   const router = useRouter();
@@ -52,15 +53,12 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
     return () => unsub();
   }, [userID]);
 
-  if (state.status === 'LOADING') {
-    return <div>Loading...</div>;
-  }
-  if (state.status === 'ERROR') {
-    return <div>{state.error}</div>;
-  }
-  // Show loading, error, and loaded states
   return (
-    <Box>
+    <Status
+      status={state.status}
+      loading={<div>Loading...</div>}
+      error={<div>{state.error}</div>}
+    >
       <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
         {cards.length > 0 &&
           cards.map(({ id, rating, published, title, bookID, excerpt }) => (
@@ -145,7 +143,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
           />
         </GridItem>
       </Grid>
-    </Box>
+    </Status>
   );
 };
 

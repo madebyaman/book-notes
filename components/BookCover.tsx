@@ -3,6 +3,7 @@ import { FC, ReactNode, useEffect, useState } from 'react';
 import db from '../firebase';
 import useStatus from '../utils/useState';
 import { Image } from '@chakra-ui/react';
+import Status from './Status';
 
 const DefaultBookCover = () => (
   <Image src="./Book.png" alt="Book Cover" width={'150px'} />
@@ -40,20 +41,19 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
     }
   }, [bookID]);
 
-  if (bookID) {
-    if (fetchingBookCoverStatus.status === 'LOADING') {
-      return <div>Loading...</div>;
-    }
-    if (fetchingBookCoverStatus.status === 'ERROR') {
-      return <div>{fetchingBookCoverStatus.error}</div>;
-    }
-    if (bookCoverURL) {
-      return <Image src={bookCoverURL} alt={bookName} width={'150px'} />;
-    }
-    return <DefaultBookCover />;
-  } else {
-    return <DefaultBookCover />;
-  }
+  return (
+    <Status
+      status={fetchingBookCoverStatus.status}
+      loading={<div>Loading...</div>}
+      error={<div>{fetchingBookCoverStatus.error}</div>}
+    >
+      {bookID && bookCoverURL ? (
+        <Image src={bookCoverURL} alt={bookName} width={'150px'} />
+      ) : (
+        <DefaultBookCover />
+      )}
+    </Status>
+  );
 };
 
 export default BookCover;

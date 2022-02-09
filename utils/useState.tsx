@@ -1,6 +1,6 @@
 import { useReducer } from 'react';
 
-type StatusType = 'LOADING' | 'LOADED' | 'ERROR';
+export type StatusType = 'LOADING' | 'LOADED' | 'ERROR';
 
 type UseStatusState = {
   status: StatusType;

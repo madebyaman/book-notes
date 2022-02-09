@@ -5,7 +5,7 @@ import { useStoreState } from '../utils/store';
 import useStatus from '../utils/useStatus';
 
 /**
- * Convert string with spaces to string with +
+ * Convert spaces inside a string to +
  */
 function convertToPlus(str: string) {
   return str.replace(/ /g, '+');

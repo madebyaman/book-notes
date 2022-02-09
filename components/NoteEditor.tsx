@@ -134,12 +134,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   };
 
   // save content, images, etc
-  const onSave = async ({
-    publish = false,
-  }: {
-    publish?: Boolean;
-    docID?: string;
-  }) => {
+  const onSave = async () => {
     // Push to firebase
     // If no docID
     const document = {

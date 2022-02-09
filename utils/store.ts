@@ -3,10 +3,11 @@ import { BookNoteState, Book } from '../@types/booktypes';
 
 type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;
-  updateSelectedBook: Action<StoreModel, Book>;
+  updateSelectedBook: Action<StoreModel, Book | null>;
   updateRating: Action<StoreModel, number>;
   updateTitle: Action<StoreModel, string>;
   updateExcerpt: Action<StoreModel, string>;
+  resetState: Action<StoreModel>;
 };
 
 export const NoteEditorStore = createStore<StoreModel>(
@@ -30,6 +31,13 @@ export const NoteEditorStore = createStore<StoreModel>(
     }),
     updateExcerpt: action((state, payload) => {
       state.excerpt = payload;
+    }),
+    resetState: action((state) => {
+      state.selectedBook = null;
+      state.content = '';
+      state.rating = 0;
+      state.title = '';
+      state.excerpt = '';
     }),
   },
   {

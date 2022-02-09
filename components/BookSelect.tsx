@@ -1,26 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Book, BookJSON } from '../@types/booktypes';
 import Select from 'react-select';
-import { useStoreState } from '../utils/store';
+import { useStoreActions, useStoreState } from '../utils/store';
 import useStatus from '../utils/useStatus';
 
 /**
- * Convert spaces inside a string to +
+ * Convert space inside a string to +
  */
 function convertToPlus(str: string) {
   return str.replace(/ /g, '+');
 }
 
+/**
+ * Convert / in a string to +
+ */
+function convertSlashToPlus(str: string) {
+  return str.replace(/\//g, '+');
+}
+
 const BookSelect = () => {
   const [bookSearchString, setBookSearchString] = React.useState('');
   const [books, setBooks] = useState<Book[]>([]);
-  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
-  const getSelectedBook = useStoreState((state) => state.selectedBook);
+  const selectedBook = useStoreState((state) => state.selectedBook);
+  const setSelectedBook = useStoreActions((state) => state.updateSelectedBook);
   const { state, dispatch } = useStatus();
-
-  useEffect(() => {
-    setSelectedBook(getSelectedBook);
-  }, [getSelectedBook]);
 
   useEffect(() => {
     // Do not wait for 1s, but wait for 1s after input has finished entering
@@ -38,7 +41,8 @@ const BookSelect = () => {
               (book: BookJSON) =>
                 book.author_name &&
                 book.author_name.length > 0 &&
-                book.first_publish_year
+                book.first_publish_year &&
+                book.cover_i
             )
             .map((book: BookJSON) => {
               return {
@@ -74,6 +78,12 @@ const BookSelect = () => {
   };
 
   const handleSelectChange = (newVal: Book | null) => {
+    if (newVal) {
+      const value = { ...newVal, key: convertSlashToPlus(newVal.key) };
+      console.log('changin to plus', value);
+      setSelectedBook(value);
+      return;
+    }
     setSelectedBook(newVal);
   };
 

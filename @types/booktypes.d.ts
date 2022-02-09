@@ -19,7 +19,7 @@ export type BookJSON = {
 
 export type DashboardNote = {
   id: string;
-  bookID?: string;
+  bookId?: string;
   published: boolean;
   rating: number;
   title: string;

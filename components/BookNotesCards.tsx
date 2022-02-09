@@ -37,7 +37,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
           const data = doc.data();
           bookNotes.push({
             id: doc.id,
-            bookID: data.bookID,
+            bookId: data.bookId,
             title: data.title,
             rating: data.rating,
             published: data.published,
@@ -61,7 +61,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
     >
       <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
         {cards.length > 0 &&
-          cards.map(({ id, rating, published, title, bookID, excerpt }) => (
+          cards.map(({ id, rating, published, title, bookId, excerpt }) => (
             <GridItem
               p={5}
               key={id}
@@ -80,7 +80,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                   // transform="rotateZ(10deg)"
                   mt="-16"
                 >
-                  <BookCover bookID={bookID} />
+                  <BookCover bookID={bookId} />
                 </Box>
                 <Box>
                   <Heading

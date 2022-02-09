@@ -9,7 +9,5 @@ export const fetchDoc = async (url: string) => {
   const docSnapshot = await getDoc(docRef);
   if (docSnapshot.exists()) {
     return docSnapshot;
-  } else {
-    throw new Error("Document doesn't exist");
   }
 };

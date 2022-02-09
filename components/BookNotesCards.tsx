@@ -13,15 +13,15 @@ import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { Book, BookNoteInterface } from '../@types/booktypes';
+import { DashboardNote } from '../@types/booktypes';
 import db from '../firebase';
-import useStatus from '../utils/useState';
+import useStatus from '../utils/useStatus';
 import BookCover from './BookCover';
 import Status from './Status';
 
 const BookNotesCards = ({ userID }: { userID: string }) => {
   const router = useRouter();
-  const [cards, setCards] = useState<BookNoteInterface[]>([]);
+  const [cards, setCards] = useState<DashboardNote[]>([]);
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
         where('userId', '==', userID)
       );
       unsub = onSnapshot(q, (snap) => {
-        const bookNotes: BookNoteInterface[] = [];
+        const bookNotes: DashboardNote[] = [];
         snap.forEach((doc) => {
           const data = doc.data();
           bookNotes.push({
@@ -139,7 +139,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
             w={'100%'}
             h={'100%'}
             borderRadius={'md'}
-            onClick={() => router.push('/add-book')}
+            onClick={() => router.push('/add')}
           />
         </GridItem>
       </Grid>

@@ -1,11 +1,10 @@
 import { FaStar } from 'react-icons/fa';
 import { Box, IconButton } from '@chakra-ui/react';
-import { useContext } from 'react';
-import { NoteEditorContext } from './NoteEditor';
+import { useStoreState, useStoreActions } from '../utils/store';
 
 const Ratings = () => {
-  const { state, dispatch } = useContext(NoteEditorContext);
-  const { rating } = state;
+  const rating = useStoreState((state) => state.rating);
+  const updateRating = useStoreActions((state) => state.updateRating);
 
   return (
     <Box>
@@ -16,7 +15,7 @@ const Ratings = () => {
           <IconButton
             aria-label={`Set rating: ${id}`}
             key={id}
-            onClick={() => dispatch({ type: 'CHANGE_RATING', payload: +id })}
+            onClick={() => updateRating(Number(id))}
             isActive={id <= stars ? true : false}
             variant={'unstyled'}
             icon={

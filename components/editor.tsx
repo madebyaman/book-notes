@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -14,6 +14,7 @@ import {
 } from 'react-icons/bs';
 import { Editor } from '@tiptap/core';
 import { Box, Flex, IconButton, Input, Select } from '@chakra-ui/react';
+import { useStoreActions, useStoreState } from '../utils/store';
 
 const VerticalRule = () => (
   <hr
@@ -192,14 +193,15 @@ const MenuBar = ({
 
 const ContentEditor = () => {
   const [showMenu, setShowMenu] = useState(false);
-  // const { state, dispatch } = useContext(NoteEditorContext);
-  // const { title } = state;
+  const { content, title } = useStoreState((state) => state);
+  const updateContent = useStoreActions((actions) => actions.updateContent);
+  const updateTitle = useStoreActions((actions) => actions.updateTitle);
 
-  // useEffect(() => {
-  //   if (editor && editor.commands) {
-  //     editor.commands.setContent(state.bookNote);
-  //   }
-  // }, [state.bookNote]);
+  useEffect(() => {
+    if (editor && editor.commands) {
+      editor.commands.setContent(content);
+    }
+  }, [content]);
 
   const editor = useEditor({
     extensions: [
@@ -210,7 +212,7 @@ const ContentEditor = () => {
     ],
     content: '',
     onBlur({ editor }) {
-      // dispatch({ type: 'CHANGE_CONTENT', payload: editor.getHTML() });
+      updateContent(editor.getHTML());
     },
     onFocus() {
       setShowMenu(true);
@@ -227,10 +229,10 @@ const ContentEditor = () => {
           variant={'unstyled'}
           mb="4"
           fontSize={'4xl'}
-          // value={title}
+          value={title}
           onChange={(e) => {
             setShowMenu(false);
-            // dispatch({ type: 'CHANGE_TITLE', payload: e.target.value });
+            updateTitle(e.target.value);
           }}
         />
         <EditorContent editor={editor} />

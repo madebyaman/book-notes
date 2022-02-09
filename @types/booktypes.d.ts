@@ -1,40 +1,13 @@
-interface BooksInitialized {
-  status: 'init';
-}
-interface BooksLoading {
-  status: 'loading';
-}
-interface BooksLoaded<T> {
-  status: 'loaded';
-  payload: T;
-}
-interface BooksError {
-  status: 'error';
-  error: Error;
-}
-export type Service<T> =
-  | BooksLoading
-  | BooksInitialized
-  | BooksLoaded<T>
-  | BooksError;
-
 export type Book = {
-  title?: string;
-  author?: string;
-  id: string;
-  cover?: string;
+  key: string;
+  title: string;
+  photoURL?: string;
+  cover: string;
+  author: string;
+  year: number;
 };
 
 export type Books = Book[];
-
-export interface BookOption {
-  value: string;
-  label: string;
-  cover?: string;
-  id: string;
-  author?: string;
-  year?: number;
-}
 
 export type BookJSON = {
   title_suggest: string;
@@ -44,11 +17,23 @@ export type BookJSON = {
   author_name?: string[];
 };
 
-export type BookNoteInterface = {
+export type DashboardNote = {
   id: string;
   bookID?: string;
   published: boolean;
   rating: number;
   title: string;
   excerpt?: string;
+};
+
+export type BookNote = DashboardNote & {
+  content: string;
+};
+
+export type BookNoteState = {
+  selectedBook: Book | null;
+  content: string;
+  rating: number;
+  title: string;
+  excerpt: string;
 };

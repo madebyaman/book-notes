@@ -1,7 +1,7 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { FC, ReactNode, useEffect, useState } from 'react';
 import db from '../firebase';
-import useStatus from '../utils/useState';
+import useStatus from '../utils/useStatus';
 import { Image } from '@chakra-ui/react';
 import Status from './Status';
 
@@ -27,7 +27,7 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
         .then((docsnap) => {
           if (docsnap.exists()) {
             const data = docsnap.data();
-            if (data && data.cover) setBookCoverURL(data.cover);
+            if (data && data.cover) setBookCoverURL(data.photoURL);
             if (data && data.title) setBookName(data.title);
           }
         })

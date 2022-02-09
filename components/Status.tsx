@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { StatusType } from '../utils/useState';
+import { StatusType } from '../utils/useStatus';
 
 export default function Status({
   children,

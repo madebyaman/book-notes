@@ -9,9 +9,7 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
       <AuthProvider>
-        <StoreProvider store={NoteEditorStore}>
-          <Component {...pageProps} />
-        </StoreProvider>
+        <Component {...pageProps} />
       </AuthProvider>
     </ChakraProvider>
   );

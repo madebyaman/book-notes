@@ -1,25 +1,23 @@
 import { action, Action, createStore, createTypedHooks } from 'easy-peasy';
-import { BookOption } from '../@types/BookTypes';
+import { BookNoteState, Book } from '../@types/booktypes';
 
-interface StoreModel {
-  selectedBook: BookOption | null;
-  bookNote: string;
-  rating: number | null;
-  title: string | undefined;
+type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;
-  updateSelectedBook: Action<StoreModel, BookOption>;
+  updateSelectedBook: Action<StoreModel, Book>;
   updateRating: Action<StoreModel, number>;
   updateTitle: Action<StoreModel, string>;
-}
+  updateExcerpt: Action<StoreModel, string>;
+};
 
 export const NoteEditorStore = createStore<StoreModel>(
   {
     selectedBook: null,
-    bookNote: '',
-    rating: null,
-    title: undefined,
+    content: '',
+    rating: 0,
+    title: '',
+    excerpt: '',
     updateContent: action((state, payload) => {
-      state.bookNote = payload;
+      state.content = payload;
     }),
     updateSelectedBook: action((state, payload) => {
       state.selectedBook = payload;
@@ -29,6 +27,9 @@ export const NoteEditorStore = createStore<StoreModel>(
     }),
     updateTitle: action((state, payload) => {
       state.title = payload;
+    }),
+    updateExcerpt: action((state, payload) => {
+      state.excerpt = payload;
     }),
   },
   {

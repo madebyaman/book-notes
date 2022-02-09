@@ -1,24 +1,39 @@
-import React, { useContext } from 'react';
-import { Service, BookOption, BookJSON } from '../types/BookTypes';
-import Select, { ActionMeta } from 'react-select';
-import { NoteEditorContext } from './NoteEditor';
+import React, { useEffect, useState } from 'react';
+import { Book, BookJSON } from '../@types/booktypes';
+import Select from 'react-select';
+import { useStoreState } from '../utils/store';
+import useStatus from '../utils/useStatus';
+
+/**
+ * Convert string with spaces to string with +
+ */
+function convertToPlus(str: string) {
+  return str.replace(/ /g, '+');
+}
 
 const BookSelect = () => {
   const [bookSearchString, setBookSearchString] = React.useState('');
-  const [books, setBooks] = React.useState<Service<BookOption[]>>({
-    status: 'init',
-  });
-  const { state, dispatch } = useContext(NoteEditorContext);
+  const [books, setBooks] = useState<Book[]>([]);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const getSelectedBook = useStoreState((state) => state.selectedBook);
+  const { state, dispatch } = useStatus();
 
-  React.useEffect(() => {
-    const searchString = bookSearchString.replace(/ /g, '+');
+  useEffect(() => {
+    setSelectedBook(getSelectedBook);
+  }, [getSelectedBook]);
+
+  useEffect(() => {
     // Do not wait for 1s, but wait for 1s after input has finished entering
     const timer = setTimeout(() => {
-      setBooks({ status: 'loading' });
-      fetch(`http://openlibrary.org/search.json?q=${searchString}`)
+      dispatch({ type: 'LOADING' });
+      fetch(
+        `http://openlibrary.org/search.json?q=${convertToPlus(
+          bookSearchString
+        )}`
+      )
         .then((data) => data.json())
         .then((data) => {
-          const newBooks = data.docs
+          const newBooks: Book[] = data.docs
             .filter(
               (book: BookJSON) =>
                 book.author_name &&
@@ -27,28 +42,28 @@ const BookSelect = () => {
             )
             .map((book: BookJSON) => {
               return {
-                value: book.title_suggest.toLowerCase().replace(/ /g, '-'),
-                label: book.title_suggest,
+                title: book.title_suggest,
                 cover: book.cover_i,
                 author: book.author_name ? book.author_name[0] : null,
-                id: book.key,
+                key: book.key,
                 year: book.first_publish_year,
               };
             });
-          setBooks({ status: 'loaded', payload: newBooks });
+          dispatch({ type: 'LOADED' });
+          setBooks(newBooks);
         })
         .catch((e) => {
-          dispatch({ type: 'ERROR_FOUND', payload: e });
+          dispatch({ type: 'ERROR', payload: 'Error fetching data' });
         });
     }, 1000);
     return () => clearTimeout(timer);
   }, [bookSearchString]);
 
-  const formatOptionLabel = ({ label, author, year }: BookOption) => {
+  const formatOptionLabel = ({ title, author, year }: Book) => {
     return (
       <div>
         <div>
-          <strong>{label}</strong> by {author}, {year}
+          <strong>{title}</strong> by {author}, {year}
         </div>
       </div>
     );
@@ -58,29 +73,24 @@ const BookSelect = () => {
     setBookSearchString(inputValue);
   };
 
-  const handleSelectChange = (
-    newVal: BookOption | null,
-    actionMeta: ActionMeta<BookOption>
-  ) => {
-    if (actionMeta.action === 'select-option') {
-      dispatch({ type: 'NEW_BOOK_SELECTED', payload: newVal });
-    } else if (actionMeta.action === 'clear') {
-      dispatch({ type: 'RESET_SELECTED_BOOK' });
-    }
+  const handleSelectChange = (newVal: Book | null) => {
+    setSelectedBook(newVal);
   };
 
   return (
     <div>
       <Select
-        isLoading={books.status === 'loading' ? true : false}
-        options={books.status === 'loaded' ? books.payload : []}
+        isLoading={state.status === 'LOADING' ? true : false}
+        options={state.status === 'LOADED' ? books : []}
+        getOptionLabel={(book: Book) => book.title}
+        getOptionValue={(book: Book) => book.key}
         isClearable
         instanceId="book-select"
         inputValue={bookSearchString}
         onInputChange={onInputChange}
         formatOptionLabel={formatOptionLabel}
         onChange={handleSelectChange}
-        value={state.selectedBook}
+        value={selectedBook}
         placeholder="Select Book"
         filterOption={null}
       />

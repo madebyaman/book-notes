@@ -1,6 +1,5 @@
 import NoteEditor from '../../components/NoteEditor';
 import { useAuth } from '../../utils/useAuth';
-import { Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 const EditBook = () => {
@@ -9,7 +8,7 @@ const EditBook = () => {
   const id: string = router.query.id as string;
   const auth = useAuth();
 
-  if (auth.status === 'loading') {
+  if (!auth.user) {
     return 'Loading ...';
   } else {
     return <NoteEditor docId={id} />;

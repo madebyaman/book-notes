@@ -133,6 +133,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
     }
   };
 
+  // save content, images, etc
   const onSave = async ({
     publish = false,
   }: {

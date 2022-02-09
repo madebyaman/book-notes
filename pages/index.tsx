@@ -7,7 +7,7 @@ const Home: NextPage = function () {
       <Link href="/add-book">
         <a className="text-lg">Add a new book</a>
       </Link>
-      <Link href={'/login'}>
+      <Link href={'/signin'}>
         <a>Login</a>
       </Link>
       <Link href={'/dashboard'}>

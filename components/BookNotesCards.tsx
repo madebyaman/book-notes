@@ -9,12 +9,13 @@ import {
   Image,
   Flex,
 } from '@chakra-ui/react';
-import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { Book, BookNoteInterface } from '../@types/booktypes';
 import db from '../firebase';
-import { useAuth } from '../utils/useAuth';
+import useStatus from '../utils/useState';
 
 const DefaultBookCover = () => (
   <>
@@ -24,44 +25,65 @@ const DefaultBookCover = () => (
 
 const BookNotesCards = ({ userID }: { userID: string }) => {
   const router = useRouter();
-  const [cards, setCards] = useState();
+  const [cards, setCards] = useState<BookNoteInterface[]>([]);
+  const { state, dispatch } = useStatus();
 
   useEffect(() => {
     let unsub: () => void;
-    const q = query(
-      collection(db, 'book-notes'),
-      where('userId', '==', userID)
-    );
-    unsub = onSnapshot(q, (snap) => {
-      const newCards = [];
-      snap.forEach((doc) => {
-        // Here push only relavant data like title, stars, book Id, publish status etc.
-        newCards.push({ id: doc.id, ...doc.data() });
+    try {
+      const q = query(
+        collection(db, 'book-notes'),
+        where('userId', '==', userID)
+      );
+      unsub = onSnapshot(q, (snap) => {
+        const bookNotes: BookNoteInterface[] = [];
+        snap.forEach((doc) => {
+          const fetchedBookNote = {
+            ...(doc.data() as BookNoteInterface),
+          };
+          // Here push only relavant data like title, stars, book Id, publish status etc.
+          bookNotes.push(fetchedBookNote);
+        });
+        setCards(bookNotes);
       });
-      setCards(newCards);
-    });
+    } catch (err) {
+      dispatch({ type: 'ERROR', payload: 'Error fetching data' });
+    }
+    dispatch({ type: 'LOADED' });
 
     return () => unsub();
   }, []);
+
+  if (state.status === 'LOADING') {
+    return <div>Loading...</div>;
+  }
+  if (state.status === 'ERROR') {
+    return <div>{state.error}</div>;
+  }
   // Show loading, error, and loaded states
   return (
     <Box>
       <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6}>
-        {cards &&
-          cards.map((item, id) => (
+        {cards.length >= 1 &&
+          cards.map(({ id, rating, published, title, bookId }) => (
             <GridItem
-              key={id}
               p={5}
+              key={id}
               shadow="md"
               borderWidth={'1px'}
               flex={'1'}
               borderRadius={'md'}
               minW={'250px'}
             >
+              {console.log(id, bookId)}
               <Flex>
                 <Box mr={6} mb={4} w={'150px'}>
-                  {/* Show default book cover ONLY IF no book ID, else get cover from Open Library */}
-                  <DefaultBookCover />
+                  {bookId ? (
+                    // Get book cover from Open Library
+                    <div>Hello</div>
+                  ) : (
+                    <DefaultBookCover />
+                  )}
                 </Box>
                 <Box>
                   <Heading
@@ -75,14 +97,14 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                     borderRadius={'md'}
                     fontWeight={'normal'}
                   >
-                    {item.published ? 'Published' : 'Draft'}
+                    {published ? 'Published' : 'Draft'}
                   </Heading>
                   <Heading as="h2" fontSize="3xl" mt={2} mb={4}>
-                    {item.title || 'Untitled'}
+                    {title || 'Untitled'}
                   </Heading>
                   <Box mb={4}>
-                    {item.rating
-                      ? [...Array(item.rating)].map((_i, id) => (
+                    {rating
+                      ? [...Array(rating)].map((_i, id) => (
                           <StarIcon key={id} color="gray.500" />
                         ))
                       : 'No rating'}
@@ -90,7 +112,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                   <Link
                     href={{
                       pathname: '/edit/[id]',
-                      query: { id: item.id },
+                      query: { id: id },
                     }}
                   >
                     <a>Edit</a>

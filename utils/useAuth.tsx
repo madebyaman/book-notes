@@ -40,12 +40,18 @@ export function AuthProvider(props: { children: ReactNode }): JSX.Element {
 
   // Redirect to login page if user is not signed in. Else,
   useEffect(() => {
+    let timerId: NodeJS.Timeout;
+
+    console.log('redirecting', auth);
+
     if (
       auth.status === 'loaded' &&
       !auth.user &&
       protectedRoutes.includes(router.pathname)
     ) {
-      router.push('/signin');
+      timerId = setTimeout(() => {
+        router.push('/signin');
+      }, 3_000);
     }
 
     // Redirect to dashboard if user is signed in.
@@ -54,8 +60,12 @@ export function AuthProvider(props: { children: ReactNode }): JSX.Element {
       auth.user &&
       authPages.includes(router.pathname)
     ) {
-      router.push('/dashboard');
+      timerId = setTimeout(() => {
+        router.push('/dashboard');
+      }, 3_000);
     }
+
+    return () => clearTimeout(timerId);
   }, [auth.status, auth.user, router]);
 
   return <Provider value={auth}>{props.children}</Provider>;

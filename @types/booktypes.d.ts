@@ -46,10 +46,9 @@ export type BookJSON = {
 
 export type BookNoteInterface = {
   id: string;
-  bookId?: string;
-  content: string;
+  bookID?: string;
   published: boolean;
   rating: number;
   title: string;
-  userId: string;
+  excerpt?: string;
 };

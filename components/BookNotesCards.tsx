@@ -16,12 +16,7 @@ import { useEffect, useState } from 'react';
 import { Book, BookNoteInterface } from '../@types/booktypes';
 import db from '../firebase';
 import useStatus from '../utils/useState';
-
-const DefaultBookCover = () => (
-  <>
-    <Image src="./Book.png" alt="Book Cover" width={'150px'} />
-  </>
-);
+import BookCover from './BookCover';
 
 const BookNotesCards = ({ userID }: { userID: string }) => {
   const router = useRouter();
@@ -38,11 +33,14 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
       unsub = onSnapshot(q, (snap) => {
         const bookNotes: BookNoteInterface[] = [];
         snap.forEach((doc) => {
-          const fetchedBookNote = {
-            ...(doc.data() as BookNoteInterface),
-          };
-          // Here push only relavant data like title, stars, book Id, publish status etc.
-          bookNotes.push(fetchedBookNote);
+          const data = doc.data();
+          bookNotes.push({
+            id: doc.id,
+            bookID: data.bookID,
+            title: data.title,
+            rating: data.rating,
+            published: data.published,
+          });
         });
         setCards(bookNotes);
       });
@@ -63,9 +61,9 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
   // Show loading, error, and loaded states
   return (
     <Box>
-      <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6}>
+      <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
         {cards.length > 0 &&
-          cards.map(({ id, rating, published, title, bookId }) => (
+          cards.map(({ id, rating, published, title, bookID, excerpt }) => (
             <GridItem
               p={5}
               key={id}
@@ -74,17 +72,17 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
               flex={'1'}
               borderRadius={'md'}
               minW={'250px'}
+              mt="12"
             >
-              {console.log(cards)}
-              {console.log('ID: ', id)}
-              <Flex>
-                <Box mr={6} mb={4} w={'150px'}>
-                  {bookId ? (
-                    // Get book cover from Open Library
-                    <div>Hello</div>
-                  ) : (
-                    <DefaultBookCover />
-                  )}
+              <Flex direction={'column'} align="center">
+                <Box
+                  mr={6}
+                  mb={4}
+                  w={'150px'}
+                  // transform="rotateZ(10deg)"
+                  mt="-16"
+                >
+                  <BookCover bookID={bookID} />
                 </Box>
                 <Box>
                   <Heading
@@ -96,13 +94,18 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                     backgroundColor={'gray.100'}
                     display={'inline-block'}
                     borderRadius={'md'}
-                    fontWeight={'normal'}
+                    fontWeight={'bold'}
                   >
                     {published ? 'Published' : 'Draft'}
                   </Heading>
                   <Heading as="h2" fontSize="3xl" mt={2} mb={4}>
                     {title || 'Untitled'}
                   </Heading>
+                  {excerpt && (
+                    <Box>
+                      <Text>{excerpt}</Text>
+                    </Box>
+                  )}
                   <Box mb={4}>
                     {rating
                       ? [...Array(rating)].map((_i, id) => (

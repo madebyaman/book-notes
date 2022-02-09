@@ -52,7 +52,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
     dispatch({ type: 'LOADED' });
 
     return () => unsub();
-  }, []);
+  }, [userID]);
 
   if (state.status === 'LOADING') {
     return <div>Loading...</div>;
@@ -64,7 +64,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
   return (
     <Box>
       <Grid templateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={6}>
-        {cards.length >= 1 &&
+        {cards.length > 0 &&
           cards.map(({ id, rating, published, title, bookId }) => (
             <GridItem
               p={5}
@@ -75,7 +75,8 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
               borderRadius={'md'}
               minW={'250px'}
             >
-              {console.log(id, bookId)}
+              {console.log(cards)}
+              {console.log('ID: ', id)}
               <Flex>
                 <Box mr={6} mb={4} w={'150px'}>
                   {bookId ? (

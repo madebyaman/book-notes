@@ -1,20 +1,16 @@
 import React, { useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useToast } from '@chakra-ui/react';
-import ErrorFallback from './ErrorFallback';
-import { Book, BookNote } from '../@types/booktypes';
-
 import { useRouter } from 'next/router';
-import { useAuth } from '../utils/useAuth';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 import { StoreProvider } from 'easy-peasy';
-import {
-  useStoreState,
-  NoteEditorStore,
-  useStoreActions,
-} from '../utils/store';
+
+import { NoteEditorStore, useStoreActions } from '../utils/store';
+import { useAuth } from '../utils/useAuth';
 import { fetchDoc } from '../utils/fetchDoc';
 import EditorLayout from './Editor/Layout';
+import ErrorFallback from './ErrorFallback';
+import { Book, BookNote } from '../@types/booktypes';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const updateContent = useStoreActions((actions) => actions.updateContent);
@@ -26,9 +22,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   );
   const resetState = useStoreActions((actions) => actions.resetState);
 
-  const auth = useAuth();
   const toast = useToast();
-  const router = useRouter();
 
   useEffect(() => {
     async function fetchNote() {
@@ -73,6 +67,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
         }
       } else {
         // reset state
+        // Otherwise, new document starts with already loaded state
         resetState();
       }
     }

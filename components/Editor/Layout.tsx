@@ -1,41 +1,18 @@
 import { Box, Flex, useToast } from '@chakra-ui/react';
-import {
-  addDoc,
-  collection,
-  doc,
-  QueryDocumentSnapshot,
-  setDoc,
-  updateDoc,
-} from 'firebase/firestore';
+import { QueryDocumentSnapshot } from 'firebase/firestore';
+
 import { Book } from '../../@types/booktypes';
-import db from '../../firebase';
 import { fetchDoc } from '../../utils/fetchDoc';
+import {
+  createDocument,
+  createOrUpdateDocument,
+  uploadImageFromCoverID,
+} from '../../utils/saveDocMethods';
 import { useStoreState } from '../../utils/store';
 import { useAuth } from '../../utils/useAuth';
 import EditingSection from './EditingSection';
 import EditorSidebar from './EditorSidebar';
 import EditorTopBar from './EditorTopBar';
-
-const uploadImageFromCoverID = async (
-  cover: string
-): Promise<string | undefined> => {
-  const cloudinaryCloud = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
-  if (cloudinaryCloud) {
-    const fileURL = `https://covers.openlibrary.org/b/id/${cover}-M.jpg`;
-    const formdata = new FormData();
-    formdata.append('file', fileURL);
-    formdata.append('upload_preset', 'book-covers');
-    const data = await fetch(
-      `https://api.cloudinary.com/v1_1/${cloudinaryCloud}/upload`,
-      {
-        method: 'POST',
-        body: formdata,
-      }
-    ).then((res) => res.json());
-    return data.secure_url as string;
-  }
-  return;
-};
 
 const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook } = useStoreState(
@@ -46,18 +23,26 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
 
   /**
    * Displays a flash message of success or failure
+   * @param success If true then success message. Else failure message
+   * @param message Message to display
    */
-  const showSaveStatus = (success: boolean) => {
+  const showFlashMessage = ({
+    success,
+    message,
+  }: {
+    success: boolean;
+    message?: string;
+  }) => {
     if (success) {
       toast({
-        title: 'Successfully saved your book note',
+        title: message || 'Successfully saved your book note',
         status: 'success',
         duration: 3000,
         isClosable: true,
       });
     } else {
       toast({
-        title: 'Error saving your book note',
+        title: message || 'Error saving your book note',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -101,25 +86,23 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
         }
 
         // The, get the URL of the uploaded image and set it to selectedBook.photoURL
-        await setDoc(doc(db, 'books', newBook.key), newBook);
+        try {
+          createDocument('books', newBook, newBook.key);
+        } catch (e) {
+          showFlashMessage({
+            success: false,
+            message: 'Error saving the selected book',
+          });
+        }
       }
       // Else we don't need to do anything. As it means book already exists in db
     }
 
     // Finally set the document if !docID, else update it
     try {
-      if (!docId) {
-        await addDoc(collection(db, 'book-notes'), document);
-        showSaveStatus(true);
-        return;
-      } else {
-        const documentRef = doc(db, 'book-notes', docId);
-        await updateDoc(documentRef, document);
-        showSaveStatus(true);
-        return;
-      }
+      createOrUpdateDocument('book-notes', document, docId);
     } catch (error) {
-      showSaveStatus(false);
+      showFlashMessage({ success: false });
       return;
     }
   };
@@ -134,6 +117,9 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
         left={'0'}
         right="0"
       >
+        <button onClick={() => showFlashMessage({ success: true })}>
+          Show Toast
+        </button>
         {/* Section for Top Bar */}
         <EditorTopBar onSave={onSave} />
       </Box>

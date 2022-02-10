@@ -5,14 +5,13 @@ import { ReactNode } from 'react';
 type ChakraNextLinkProps = {
   href: string;
   children?: ReactNode;
-  [x: string]: any;
 };
 
 function ChakraNextLinkButton({
   href,
   children,
   ...props
-}: ChakraNextLinkProps) {
+}: ChakraNextLinkProps): JSX.Element {
   return (
     <Link href={href} passHref>
       <ChakraLink {...props}>{children}</ChakraLink>

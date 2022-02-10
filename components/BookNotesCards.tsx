@@ -1,4 +1,4 @@
-import { AddIcon, StarIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import {
   Heading,
   Text,
@@ -6,7 +6,6 @@ import {
   Grid,
   GridItem,
   IconButton,
-  Image,
   Flex,
 } from '@chakra-ui/react';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
@@ -65,82 +64,82 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
             <GridItem
               p={5}
               key={id}
-              shadow="md"
+              _hover={{ boxShadow: 'md' }}
+              cursor="pointer"
               borderWidth={'1px'}
               flex={'1'}
-              borderRadius={'md'}
               minW={'250px'}
               mt="12"
             >
-              <Flex direction={'column'} align="center">
-                <Box
-                  mr={6}
-                  mb={4}
-                  w={'150px'}
-                  // transform="rotateZ(10deg)"
-                  mt="-16"
-                >
+              <Flex direction={'column'} px="4">
+                <Box mb={4} w={'150px'} mt="-16">
                   <BookCover bookID={bookId} />
                 </Box>
                 <Box>
+                  <Heading as="h2" fontSize="3xl" mt={2} mb={1}>
+                    {title || 'Untitled'}
+                  </Heading>
                   <Heading
                     as="h3"
-                    fontSize={'12px'}
+                    fontSize={'10px'}
                     textTransform={'uppercase'}
                     letterSpacing={'wider'}
-                    p={2}
-                    backgroundColor={'gray.100'}
+                    p={1}
+                    backgroundColor={'gray.50'}
                     display={'inline-block'}
-                    borderRadius={'md'}
-                    fontWeight={'bold'}
+                    color={'gray.600'}
                   >
                     {published ? 'Published' : 'Draft'}
-                  </Heading>
-                  <Heading as="h2" fontSize="3xl" mt={2} mb={4}>
-                    {title || 'Untitled'}
                   </Heading>
                   {excerpt && (
                     <Box>
                       <Text>{excerpt}</Text>
                     </Box>
                   )}
-                  <Box mb={4}>
-                    {rating
-                      ? [...Array(rating)].map((_i, id) => (
-                          <StarIcon key={id} color="gray.500" />
-                        ))
-                      : 'No rating'}
-                  </Box>
-                  <Link
-                    href={{
-                      pathname: '/edit/[id]',
-                      query: { id: id },
-                    }}
-                  >
-                    <a>Edit</a>
-                  </Link>
+                  <Flex justify={'flex-start'}>
+                    <Link
+                      href={{
+                        pathname: '/edit/[id]',
+                        query: { id: id },
+                      }}
+                    >
+                      <a>Edit</a>
+                    </Link>
+                    <Link
+                      href={{
+                        pathname: '/edit/[id]',
+                        query: { id: id },
+                      }}
+                    >
+                      <a>View it live</a>
+                    </Link>
+                  </Flex>
                 </Box>
               </Flex>
             </GridItem>
           ))}
         <GridItem
-          shadow="md"
           borderWidth={'1px'}
           flex={'1'}
           borderRadius={'md'}
           minW={'250px'}
           minH={'250px'}
+          p={5}
+          _hover={{ boxShadow: 'md' }}
+          cursor="pointer"
+          mt="12"
+          onClick={() => router.push('/add')}
         >
-          <IconButton
-            colorScheme={'blackAlpha'}
-            variant={'unstyled'}
-            aria-label="Add book"
-            icon={<AddIcon />}
+          <Flex
             w={'100%'}
             h={'100%'}
-            borderRadius={'md'}
-            onClick={() => router.push('/add')}
-          />
+            flexDir={'column'}
+            justify="center"
+            align={'center'}
+          >
+            <AddIcon mb={'4'} />
+            <Text>Add a new book note</Text>
+          </Flex>
         </GridItem>
       </Grid>
     </Status>

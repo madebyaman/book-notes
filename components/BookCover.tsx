@@ -19,8 +19,8 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
 
   // Get the book cover URL from the book ID
   useEffect(() => {
+    setFetchingBookCoverStatus({ type: 'LOADING' });
     if (bookID) {
-      setFetchingBookCoverStatus({ type: 'LOADING' });
       // Fetch a document from the book collection with bookID
       const docRef = doc(db, `books/${bookID}`);
       getDoc(docRef)
@@ -37,8 +37,8 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
             payload: 'Error fetching book cover',
           });
         });
-      setFetchingBookCoverStatus({ type: 'LOADED' });
     }
+    setFetchingBookCoverStatus({ type: 'LOADED' });
   }, [bookID]);
 
   return (
@@ -48,7 +48,13 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
       error={<div>{fetchingBookCoverStatus.error}</div>}
     >
       {bookID && bookCoverURL ? (
-        <Image src={bookCoverURL} alt={bookName} width={'150px'} />
+        <Image
+          src={bookCoverURL}
+          alt={bookName}
+          width={'120px'}
+          boxShadow="md"
+          transform={'translateZ(-15deg)'}
+        />
       ) : (
         <DefaultBookCover />
       )}

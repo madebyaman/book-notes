@@ -36,4 +36,6 @@ export type BookNoteState = {
   rating: number;
   title: string;
   excerpt: string;
+  bookId?: string;
+  isPublished: boolean;
 };

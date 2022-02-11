@@ -4,7 +4,6 @@ import {
   Action,
   createStore,
   createTypedHooks,
-  Store,
   thunk,
   Thunk,
 } from 'easy-peasy';
@@ -17,8 +16,10 @@ type StoreModel = BookNoteState & {
   updateRating: Action<StoreModel, number>;
   updateTitle: Action<StoreModel, string>;
   updateExcerpt: Action<StoreModel, string>;
+  updateBookId: Action<StoreModel, string>;
+  updateIsPublished: Action<StoreModel, boolean>;
   resetState: Action<StoreModel>;
-  fetchDoc: Thunk<StoreModel, string>;
+  fetchDocument: Thunk<StoreModel, string>;
   fetchBook: Thunk<StoreModel, string>;
 };
 
@@ -29,6 +30,14 @@ export const NoteEditorStore = createStore<StoreModel>(
     rating: 0,
     title: '',
     excerpt: '',
+    bookId: undefined,
+    isPublished: false,
+    updateIsPublished: action((state, payload) => {
+      state.isPublished = payload;
+    }),
+    updateBookId: action((state, payload) => {
+      state.bookId = payload;
+    }),
     updateContent: action((state, payload) => {
       state.content = payload;
     }),
@@ -50,18 +59,24 @@ export const NoteEditorStore = createStore<StoreModel>(
       state.rating = 0;
       state.title = '';
       state.excerpt = '';
+      state.bookId = undefined;
+      state.isPublished = false;
     }),
-    fetchDoc: thunk(async (actions, payload) => {
+    fetchDocument: thunk(async (actions, payload) => {
       const noteDocSnap = (await fetchDoc(
         `book-notes/${payload}`
       )) as QueryDocumentSnapshot<BookNote>;
 
-      if (noteDocSnap.exists()) {
+      if (!noteDocSnap || !noteDocSnap.exists()) {
+        throw new Error('Error fetching note');
+      } else {
         const note = noteDocSnap.data();
         actions.updateContent(note.content);
         actions.updateExcerpt(note.excerpt || '');
         actions.updateRating(note.rating || 0);
         actions.updateTitle(note.title || '');
+        actions.updateBookId(note.bookId || '');
+        actions.updateIsPublished(note.published || false);
       }
     }),
     fetchBook: thunk(async (actions, payload) => {
@@ -69,9 +84,11 @@ export const NoteEditorStore = createStore<StoreModel>(
         `books/${payload}`
       )) as QueryDocumentSnapshot<Book>;
 
-      if (bookDocSnap.exists()) {
+      if (bookDocSnap && bookDocSnap.exists()) {
         const book = bookDocSnap.data();
         actions.updateSelectedBook(book);
+      } else {
+        throw new Error('Error fetching the book');
       }
     }),
   },

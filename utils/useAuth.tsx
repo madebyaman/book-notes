@@ -42,8 +42,6 @@ export function AuthProvider(props: { children: ReactNode }): JSX.Element {
   useEffect(() => {
     let timerId: NodeJS.Timeout;
 
-    console.log('redirecting', auth);
-
     if (
       auth.status === 'loaded' &&
       !auth.user &&

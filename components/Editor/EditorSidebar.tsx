@@ -1,7 +1,8 @@
 import { Text, Flex, Spacer, Box, Heading } from '@chakra-ui/react';
 import { useStoreState } from '../../utils/store';
 import BookSelect from '../BookSelect';
-import Ratings from '../Ratings';
+import Ratings from './Ratings';
+import PublishSwitch from './PublishSwitch';
 
 const EditorSidebar = () => {
   const selectedBook = useStoreState((state) => state.selectedBook);
@@ -20,22 +21,25 @@ const EditorSidebar = () => {
         How strongly would you recommend it?
       </Text>
       <Ratings />
+      <PublishSwitch />
       <Spacer />
       {selectedBook && (
         <Flex bg="gray.100" borderRadius={'md'} p="4" mt={'auto'}>
-          <img
-            src={
-              selectedBook.photoURL
-                ? selectedBook.photoURL
-                : `https://covers.openlibrary.org/b/id/${selectedBook.cover}-M.jpg`
-            }
-            alt={selectedBook.title}
-            style={{
-              height: '100px',
-              width: 'auto',
-              marginRight: '15px',
-            }}
-          />
+          {(selectedBook.photoURL || selectedBook.cover) && (
+            <img
+              src={
+                selectedBook.photoURL
+                  ? selectedBook.photoURL
+                  : `https://covers.openlibrary.org/b/id/${selectedBook.cover}-M.jpg`
+              }
+              alt={selectedBook.title}
+              style={{
+                height: '100px',
+                width: 'auto',
+                marginRight: '15px',
+              }}
+            />
+          )}
           <Box>
             <Heading as="h3" size="sm">
               {selectedBook?.title}

@@ -23,6 +23,7 @@ const BookSelect = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const selectedBook = useStoreState((state) => state.selectedBook);
   const setSelectedBook = useStoreActions((state) => state.updateSelectedBook);
+  const updateBookId = useStoreActions((state) => state.updateBookId);
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
@@ -82,6 +83,7 @@ const BookSelect = () => {
       const value = { ...newVal, key: convertSlashToPlus(newVal.key) };
       console.log('changin to plus', value);
       setSelectedBook(value);
+      updateBookId(value.key);
       return;
     }
     setSelectedBook(newVal);

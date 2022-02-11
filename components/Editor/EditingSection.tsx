@@ -12,11 +12,11 @@ const EditingSection = () => {
   const content = useStoreState((state) => state.content);
   const updateContent = useStoreActions((actions) => actions.updateContent);
 
-  useEffect(() => {
-    if (!editor) return;
-    if (!editor.commands) return;
-    editor.commands.setContent(content);
-  }, [content]);
+  // useEffect(() => {
+  //   if (!editor) return;
+  //   if (!editor.commands) return;
+  //   editor.commands.setContent(content);
+  // }, [content]);
 
   const editor = useEditor({
     extensions: [
@@ -25,7 +25,7 @@ const EditingSection = () => {
         placeholder: 'Write something ...',
       }),
     ],
-    content: '',
+    content,
     onBlur({ editor }) {
       updateContent(editor.getHTML());
     },

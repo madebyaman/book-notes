@@ -1,4 +1,4 @@
-import { Box, Container, Flex, useToast } from '@chakra-ui/react';
+import { Box, Flex, useToast } from '@chakra-ui/react';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 import { Book } from '../../@types/booktypes';
@@ -15,9 +15,8 @@ import EditorSidebar from './EditorSidebar';
 import EditorTopBar from './EditorTopBar';
 
 const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
-  const { content, rating, title, selectedBook } = useStoreState(
-    (state) => state
-  );
+  const { content, rating, title, selectedBook, bookId, isPublished } =
+    useStoreState((state) => state);
   const auth = useAuth();
   const toast = useToast();
 
@@ -60,10 +59,10 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
     const document = {
       content,
       rating,
-      published: false,
+      published: isPublished,
       userId: auth.user?.uid,
       title,
-      bookId: selectedBook ? selectedBook.key : null,
+      bookId: bookId,
     };
 
     if (selectedBook) {
@@ -101,6 +100,7 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
     // Finally set the document if !docID, else update it
     try {
       createOrUpdateDocument('book-notes', document, docId);
+      showFlashMessage({ success: true });
     } catch (error) {
       showFlashMessage({ success: false });
       return;

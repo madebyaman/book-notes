@@ -9,6 +9,7 @@ import {
   useColorModeValue,
   Text,
   InputGroup,
+  Link,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FormEvent, ReactNode, useState } from 'react';
@@ -72,7 +73,7 @@ const AuthForm = ({
     }
   };
 
-  const href = mode === 'LOGIN' ? '/signup' : '/login';
+  const href = mode === 'LOGIN' ? '/signup' : '/signin';
 
   return (
     <Flex
@@ -128,9 +129,9 @@ const AuthForm = ({
             {error !== '' && <Text color={'tomato'}>{error}</Text>}
             <Text align={'center'} display={'inline-block'}>
               Not a user?{' '}
-              <ChakraNextLinkButton color={'blue.400'} href={href}>
+              <Link color={'blue.400'} href={href}>
                 {mode === 'LOGIN' ? 'Sign up' : 'Log in'}
-              </ChakraNextLinkButton>
+              </Link>
             </Text>
           </Stack>
         </Box>

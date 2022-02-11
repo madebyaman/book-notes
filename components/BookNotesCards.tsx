@@ -82,11 +82,19 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                 </Box>
                 <Box mt="auto">
                   {isPublished ? (
-                    <Badge variant={'subtle'} colorScheme="green">
+                    <Badge
+                      variant={'subtle'}
+                      fontSize={'10px'}
+                      colorScheme="green"
+                    >
                       Published
                     </Badge>
                   ) : (
-                    <Badge variant={'subtle'} colorScheme="red">
+                    <Badge
+                      variant={'subtle'}
+                      colorScheme="red"
+                      fontSize={'10px'}
+                    >
                       Draft
                     </Badge>
                   )}

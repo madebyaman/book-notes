@@ -11,6 +11,7 @@ import {
 import { NextPage } from 'next';
 import { useAuth } from '../utils/useAuth';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
+import { ImUser } from 'react-icons/im';
 import { useEffect, useState } from 'react';
 import md5 from 'md5';
 import Tab from '../components/Tab';
@@ -45,7 +46,7 @@ const Dashboard: NextPage = function () {
       <Box>
         <Box backgroundColor={'gray.50'}>
           <Container maxW="container.lg" pt={'16'}>
-            <Flex justify="center">
+            <Flex justify="center" align={'center'}>
               {auth.user.photoURL ? (
                 <Image
                   borderRadius={'full'}
@@ -54,10 +55,7 @@ const Dashboard: NextPage = function () {
                   h="100px"
                 />
               ) : (
-                <Image
-                  borderRadius={'full'}
-                  src={`https://www.gravatar.com/avatar/${gravatarHash}`}
-                />
+                <ImUser fontSize={'50px'} />
               )}
               <Box ml={8}>
                 <Heading as="h1">

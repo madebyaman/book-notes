@@ -13,9 +13,9 @@ const EditingSection = () => {
   const updateContent = useStoreActions((actions) => actions.updateContent);
 
   useEffect(() => {
-    if (editor && editor.commands) {
-      editor.commands.setContent(content);
-    }
+    if (!editor) return;
+    if (!editor.commands) return;
+    editor.commands.setContent(content);
   }, [content]);
 
   const editor = useEditor({
@@ -36,12 +36,14 @@ const EditingSection = () => {
 
   return (
     <Box>
-      <Box pos={'sticky'} top="120px">
+      <Box pos={'sticky'} top="73px" backgroundColor={'white'} zIndex="10">
         {/* Sticky bar for editor menu */}
-        <EditorMenu isDisabled={showMenu} editor={editor} />
+        <EditorMenu isDisabled={!showMenu} editor={editor} />
       </Box>
       {/* Content area */}
-      <ContentEditor setShowMenu={setShowMenu} editor={editor} />
+      <Box>
+        <ContentEditor setShowMenu={setShowMenu} editor={editor} />
+      </Box>
     </Box>
   );
 };

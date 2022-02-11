@@ -2,7 +2,6 @@ import { Flex, IconButton, Select } from '@chakra-ui/react';
 import { Editor } from '@tiptap/react';
 import {
   BsCode,
-  BsCodeSquare,
   BsDash,
   BsListOl,
   BsListUl,
@@ -136,16 +135,6 @@ const EditorMenu = ({
         mx={'2'}
         isActive={editor.isActive('orderedList')}
         icon={<BsListOl style={{ fontSize: '18px' }} />}
-        size={'sm'}
-        variant={'ghost'}
-      />
-      <IconButton
-        isDisabled={isDisabled}
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        aria-label="Code Block"
-        isActive={editor.isActive('codeBlock')}
-        mx={'2'}
-        icon={<BsCodeSquare style={{ fontSize: '18px' }} />}
         size={'sm'}
         variant={'ghost'}
       />

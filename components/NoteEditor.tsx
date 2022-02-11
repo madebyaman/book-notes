@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
-import { useToast } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 import { StoreProvider } from 'easy-peasy';
 
 import { NoteEditorStore, useStoreActions } from '../utils/store';
-import { useAuth } from '../utils/useAuth';
 import { fetchDoc } from '../utils/fetchDoc';
 import EditorLayout from './Editor/Layout';
-import ErrorFallback from './ErrorFallback';
 import { Book, BookNote } from '../@types/booktypes';
+import useStatus from '../utils/useStatus';
+import Status from './Status';
+import ErrorFetchingNote from './ErrorFetchingNote';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const updateContent = useStoreActions((actions) => actions.updateContent);
@@ -21,12 +19,12 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
     (actions) => actions.updateSelectedBook
   );
   const resetState = useStoreActions((actions) => actions.resetState);
-
-  const toast = useToast();
+  const { state: status, dispatch } = useStatus();
 
   useEffect(() => {
     async function fetchNote() {
       if (docId) {
+        dispatch({ type: 'LOADING' });
         try {
           const noteDocSnap = (await fetchDoc(
             `book-notes/${docId}`
@@ -38,6 +36,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
             updateExcerpt(note.excerpt || '');
             updateRating(note.rating || 0);
             updateTitle(note.title || '');
+            dispatch({ type: 'LOADED' });
             // set note
 
             if (note.bookId) {
@@ -58,16 +57,11 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
             }
           }
         } catch (err) {
-          toast({
-            title: 'Error fetching note',
-            status: 'error',
-            duration: 3000,
-            isClosable: true,
-          });
+          dispatch({ type: 'ERROR', payload: 'Note not found' });
         }
       } else {
         // reset state
-        // Otherwise, new document starts with already loaded state
+        // If you don't reset state, then new document starts with already loaded state
         resetState();
       }
     }
@@ -78,12 +72,13 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   // save content, images, etc
 
   return (
-    <ErrorBoundary
-      FallbackComponent={ErrorFallback}
-      // onReset={() => }
+    <Status
+      loading={<div>Loading...</div>}
+      error={<ErrorFetchingNote />}
+      status={status.status}
     >
       <EditorLayout docId={docId} />
-    </ErrorBoundary>
+    </Status>
   );
 };
 

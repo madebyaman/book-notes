@@ -24,8 +24,8 @@ const ContentEditor = ({
         mb="4"
         fontSize={'4xl'}
         value={title}
+        onFocus={() => setShowMenu(false)}
         onChange={(e) => {
-          setShowMenu(false);
           updateTitle(e.target.value);
         }}
       />

@@ -1,4 +1,4 @@
-import { Box, Flex, useToast } from '@chakra-ui/react';
+import { Box, Container, Flex, useToast } from '@chakra-ui/react';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 import { Book } from '../../@types/booktypes';
@@ -108,32 +108,32 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
   };
 
   return (
-    <>
+    <Box maxW={'1080px'} margin="0 auto">
       <Box
+        w="100%"
         pos={'fixed'}
         top="0"
-        maxW={'960px'}
-        margin="0 auto"
         left={'0'}
         right="0"
+        zIndex={10}
+        px="2"
       >
-        <button onClick={() => showFlashMessage({ success: true })}>
-          Show Toast
-        </button>
         {/* Section for Top Bar */}
         <EditorTopBar onSave={onSave} />
       </Box>
-      <Flex maxW={'960px'} margin="0 auto" mt={'100px'}>
+      <Flex margin="0 auto" mt={'80px'} w="100%">
         {/* EditingSection */}
-        <EditingSection />
-        <Box>
-          <Box pos={'sticky'} top="100px">
+        <Box flex={1} pr={2}>
+          <EditingSection />
+        </Box>
+        <Box w={'30%'}>
+          <Box pos={'sticky'} top="73px">
             {/* Sidebar sticky area */}
             <EditorSidebar />
           </Box>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 

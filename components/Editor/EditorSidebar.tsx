@@ -8,16 +8,12 @@ const EditorSidebar = () => {
 
   return (
     <Flex
-      mt="28"
-      w="30%"
-      px="12"
+      pl="8"
+      py="10"
       borderLeft={'1px solid #e9ebf0'}
-      minH="calc(100vh - 150px)"
       flexDir={'column'}
-      pos={'fixed'}
-      top={'0'}
-      right={'0'}
       zIndex={'10'}
+      height={'calc(100vh - 80px)'}
     >
       <BookSelect />
       <Text fontSize={'md'} mt="12" mb="2">
@@ -26,7 +22,7 @@ const EditorSidebar = () => {
       <Ratings />
       <Spacer />
       {selectedBook && (
-        <Flex bg="gray.100" borderRadius={'md'} p="4">
+        <Flex bg="gray.100" borderRadius={'md'} p="4" mt={'auto'}>
           <img
             src={
               selectedBook.photoURL

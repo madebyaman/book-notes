@@ -1,12 +1,13 @@
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, EditIcon } from '@chakra-ui/icons';
 import {
   Heading,
   Text,
   Box,
   Grid,
   GridItem,
-  IconButton,
   Flex,
+  Button,
+  Link as ChakraLink,
 } from '@chakra-ui/react';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import Link from 'next/link';
@@ -16,6 +17,7 @@ import { DashboardNote } from '../@types/booktypes';
 import db from '../firebase';
 import useStatus from '../utils/useStatus';
 import BookCover from './BookCover';
+import ChakraNextLinkButton from './ChakraNextLink';
 import Status from './Status';
 
 const BookNotesCards = ({ userID }: { userID: string }) => {
@@ -70,48 +72,51 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
               flex={'1'}
               minW={'250px'}
               mt="12"
+              borderColor={'gray.100'}
             >
               <Flex direction={'column'} px="4">
                 <Box mb={4} w={'150px'} mt="-16">
                   <BookCover bookID={bookId} />
                 </Box>
-                <Box>
-                  <Heading as="h2" fontSize="3xl" mt={2} mb={1}>
-                    {title || 'Untitled'}
-                  </Heading>
-                  <Heading
-                    as="h3"
+                <Box mt="auto">
+                  <Text
                     fontSize={'10px'}
                     textTransform={'uppercase'}
                     letterSpacing={'wider'}
                     p={1}
-                    backgroundColor={'gray.50'}
+                    backgroundColor={'gray.100'}
                     display={'inline-block'}
                     color={'gray.600'}
                   >
                     {published ? 'Published' : 'Draft'}
+                  </Text>
+                  <Heading as="h2" fontSize="3xl" mt={0} mb={2}>
+                    {title || 'Untitled'}
                   </Heading>
                   {excerpt && (
                     <Box>
                       <Text>{excerpt}</Text>
                     </Box>
                   )}
-                  <Flex justify={'flex-start'}>
+                  <Flex justify={'flex-start'} alignItems="center" mt={4}>
                     <Link
                       href={{
                         pathname: '/edit/[id]',
                         query: { id: id },
                       }}
+                      passHref
                     >
-                      <a>Edit</a>
+                      <Button
+                        colorScheme={'teal'}
+                        borderRadius="0"
+                        mr="4"
+                        rightIcon={<EditIcon />}
+                      >
+                        Edit
+                      </Button>
                     </Link>
-                    <Link
-                      href={{
-                        pathname: '/edit/[id]',
-                        query: { id: id },
-                      }}
-                    >
-                      <a>View it live</a>
+                    <Link href={'/edit'} passHref>
+                      <ChakraLink color="teal.500">View it live</ChakraLink>
                     </Link>
                   </Flex>
                 </Box>

@@ -46,10 +46,19 @@ const Dashboard: NextPage = function () {
         <Box backgroundColor={'gray.50'}>
           <Container maxW="container.lg" pt={'16'}>
             <Flex justify="center">
-              <Image
-                borderRadius={'full'}
-                src={`https://www.gravatar.com/avatar/${gravatarHash}`}
-              />
+              {auth.user.photoURL ? (
+                <Image
+                  borderRadius={'full'}
+                  src={auth.user.photoURL}
+                  w="100px"
+                  h="100px"
+                />
+              ) : (
+                <Image
+                  borderRadius={'full'}
+                  src={`https://www.gravatar.com/avatar/${gravatarHash}`}
+                />
+              )}
               <Box ml={8}>
                 <Heading as="h1">
                   Hello {auth.user.displayName || 'there'}

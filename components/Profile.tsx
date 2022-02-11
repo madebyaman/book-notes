@@ -5,7 +5,9 @@ import {
   Input,
   Stack,
   useToast,
+  Text,
 } from '@chakra-ui/react';
+import { updateProfile } from 'firebase/auth';
 import { useEffect, useReducer } from 'react';
 import { useAuth } from '../utils/useAuth';
 
@@ -44,9 +46,43 @@ const Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!auth.user) return;
+    if (
+      !auth.user ||
+      !process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE
+    ) {
+      return;
+    }
+
+    const fileInput = Array.from(e.currentTarget.elements).find(
+      ({ name }): boolean => {
+        return name === 'uploadImage';
+      }
+    );
+
+    const formData = new FormData();
+    if (!fileInput) return;
+    const files = fileInput.files || [];
+    for (const file of files) {
+      formData.append('file', file);
+      formData.append(
+        'upload_preset',
+        process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE
+      );
+    }
+
+    const data = await fetch(
+      'https://api.cloudinary.com/v1_1/dksughwo7/image/upload',
+      {
+        method: 'POST',
+        body: formData,
+      }
+    ).then((res) => res.json());
+
     try {
-      console.log('name', state.name);
+      updateProfile(auth.user, {
+        displayName: state.name,
+        photoURL: data.secure_url,
+      });
       toast({
         title: 'Successfully saved your profile',
         status: 'success',
@@ -65,7 +101,7 @@ const Profile = () => {
 
   return (
     <div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} pb={12} px={6}>
           <FormControl>
             <FormLabel htmlFor="name">Name</FormLabel>
@@ -77,6 +113,13 @@ const Profile = () => {
                 dispatch({ type: 'UPDATE_NAME', payload: e.target.value })
               }
             />
+          </FormControl>
+          <FormControl>
+            <FormLabel htmlFor="uploadImage">Upload Image</FormLabel>
+            <Text fontSize={'sm'} my="2">
+              Upload 150px * 150px photo for best results
+            </Text>
+            <input type="file" name="uploadImage" id="uploadImage" />
           </FormControl>
         </Stack>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} px={6}>

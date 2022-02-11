@@ -8,6 +8,7 @@ import {
   Flex,
   Button,
   Link as ChakraLink,
+  Badge,
 } from '@chakra-ui/react';
 import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import Link from 'next/link';
@@ -80,17 +81,15 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                   <BookCover bookID={bookId} />
                 </Box>
                 <Box mt="auto">
-                  <Text
-                    fontSize={'10px'}
-                    textTransform={'uppercase'}
-                    letterSpacing={'wider'}
-                    p={1}
-                    backgroundColor={'gray.100'}
-                    display={'inline-block'}
-                    color={'gray.600'}
-                  >
-                    {isPublished ? 'Published' : 'Draft'}
-                  </Text>
+                  {isPublished ? (
+                    <Badge variant={'subtle'} colorScheme="green">
+                      Published
+                    </Badge>
+                  ) : (
+                    <Badge variant={'subtle'} colorScheme="red">
+                      Draft
+                    </Badge>
+                  )}
                   <Heading as="h2" fontSize="3xl" mt={0} mb={2}>
                     {title || 'Untitled'}
                   </Heading>

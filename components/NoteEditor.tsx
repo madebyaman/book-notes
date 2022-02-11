@@ -19,13 +19,15 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const { state: status, dispatch } = useStatus();
 
   useEffect(() => {
+    let isSubscribed = true;
+
     if (docId) {
       dispatch({ type: 'LOADING' });
 
       // First, fetch the document
       (async function () {
         try {
-          await fetchDocument(docId);
+          await fetchDocument({ docId, isSubscribed });
           dispatch({ type: 'LOADED' });
         } catch (e) {
           dispatch({ type: 'ERROR', payload: 'Note not found' });
@@ -36,7 +38,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       (async function () {
         if (bookId) {
           try {
-            await fetchBook(bookId);
+            await fetchBook({ bookId, isSubscribed });
           } catch (e) {
             // Now if there is an error fetching the book, I don't want to throw an error
             console.log(e);
@@ -48,6 +50,10 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       // If you don't reset state, then new document starts with already loaded state
       resetState();
     }
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [docId]);
 
   // save content, images, etc

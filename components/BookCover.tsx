@@ -1,8 +1,8 @@
 import { doc, getDoc } from 'firebase/firestore';
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import db from '../firebase';
 import useStatus from '../utils/useStatus';
-import { Image, useMenuButton } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/react';
 import Status from './Status';
 
 const DefaultBookCover = () => (
@@ -42,7 +42,9 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
     }
     setFetchingBookCoverStatus({ type: 'LOADED' });
 
-    return () => (isSubscribed = false);
+    return () => {
+      isSubscribed = false;
+    };
   }, [bookID]);
 
   return (

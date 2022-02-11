@@ -8,7 +8,6 @@ import {
   Thunk,
 } from 'easy-peasy';
 import { BookNoteState, Book, BookNote } from '../@types/booktypes';
-import db from '../firebase';
 import { fetchDoc } from './fetchDoc';
 
 type StoreModel = BookNoteState & {
@@ -19,8 +18,8 @@ type StoreModel = BookNoteState & {
   updateBookId: Action<StoreModel, string>;
   updateIsPublished: Action<StoreModel, boolean>;
   resetState: Action<StoreModel>;
-  fetchDocument: Thunk<StoreModel, string>;
-  fetchBook: Thunk<StoreModel, string>;
+  fetchDocument: Thunk<StoreModel, { docId: string; isSubscribed: boolean }>;
+  fetchBook: Thunk<StoreModel, { bookId: string; isSubscribed: boolean }>;
 };
 
 export const NoteEditorStore = createStore<StoreModel>(
@@ -57,14 +56,17 @@ export const NoteEditorStore = createStore<StoreModel>(
       state.bookId = undefined;
       state.isPublished = false;
     }),
+    /**
+     * Fetch a document with a url. It should update the note state if everything went well.
+     */
     fetchDocument: thunk(async (actions, payload) => {
       const noteDocSnap = (await fetchDoc(
-        `book-notes/${payload}`
+        `book-notes/${payload.docId}`
       )) as QueryDocumentSnapshot<BookNote>;
 
       if (!noteDocSnap || !noteDocSnap.exists()) {
         throw new Error('Error fetching note');
-      } else {
+      } else if (payload.isSubscribed) {
         const note = noteDocSnap.data();
         actions.updateContent(note.content);
         actions.updateRating(note.rating || 0);
@@ -73,14 +75,17 @@ export const NoteEditorStore = createStore<StoreModel>(
         actions.updateIsPublished(note.isPublished || false);
       }
     }),
+    /**
+     * Gets a book with the given bookId. And updates `selectedBook` state.
+     */
     fetchBook: thunk(async (actions, payload) => {
       const bookDocSnap = (await fetchDoc(
-        `books/${payload}`
+        `books/${payload.bookId}`
       )) as QueryDocumentSnapshot<Book>;
 
       if (bookDocSnap && bookDocSnap.exists()) {
         const book = bookDocSnap.data();
-        actions.updateSelectedBook(book);
+        if (payload.isSubscribed) actions.updateSelectedBook(book);
       } else {
         throw new Error('Error fetching the book');
       }

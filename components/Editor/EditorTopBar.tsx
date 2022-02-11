@@ -2,14 +2,13 @@ import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
-  Container,
   Flex,
   Heading,
   IconButton,
   Stack,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { FaArchive } from 'react-icons/fa';
+import { FaSave } from 'react-icons/fa';
 
 const EditorTopBar = ({
   onSave,
@@ -43,8 +42,8 @@ const EditorTopBar = ({
       </Box>
       <Box py="4" borderLeft={'1px solid #e9ebf0'} pl={4}>
         <Button
-          leftIcon={<FaArchive />}
-          variant={'outline'}
+          leftIcon={<FaSave />}
+          borderRadius="md"
           colorScheme={'teal'}
           onClick={onSave}
         >

@@ -1,5 +1,15 @@
-import { action, Action, createStore, createTypedHooks } from 'easy-peasy';
-import { BookNoteState, Book } from '../@types/booktypes';
+import { QueryDocumentSnapshot } from '@firebase/firestore';
+import {
+  action,
+  Action,
+  createStore,
+  createTypedHooks,
+  Store,
+  thunk,
+  Thunk,
+} from 'easy-peasy';
+import { BookNoteState, Book, BookNote } from '../@types/booktypes';
+import { fetchDoc } from './fetchDoc';
 
 type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;
@@ -8,6 +18,8 @@ type StoreModel = BookNoteState & {
   updateTitle: Action<StoreModel, string>;
   updateExcerpt: Action<StoreModel, string>;
   resetState: Action<StoreModel>;
+  fetchDoc: Thunk<StoreModel, string>;
+  fetchBook: Thunk<StoreModel, string>;
 };
 
 export const NoteEditorStore = createStore<StoreModel>(
@@ -38,6 +50,29 @@ export const NoteEditorStore = createStore<StoreModel>(
       state.rating = 0;
       state.title = '';
       state.excerpt = '';
+    }),
+    fetchDoc: thunk(async (actions, payload) => {
+      const noteDocSnap = (await fetchDoc(
+        `book-notes/${payload}`
+      )) as QueryDocumentSnapshot<BookNote>;
+
+      if (noteDocSnap.exists()) {
+        const note = noteDocSnap.data();
+        actions.updateContent(note.content);
+        actions.updateExcerpt(note.excerpt || '');
+        actions.updateRating(note.rating || 0);
+        actions.updateTitle(note.title || '');
+      }
+    }),
+    fetchBook: thunk(async (actions, payload) => {
+      const bookDocSnap = (await fetchDoc(
+        `books/${payload}`
+      )) as QueryDocumentSnapshot<Book>;
+
+      if (bookDocSnap.exists()) {
+        const book = bookDocSnap.data();
+        actions.updateSelectedBook(book);
+      }
     }),
   },
   {

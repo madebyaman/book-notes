@@ -51,18 +51,24 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
 
   /**
    * It does the following:
-   * 1. Adds bookId to the document to attach a book to the note.
-   * 2. If a book doesn't exist in db with id of `selectedBook.key`, upload cover to Cloudinary and add book to db
-   * 3. If `docId` is provided, update the document. Else, create a new document
+   * 1. Computes excerpt from content.
+   * 2. Adds bookId to the document to attach a book to the note.
+   * 3. If a book doesn't exist in db with id of `selectedBook.key`, upload cover to Cloudinary and add photoURL to db
+   * 4. If `docId` is provided, update the document. Else, create a new document
    */
   const onSave = async () => {
+    const firstParagraphElement = content.split('</p>', 1)[0];
+    const newExcerpt = firstParagraphElement.replace('<p>', '');
+
     const document = {
       content,
       rating,
-      published: isPublished,
+      isPublished,
       userId: auth.user?.uid,
       title,
+      excerpt: newExcerpt,
       bookId: bookId,
+      lastUpdated: new Date(),
     };
 
     if (selectedBook) {
@@ -75,6 +81,7 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
         // First upload the book cover if selectedBook.cover exists
         const coverURL = await uploadImageFromCoverID(selectedBook.cover);
         let newBook: Book;
+
         if (coverURL) {
           newBook = {
             ...selectedBook,

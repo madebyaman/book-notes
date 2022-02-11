@@ -41,7 +41,9 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
             bookId: data.bookId,
             title: data.title,
             rating: data.rating,
-            published: data.published,
+            isPublished: data.isPublished,
+            lastUpdated: data.lastUpdated,
+            excerpt: data.excerpt,
           });
         });
         setCards(bookNotes);
@@ -62,7 +64,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
     >
       <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
         {cards.length > 0 &&
-          cards.map(({ id, rating, published, title, bookId, excerpt }) => (
+          cards.map(({ id, isPublished, excerpt, title, bookId }) => (
             <GridItem
               p={5}
               key={id}
@@ -88,7 +90,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                     display={'inline-block'}
                     color={'gray.600'}
                   >
-                    {published ? 'Published' : 'Draft'}
+                    {isPublished ? 'Published' : 'Draft'}
                   </Text>
                   <Heading as="h2" fontSize="3xl" mt={0} mb={2}>
                     {title || 'Untitled'}

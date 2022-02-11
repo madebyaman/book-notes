@@ -27,7 +27,8 @@ const EditingSection = () => {
     ],
     content,
     onBlur({ editor }) {
-      updateContent(editor.getHTML());
+      const content = editor.getHTML();
+      updateContent(content);
     },
     onFocus() {
       setShowMenu(true);

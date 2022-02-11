@@ -17,7 +17,7 @@ const PublishSwitch = () => {
   }
 
   return (
-    <FormControl display="flex" alignItems="center">
+    <FormControl display="flex" alignItems="center" mt="6">
       <FormLabel htmlFor="publish-note" mb="0">
         Published
       </FormLabel>

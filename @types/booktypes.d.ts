@@ -20,10 +20,11 @@ export type BookJSON = {
 export type DashboardNote = {
   id: string;
   bookId?: string;
-  published: boolean;
+  isPublished: boolean;
   rating: number;
   title: string;
-  excerpt?: string;
+  lastUpdated: date;
+  excerpt: string;
 };
 
 export type BookNote = DashboardNote & {
@@ -35,7 +36,6 @@ export type BookNoteState = {
   content: string;
   rating: number;
   title: string;
-  excerpt: string;
   bookId?: string;
   isPublished: boolean;
 };

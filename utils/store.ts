@@ -8,6 +8,7 @@ import {
   Thunk,
 } from 'easy-peasy';
 import { BookNoteState, Book, BookNote } from '../@types/booktypes';
+import db from '../firebase';
 import { fetchDoc } from './fetchDoc';
 
 type StoreModel = BookNoteState & {
@@ -15,7 +16,6 @@ type StoreModel = BookNoteState & {
   updateSelectedBook: Action<StoreModel, Book | null>;
   updateRating: Action<StoreModel, number>;
   updateTitle: Action<StoreModel, string>;
-  updateExcerpt: Action<StoreModel, string>;
   updateBookId: Action<StoreModel, string>;
   updateIsPublished: Action<StoreModel, boolean>;
   resetState: Action<StoreModel>;
@@ -29,7 +29,6 @@ export const NoteEditorStore = createStore<StoreModel>(
     content: '',
     rating: 0,
     title: '',
-    excerpt: '',
     bookId: undefined,
     isPublished: false,
     updateIsPublished: action((state, payload) => {
@@ -50,15 +49,11 @@ export const NoteEditorStore = createStore<StoreModel>(
     updateTitle: action((state, payload) => {
       state.title = payload;
     }),
-    updateExcerpt: action((state, payload) => {
-      state.excerpt = payload;
-    }),
     resetState: action((state) => {
       state.selectedBook = null;
       state.content = '';
       state.rating = 0;
       state.title = '';
-      state.excerpt = '';
       state.bookId = undefined;
       state.isPublished = false;
     }),
@@ -72,11 +67,10 @@ export const NoteEditorStore = createStore<StoreModel>(
       } else {
         const note = noteDocSnap.data();
         actions.updateContent(note.content);
-        actions.updateExcerpt(note.excerpt || '');
         actions.updateRating(note.rating || 0);
         actions.updateTitle(note.title || '');
         actions.updateBookId(note.bookId || '');
-        actions.updateIsPublished(note.published || false);
+        actions.updateIsPublished(note.isPublished || false);
       }
     }),
     fetchBook: thunk(async (actions, payload) => {

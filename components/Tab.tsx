@@ -1,8 +1,6 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
-interface props {}
-
 export default function Tab({
   icon,
   children,

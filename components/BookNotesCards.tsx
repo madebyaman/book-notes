@@ -17,7 +17,6 @@ import { DashboardNote } from '../@types/booktypes';
 import db from '../firebase';
 import useStatus from '../utils/useStatus';
 import BookCover from './BookCover';
-import ChakraNextLinkButton from './ChakraNextLink';
 import Status from './Status';
 
 const BookNotesCards = ({ userID }: { userID: string }) => {
@@ -96,8 +95,8 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                     {title || 'Untitled'}
                   </Heading>
                   {excerpt && (
-                    <Box>
-                      <Text>{excerpt}</Text>
+                    <Box my="4">
+                      <Box dangerouslySetInnerHTML={{ __html: excerpt }}></Box>
                     </Box>
                   )}
                   <Flex justify={'flex-start'} alignItems="center" mt={4}>
@@ -110,7 +109,7 @@ const BookNotesCards = ({ userID }: { userID: string }) => {
                     >
                       <Button
                         colorScheme={'teal'}
-                        borderRadius="0"
+                        borderRadius="sm"
                         mr="4"
                         rightIcon={<EditIcon />}
                       >

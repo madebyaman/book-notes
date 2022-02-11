@@ -12,10 +12,10 @@ import { NextPage } from 'next';
 import { useAuth } from '../utils/useAuth';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { useEffect, useState } from 'react';
-import ChakraNextLink from '../components/ChakraNextLink';
 import md5 from 'md5';
 import Tab from '../components/Tab';
 import BookNotesCards from '../components/BookNotesCards';
+import Profile from '../components/Profile';
 
 const Dashboard: NextPage = function () {
   const [gravatarHash, setGravatarHash] = useState<String | null>(null);
@@ -33,10 +33,7 @@ const Dashboard: NextPage = function () {
     return (
       <Container maxW="container.lg" mt="24">
         <Center flexDir={'column'}>
-          <Text>
-            You are not logged in. Redirecting you back to{' '}
-            <ChakraNextLink href="/signin">login page.</ChakraNextLink>
-          </Text>
+          <Text>Loading</Text>
           <Box mt="8">
             <CircularProgress isIndeterminate />
           </Box>
@@ -55,10 +52,11 @@ const Dashboard: NextPage = function () {
               />
               <Box ml={8}>
                 <Heading as="h1">
-                  Hello {auth.user.displayName || 'Name not found'}
+                  Hello {auth.user.displayName || 'there'}
                 </Heading>
                 <Text ml={1} mt={'2'}>
-                  Here are book notes
+                  {activeTab === 0 && 'Here are book notes'}
+                  {activeTab === 1 && 'Update your profile here'}
                 </Text>
               </Box>
             </Flex>
@@ -85,6 +83,7 @@ const Dashboard: NextPage = function () {
         </Box>
         <Container maxW="container.lg" mt={16} mb={12}>
           {activeTab === 0 && <BookNotesCards userID={auth.user.uid} />}
+          {activeTab === 1 && <Profile />}
         </Container>
       </Box>
     );

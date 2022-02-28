@@ -7,8 +7,8 @@ import {
   thunk,
   Thunk,
 } from 'easy-peasy';
-import { BookNoteState, Book, BookNote } from '../@types/booktypes';
-import { fetchDoc } from './fetchDoc';
+import { BookNoteState, Book, BookNote } from '../../@types/booktypes';
+import { fetchDoc } from '../../utils/fetchDoc';
 
 type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;

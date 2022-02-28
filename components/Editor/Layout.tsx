@@ -8,16 +8,16 @@ import {
   createDocument,
   createOrUpdateDocument,
   uploadImageFromCoverID,
-} from '../../utils/saveDocMethods';
-import { useStoreState } from '../../utils/store';
-import EditingSection from './EditingSection';
-import EditorSidebar from './EditorSidebar';
-import EditorTopBar from './EditorTopBar';
+} from './utils';
+import { useStoreState } from './store';
+import { EditingSection } from './Main';
+import { EditorSidebar } from './Sidebar';
+import TopBar from './TopBar';
 
-const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
+export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished } =
     useStoreState((state) => state);
-  const { user, isLoading } = useAuth(); // TODO
+  const { user, isLoading } = useAuth();
   const toast = useToast();
 
   /**
@@ -127,7 +127,7 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
         px="2"
       >
         {/* Section for Top Bar */}
-        <EditorTopBar onSave={onSave} />
+        <TopBar onSave={onSave} />
       </Box>
       <Flex margin="0 auto" mt={'80px'} w="100%">
         {/* EditingSection */}
@@ -144,5 +144,3 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
     </Box>
   );
 };
-
-export default EditorLayout;

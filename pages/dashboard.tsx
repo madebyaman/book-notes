@@ -12,8 +12,7 @@ import { NextPage } from 'next';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { ImUser } from 'react-icons/im';
 import { useState } from 'react';
-import Tab from '../components/Tab';
-import { BookCards } from '../components/Dashboard';
+import { BookCards, Tab } from '../components/Dashboard';
 import Profile from '../components/Profile';
 import { signout, useAuth } from '../utils/auth';
 

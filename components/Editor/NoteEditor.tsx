@@ -1,14 +1,9 @@
 import React, { useEffect } from 'react';
 import { StoreProvider } from 'easy-peasy';
 
-import {
-  NoteEditorStore,
-  useStoreActions,
-  useStoreState,
-} from '../utils/store';
-import EditorLayout from './Editor/Layout';
-import { useStatus } from './Status/useStatus';
-import { StatusWrapper } from './Status/StatusWrapper';
+import { NoteEditorStore, useStoreActions, useStoreState } from './store';
+import { Layout } from './Layout';
+import { useStatus, StatusWrapper } from '../Status';
 import ErrorFetchingNote from './ErrorFetchingNote';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
@@ -64,17 +59,15 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       error={<ErrorFetchingNote />}
       status={status.status}
     >
-      <EditorLayout docId={docId} />
+      <Layout docId={docId} />
     </StatusWrapper>
   );
 };
 
-const NoteEditor = ({ docId }: { docId?: string }) => {
+export const NoteEditor = ({ docId }: { docId?: string }) => {
   return (
     <StoreProvider store={NoteEditorStore}>
       <NoteEditorConsumer docId={docId} />
     </StoreProvider>
   );
 };
-
-export default NoteEditor;

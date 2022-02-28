@@ -3,20 +3,14 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useState } from 'react';
-import { useStoreActions, useStoreState } from '../../utils/store';
+import { useStoreActions, useStoreState } from '../store';
 import ContentEditor from './ContentEditor';
 import EditorMenu from './EditorMenu';
 
-const EditingSection = () => {
+export const EditingSection = () => {
   const [showMenu, setShowMenu] = useState(false);
   const content = useStoreState((state) => state.content);
   const updateContent = useStoreActions((actions) => actions.updateContent);
-
-  // useEffect(() => {
-  //   if (!editor) return;
-  //   if (!editor.commands) return;
-  //   editor.commands.setContent(content);
-  // }, [content]);
 
   const editor = useEditor({
     extensions: [
@@ -48,5 +42,3 @@ const EditingSection = () => {
     </Box>
   );
 };
-
-export default EditingSection;

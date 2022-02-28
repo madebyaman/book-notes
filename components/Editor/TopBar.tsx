@@ -1,16 +1,9 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  IconButton,
-  Stack,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FaSave } from 'react-icons/fa';
 
-const EditorTopBar = ({
+const TopBar = ({
   onSave,
   isEditing = false,
 }: {

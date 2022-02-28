@@ -1,6 +1,6 @@
 import { Box, Input, Text, Textarea } from '@chakra-ui/react';
 import { Editor, EditorContent } from '@tiptap/react';
-import { useStoreActions, useStoreState } from '../../utils/store';
+import { useStoreActions, useStoreState } from '../store';
 
 /**
  * Tiptap editor component. It also displays title.

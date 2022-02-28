@@ -1,6 +1,6 @@
 import { FaStar } from 'react-icons/fa';
 import { Box, IconButton } from '@chakra-ui/react';
-import { useStoreState, useStoreActions } from '../../utils/store';
+import { useStoreState, useStoreActions } from '../store';
 
 const Ratings = () => {
   const rating = useStoreState((state) => state.rating);

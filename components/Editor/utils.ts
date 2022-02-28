@@ -1,5 +1,5 @@
 import { addDoc, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
-import db from '../firebase';
+import db from '../../firebase';
 
 /**
  * Upload an image to cloudinary with the given coverId.

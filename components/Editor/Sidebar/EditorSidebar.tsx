@@ -1,10 +1,10 @@
 import { Text, Flex, Spacer, Box, Heading } from '@chakra-ui/react';
-import { useStoreState } from '../../utils/store';
-import BookSelect from '../BookSelect';
+import { useStoreState } from '../store';
+import BookSelect from './BookSelect';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
 
-const EditorSidebar = () => {
+export const EditorSidebar = () => {
   const selectedBook = useStoreState((state) => state.selectedBook);
 
   return (
@@ -52,5 +52,3 @@ const EditorSidebar = () => {
     </Flex>
   );
 };
-
-export default EditorSidebar;

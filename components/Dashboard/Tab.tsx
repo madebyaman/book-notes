@@ -1,7 +1,7 @@
 import { Box, Flex } from '@chakra-ui/react';
 import { JSXElementConstructor, ReactElement, ReactNode } from 'react';
 
-export default function Tab({
+export const Tab = ({
   icon,
   children,
   active,
@@ -11,7 +11,7 @@ export default function Tab({
   icon: ReactElement<any, string | JSXElementConstructor<any>>;
   active?: boolean;
   onClick?: () => void;
-}) {
+}) => {
   return (
     <Flex
       onClick={onClick}
@@ -27,4 +27,4 @@ export default function Tab({
       {children}
     </Flex>
   );
-}
+};

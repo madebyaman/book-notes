@@ -1,4 +1,4 @@
-import NoteEditor from '../../components/NoteEditor';
+import { NoteEditor } from '../../components/Editor';
 import { useRouter } from 'next/router';
 
 const EditBook = () => {

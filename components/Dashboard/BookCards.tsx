@@ -1,49 +1,22 @@
 import { AddIcon } from '@chakra-ui/icons';
 import { Text, Grid, GridItem, Flex } from '@chakra-ui/react';
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-import { DashboardNote } from '../../@types/booktypes';
-import db from '../../firebase';
+import { BookNote } from '../../@types/booktypes';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
 import { BookCard } from './BookCard';
+import { subscribeToCurrentUserNotes } from './subscribeToCurrentUserNotes';
 
-export const BookCards = ({ userID }: { userID: string }) => {
-  const [cards, setCards] = useState<DashboardNote[]>([]);
+export const BookCards = () => {
+  const [cards, setCards] = useState<BookNote[]>([]);
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
-    let unsub: () => void;
-    try {
-      const q = query(
-        collection(db, 'book-notes'),
-        where('userId', '==', userID)
-      );
-      unsub = onSnapshot(q, (snap) => {
-        const bookNotes: DashboardNote[] = [];
-        snap.forEach((doc) => {
-          const data = doc.data();
-          bookNotes.push({
-            id: doc.id,
-            bookId: data.bookId,
-            title: data.title,
-            rating: data.rating,
-            isPublished: data.isPublished,
-            lastUpdated: data.lastUpdated,
-            excerpt: data.excerpt,
-          });
-        });
-        setCards(bookNotes);
-      });
-    } catch (err) {
-      dispatch({ type: 'ERROR', payload: 'Error fetching data' });
-    }
-    dispatch({ type: 'LOADED' });
-
-    return () => unsub();
-  }, [userID]);
+    const unsub = subscribeToCurrentUserNotes((result) => setCards(result));
+    return unsub;
+  }, []);
 
   return (
     <StatusWrapper

@@ -9,13 +9,13 @@ import {
 import { BookNote } from '../../@types/booktypes';
 import db from '../../firebase';
 
-export const getAllUserNotes = async (
+export const subscribeToNotes = (
   userId: string,
   cb: (notes: BookNote[]) => void
 ) => {
-  const callback = async (querySnap: QuerySnapshot<DocumentData>) => {
+  const callback = (querySnap: QuerySnapshot<DocumentData>) => {
     const notes: BookNote[] = [];
-    await querySnap.forEach((doc: any) => {
+    querySnap.forEach((doc: any) => {
       notes.push({
         ...doc.data(),
         id: doc.id,

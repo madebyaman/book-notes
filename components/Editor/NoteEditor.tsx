@@ -51,8 +51,6 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
     };
   }, [docId]);
 
-  // save content, images, etc
-
   return (
     <StatusWrapper
       loading={<div>Loading...</div>}

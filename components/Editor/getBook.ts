@@ -1,9 +1,10 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore';
+import { Book } from '../../@types/booktypes';
 import db from '../../firebase';
 
 export const getBook = async (bookId: string) => {
   const bookRef = doc(db, 'books', bookId);
-  const bookSnap = await getDoc(bookRef);
+  const bookSnap = (await getDoc(bookRef)) as DocumentSnapshot<Book>;
 
   if (bookSnap.exists()) {
     return {

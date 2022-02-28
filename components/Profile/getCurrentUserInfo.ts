@@ -1,4 +1,4 @@
-import { getCurrentUser } from '../auth';
+import { getCurrentUser } from '../../utils/auth';
 import { getUserInfo } from './getUserInfo';
 
 export const getCurrentUserInfo = async () => {

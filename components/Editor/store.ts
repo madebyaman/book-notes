@@ -1,4 +1,3 @@
-import { QueryDocumentSnapshot } from '@firebase/firestore';
 import {
   action,
   Action,
@@ -7,8 +6,9 @@ import {
   thunk,
   Thunk,
 } from 'easy-peasy';
-import { BookNoteState, Book, BookNote } from '../../@types/booktypes';
-import { fetchDoc } from '../../utils/fetchDoc';
+import { BookNoteState, Book } from '../../@types/booktypes';
+import { getBook } from './getBook';
+import { getNote } from './getNote';
 
 type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;
@@ -60,14 +60,8 @@ export const NoteEditorStore = createStore<StoreModel>(
      * Fetch a document with a url. It should update the note state if everything went well.
      */
     fetchDocument: thunk(async (actions, payload) => {
-      const noteDocSnap = (await fetchDoc(
-        `book-notes/${payload.docId}`
-      )) as QueryDocumentSnapshot<BookNote>;
-
-      if (!noteDocSnap || !noteDocSnap.exists()) {
-        throw new Error('Error fetching note');
-      } else if (payload.isSubscribed) {
-        const note = noteDocSnap.data();
+      const note = await getNote(payload.docId);
+      if (note) {
         actions.updateContent(note.content);
         actions.updateRating(note.rating || 0);
         actions.updateTitle(note.title || '');
@@ -79,15 +73,9 @@ export const NoteEditorStore = createStore<StoreModel>(
      * Gets a book with the given bookId. And updates `selectedBook` state.
      */
     fetchBook: thunk(async (actions, payload) => {
-      const bookDocSnap = (await fetchDoc(
-        `books/${payload.bookId}`
-      )) as QueryDocumentSnapshot<Book>;
-
-      if (bookDocSnap && bookDocSnap.exists()) {
-        const book = bookDocSnap.data();
-        if (payload.isSubscribed) actions.updateSelectedBook(book);
-      } else {
-        throw new Error('Error fetching the book');
+      const book = await getBook(payload.bookId);
+      if (book) {
+        actions.updateSelectedBook(book);
       }
     }),
   },

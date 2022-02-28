@@ -7,8 +7,9 @@ import {
   useToast,
   Text,
 } from '@chakra-ui/react';
-import { updateProfile } from 'firebase/auth';
 import { useEffect, useReducer } from 'react';
+import { getCurrentUserInfo } from './getCurrentUserInfo';
+import { updateCurrentUserInfo } from './updateCurrentUserInfo';
 
 const initialState = {
   name: '',
@@ -30,25 +31,25 @@ function reducer(state: typeof initialState, action: ProfileActions) {
   }
 }
 
-const Profile = () => {
+export const Profile = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // const auth = useAuth(); // TODO
   const toast = useToast();
 
-  // useEffect(() => {
-  //   if (auth.user) {
-  //     if (auth.user.displayName) {
-  //       dispatch({ type: 'UPDATE_NAME', payload: auth.user.displayName });
-  //     }
-  //   }
-  // }, [auth.user]);
+  useEffect(() => {
+    const updateName = async () => {
+      const user = await getCurrentUserInfo();
+      if (user) {
+        dispatch({ type: 'UPDATE_NAME', payload: user.name });
+      }
+    };
+    updateName();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
     e.preventDefault();
-    if (
-      // !auth.user ||
-      !process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE
-    ) {
+    if (!process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE) {
       return;
     }
 
@@ -78,10 +79,10 @@ const Profile = () => {
     ).then((res) => res.json());
 
     try {
-      // updateProfile(auth.user, {
-      //   displayName: state.name,
-      //   photoURL: data.secure_url,
-      // });
+      await updateCurrentUserInfo({
+        name: state.name,
+        photo: data.secure_url,
+      });
       toast({
         title: 'Successfully saved your profile',
         status: 'success',
@@ -95,6 +96,8 @@ const Profile = () => {
         duration: 1_000,
         isClosable: true,
       });
+    } finally {
+      dispatch({ type: 'UPDATE_LOADING_STATE', payload: false });
     }
   };
 
@@ -130,5 +133,3 @@ const Profile = () => {
     </div>
   );
 };
-
-export default Profile;

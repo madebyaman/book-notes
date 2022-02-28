@@ -47,4 +47,4 @@ const TopBar = ({
   );
 };
 
-export default EditorTopBar;
+export default TopBar;

@@ -9,92 +9,83 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { NextPage } from 'next';
-import { useAuth } from '../utils/useAuth';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { ImUser } from 'react-icons/im';
-import { useEffect, useState } from 'react';
-import md5 from 'md5';
+import { useState } from 'react';
 import Tab from '../components/Tab';
 import BookNotesCards from '../components/BookNotesCards';
 import Profile from '../components/Profile';
+import { signout, useAuth } from '../utils/auth';
 
 const Dashboard: NextPage = function () {
-  const [gravatarHash, setGravatarHash] = useState<String | null>(null);
   const [activeTab, setActiveTab] = useState(0);
-  const auth = useAuth();
+  const { user } = useAuth();
+  // const auth = useAuth(); // TODO
 
-  useEffect(() => {
-    if (gravatarHash === null && auth.user && auth.user.email) {
-      setGravatarHash(md5(auth.user.email.toLocaleLowerCase()));
-    }
-  }, [auth]);
-
-  if (!auth.user) {
-    // Sometimes it takes a second to load initial state
-    return (
-      <Container maxW="container.lg" mt="24">
-        <Center flexDir={'column'}>
-          <Text>Loading</Text>
-          <Box mt="8">
-            <CircularProgress isIndeterminate />
-          </Box>
-        </Center>
-      </Container>
-    );
-  } else {
-    return (
-      <Box>
-        <Box backgroundColor={'gray.50'}>
-          <Container maxW="container.lg" pt={'16'}>
-            <Flex justify="center" align={'center'}>
-              {auth.user.photoURL ? (
-                <Image
-                  borderRadius={'full'}
-                  src={auth.user.photoURL}
-                  w="100px"
-                  h="100px"
-                />
-              ) : (
-                <ImUser fontSize={'50px'} />
-              )}
-              <Box ml={8}>
-                <Heading as="h1">
-                  Hello {auth.user.displayName || 'there'}
-                </Heading>
-                <Text ml={1} mt={'2'}>
-                  {activeTab === 0 && 'Here are book notes'}
-                  {activeTab === 1 && 'Update your profile here'}
-                </Text>
-              </Box>
-            </Flex>
-            <Flex mt={12} justify={'center'}>
-              <Tab
-                icon={<FiBook />}
-                active={activeTab === 0}
-                onClick={() => setActiveTab(0)}
-              >
-                Book Notes
-              </Tab>
-              <Tab
-                icon={<FiUser />}
-                active={activeTab === 1}
-                onClick={() => setActiveTab(1)}
-              >
-                Profile
-              </Tab>
-              <Tab icon={<FiLogOut />} onClick={auth.handleSignout}>
-                Logout
-              </Tab>
-            </Flex>
-          </Container>
-        </Box>
-        <Container maxW="container.lg" mt={16} mb={12}>
-          {activeTab === 0 && <BookNotesCards userID={auth.user.uid} />}
-          {activeTab === 1 && <Profile />}
+  // Sometimes it takes a second to load initial state
+  // return (
+  //   <Container maxW="container.lg" mt="24">
+  //     <Center flexDir={'column'}>
+  //       <Text>Loading</Text>
+  //       <Box mt="8">
+  //         <CircularProgress isIndeterminate />
+  //       </Box>
+  //     </Center>
+  //   </Container>
+  // );
+  return (
+    <Box>
+      <Box backgroundColor={'gray.50'}>
+        <Container maxW="container.lg" pt={'16'}>
+          <Flex justify="center" align={'center'}>
+            {/* {auth.user.photoURL ? ( // TODO */}
+            {/* <Image
+                borderRadius={'full'}
+                src={auth.user.photoURL}
+                w="100px"
+                h="100px"
+              />
+            ) : ( */}
+            <ImUser fontSize={'50px'} />
+            {/* )} */}
+            <Box ml={8}>
+              <Heading as="h1">
+                {/* Hello {auth.user.displayName || 'there'} // TODO */}
+                Hello
+              </Heading>
+              <Text ml={1} mt={'2'}>
+                {activeTab === 0 && 'Here are book notes'}
+                {activeTab === 1 && 'Update your profile here'}
+              </Text>
+            </Box>
+          </Flex>
+          <Flex mt={12} justify={'center'}>
+            <Tab
+              icon={<FiBook />}
+              active={activeTab === 0}
+              onClick={() => setActiveTab(0)}
+            >
+              Book Notes
+            </Tab>
+            <Tab
+              icon={<FiUser />}
+              active={activeTab === 1}
+              onClick={() => setActiveTab(1)}
+            >
+              Profile
+            </Tab>
+            <Tab icon={<FiLogOut />} onClick={signout}>
+              Logout
+            </Tab>
+          </Flex>
         </Container>
       </Box>
-    );
-  }
+      <Container maxW="container.lg" mt={16} mb={12}>
+        {activeTab === 0 && user && <BookNotesCards userID={user.id} />}
+        {activeTab === 1 && <Profile />}
+      </Container>
+    </Box>
+  );
 };
 
 export default Dashboard;

@@ -1,4 +1,4 @@
-import { Checkbox, FormControl, FormLabel, Switch } from '@chakra-ui/react';
+import { Checkbox } from '@chakra-ui/react';
 import { useStoreActions, useStoreState } from '../../utils/store';
 
 const PublishSwitch = () => {

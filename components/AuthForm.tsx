@@ -13,7 +13,8 @@ import {
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FormEvent, ReactNode, useState } from 'react';
-import { useAuth } from '../utils/useAuth';
+
+import { signin, signup } from '../utils/auth';
 import ChakraNextLinkButton from './ChakraNextLink';
 
 interface AuthFormInterface {
@@ -38,7 +39,6 @@ const AuthForm = ({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-  const { signIn, signUp } = useAuth();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,9 +46,8 @@ const AuthForm = ({
 
     if (mode === 'LOGIN') {
       // Login mode
-      if (!signIn) return;
       try {
-        await signIn({ email, password, remember: true && rememberMe });
+        await signin({ email, password, remember: rememberMe });
         router.push('/dashboard');
       } catch (e) {
         let message = 'Error: ';
@@ -59,9 +58,8 @@ const AuthForm = ({
       }
     } else {
       // Signup mode
-      if (!signUp) return;
       try {
-        await signUp({ email, password, name });
+        await signup({ email, password, name });
         router.push('/dashboard');
       } catch (e) {
         let message = 'Error: ';

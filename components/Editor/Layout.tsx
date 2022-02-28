@@ -2,6 +2,7 @@ import { Box, Flex, useToast } from '@chakra-ui/react';
 import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 import { Book } from '../../@types/booktypes';
+import { useAuth } from '../../utils/auth';
 import { fetchDoc } from '../../utils/fetchDoc';
 import {
   createDocument,
@@ -9,7 +10,6 @@ import {
   uploadImageFromCoverID,
 } from '../../utils/saveDocMethods';
 import { useStoreState } from '../../utils/store';
-import { useAuth } from '../../utils/useAuth';
 import EditingSection from './EditingSection';
 import EditorSidebar from './EditorSidebar';
 import EditorTopBar from './EditorTopBar';
@@ -17,7 +17,7 @@ import EditorTopBar from './EditorTopBar';
 const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished } =
     useStoreState((state) => state);
-  const auth = useAuth();
+  const { user, isLoading } = useAuth(); // TODO
   const toast = useToast();
 
   /**
@@ -57,6 +57,7 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
    * 4. If `docId` is provided, update the document. Else, create a new document
    */
   const onSave = async () => {
+    if (!user) return;
     const firstParagraphElement = content.split('</p>', 1)[0];
     const newExcerpt = firstParagraphElement.replace('<p>', '');
 
@@ -64,7 +65,7 @@ const EditorLayout = ({ docId = undefined }: { docId?: string }) => {
       content,
       rating,
       isPublished,
-      userId: auth.user?.uid,
+      userId: user?.id,
       title,
       excerpt: newExcerpt,
       bookId: bookId,

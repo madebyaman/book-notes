@@ -35,7 +35,7 @@ function reducer(
 /**
  * UseStatus hook. It contains the state and dispatch function.State consists of status and error.
  */
-export default function useStatus() {
+export const useStatus = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   return { state, dispatch };
-}
+};

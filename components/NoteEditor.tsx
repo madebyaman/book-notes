@@ -7,8 +7,8 @@ import {
   useStoreState,
 } from '../utils/store';
 import EditorLayout from './Editor/Layout';
-import useStatus from '../utils/useStatus';
-import Status from './Status';
+import { useStatus } from './Status/useStatus';
+import { StatusWrapper } from './Status/StatusWrapper';
 import ErrorFetchingNote from './ErrorFetchingNote';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
@@ -59,13 +59,13 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   // save content, images, etc
 
   return (
-    <Status
+    <StatusWrapper
       loading={<div>Loading...</div>}
       error={<ErrorFetchingNote />}
       status={status.status}
     >
       <EditorLayout docId={docId} />
-    </Status>
+    </StatusWrapper>
   );
 };
 

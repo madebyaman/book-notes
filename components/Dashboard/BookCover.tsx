@@ -1,9 +1,9 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import db from '../firebase';
-import useStatus from '../utils/useStatus';
+import db from '../../firebase';
+import { useStatus } from '../Status';
 import { Image } from '@chakra-ui/react';
-import Status from './Status';
+import { StatusWrapper } from '../Status';
 
 const DefaultBookCover = () => (
   <Image src="./Book.png" alt="Book Cover" width={'150px'} />
@@ -48,10 +48,18 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
   }, [bookID]);
 
   return (
-    <Status
+    <StatusWrapper
       status={fetchingBookCoverStatus.status}
-      loading={<div>Loading...</div>}
-      error={<div>{fetchingBookCoverStatus.error}</div>}
+      loading={
+        <div>
+          <DefaultBookCover />
+        </div>
+      }
+      error={
+        <div>
+          <DefaultBookCover />
+        </div>
+      }
     >
       {bookID && bookCoverURL ? (
         <Image
@@ -64,7 +72,7 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
       ) : (
         <DefaultBookCover />
       )}
-    </Status>
+    </StatusWrapper>
   );
 };
 

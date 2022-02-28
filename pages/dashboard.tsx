@@ -13,7 +13,7 @@ import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { ImUser } from 'react-icons/im';
 import { useState } from 'react';
 import Tab from '../components/Tab';
-import BookNotesCards from '../components/BookNotesCards';
+import { BookCards } from '../components/Dashboard';
 import Profile from '../components/Profile';
 import { signout, useAuth } from '../utils/auth';
 
@@ -81,7 +81,7 @@ const Dashboard: NextPage = function () {
         </Container>
       </Box>
       <Container maxW="container.lg" mt={16} mb={12}>
-        {activeTab === 0 && user && <BookNotesCards userID={user.id} />}
+        {activeTab === 0 && user && <BookCards userID={user.id} />}
         {activeTab === 1 && <Profile />}
       </Container>
     </Box>

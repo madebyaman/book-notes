@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { StatusType } from '../utils/useStatus';
+import { StatusType } from './useStatus';
 
-export default function Status({
+export const StatusWrapper = ({
   children,
   status,
   loading,
@@ -11,11 +11,11 @@ export default function Status({
   status: StatusType;
   loading: ReactNode;
   error: ReactNode;
-}): JSX.Element {
+}): JSX.Element => {
   if (status === 'LOADING') {
     return <>{loading}</>;
   } else if (status === 'ERROR') {
     return <>{error}</>;
   }
   return <>{children}</>;
-}
+};

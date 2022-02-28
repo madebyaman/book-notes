@@ -14,7 +14,11 @@ export const BookCards = () => {
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
-    const unsub = subscribeToCurrentUserNotes((result) => setCards(result));
+    const unsub = subscribeToCurrentUserNotes((result) => {
+      dispatch({ type: 'LOADING' });
+      setCards(result);
+      dispatch({ type: 'LOADED' });
+    });
     return unsub;
   }, []);
 

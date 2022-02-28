@@ -33,7 +33,6 @@ function reducer(state: typeof initialState, action: ProfileActions) {
 
 export const Profile = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const auth = useAuth(); // TODO
   const toast = useToast();
 
   useEffect(() => {
@@ -59,30 +58,33 @@ export const Profile = () => {
       }
     );
 
-    const formData = new FormData();
-    if (!fileInput) return;
-    const files = fileInput.files || [];
-    for (const file of files) {
-      formData.append('file', file);
-      formData.append(
-        'upload_preset',
-        process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE
-      );
+    let profile = {
+      name: state.name,
+    };
+    if (fileInput && fileInput.files.length) {
+      const formData = new FormData();
+      const files = fileInput.files || [];
+      for (const file of files) {
+        formData.append('file', file);
+        formData.append(
+          'upload_preset',
+          process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE
+        );
+      }
+
+      const data = await fetch(
+        'https://api.cloudinary.com/v1_1/dksughwo7/image/upload',
+        {
+          method: 'POST',
+          body: formData,
+        }
+      ).then((res) => res.json());
+
+      profile.photo = data.secure_url;
     }
 
-    const data = await fetch(
-      'https://api.cloudinary.com/v1_1/dksughwo7/image/upload',
-      {
-        method: 'POST',
-        body: formData,
-      }
-    ).then((res) => res.json());
-
     try {
-      await updateCurrentUserInfo({
-        name: state.name,
-        photo: data.secure_url,
-      });
+      await updateCurrentUserInfo(profile);
       toast({
         title: 'Successfully saved your profile',
         status: 'success',
@@ -90,6 +92,7 @@ export const Profile = () => {
         isClosable: true,
       });
     } catch (e) {
+      console.log(e);
       toast({
         title: 'Error saving your profile. Try again',
         status: 'error',

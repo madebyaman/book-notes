@@ -27,7 +27,6 @@ const BookSelect = () => {
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
-    // Do not wait for 1s, but wait for 1s after input has finished entering
     const timer = setTimeout(() => {
       dispatch({ type: 'LOADING' });
       fetch(
@@ -81,7 +80,6 @@ const BookSelect = () => {
   const handleSelectChange = (newVal: Book | null) => {
     if (newVal) {
       const value = { ...newVal, key: convertSlashToPlus(newVal.key) };
-      console.log('changin to plus', value);
       setSelectedBook(value);
       updateBookId(value.key);
       return;

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { addAuthListener, getCurrentUser } from '.';
+import { addAuthListener } from '.';
 
 export const useAuth = () => {
   const [authInfo, setAuthInfo] = useState<{

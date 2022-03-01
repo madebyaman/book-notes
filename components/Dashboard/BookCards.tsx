@@ -14,14 +14,15 @@ export const BookCards = () => {
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
-    console.log('starting up subscribe');
-    const unsub = subscribeToCurrentUserNotes((result) => {
-      console.log('result', result);
-      dispatch({ type: 'LOADING' });
-      setCards(result);
-      dispatch({ type: 'LOADED' });
-    });
-    return unsub;
+    const setBooks = async () => {
+      const unsub = await subscribeToCurrentUserNotes((result) => {
+        dispatch({ type: 'LOADING' });
+        setCards(result);
+        dispatch({ type: 'LOADED' });
+      });
+      return unsub;
+    };
+    setBooks();
   }, []);
 
   return (

@@ -1,8 +1,13 @@
+import { onAuthStateChanged } from 'firebase/auth';
+import { addAuthListener } from '.';
 import { auth } from '../../firebase';
 
-export const getCurrentUser = () => {
-  const user = auth.currentUser;
-
-  if (!user) return null;
-  return { id: user.uid };
+export const getCurrentUser = async (): Promise<{ id: string } | undefined> => {
+  return new Promise((resolve, reject) => {
+    const unsub = onAuthStateChanged(auth, (user) => {
+      unsub();
+      if (user) resolve({ id: user.uid });
+      else reject();
+    });
+  });
 };

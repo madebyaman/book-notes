@@ -3,7 +3,7 @@ import db from '../../firebase';
 import { getCurrentUser } from '../../utils/auth';
 
 export const updateCurrentUserInfo = async (updates) => {
-  const currentUser = getCurrentUser();
+  const currentUser = await getCurrentUser();
 
   if (!currentUser) return;
   const userRef = doc(db, 'users', currentUser.id);

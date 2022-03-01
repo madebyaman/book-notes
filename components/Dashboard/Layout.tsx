@@ -17,7 +17,6 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const loadUser = async () => {
       const currentUser = await getCurrentUserInfo();
-      console.log('currentUser', currentUser);
       if (currentUser) {
         setUser(currentUser);
       }

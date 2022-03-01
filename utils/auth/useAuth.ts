@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { addAuthListener, getCurrentUser } from '.';
 
 export const useAuth = () => {
-  const [authInfo, setAuthInfo] = useState(() => {
-    const user = getCurrentUser();
-    const isLoading = !user;
-    return { user, isLoading };
+  const [authInfo, setAuthInfo] = useState<{
+    user: null | { id: string };
+    isLoading: boolean;
+  }>({
+    user: null,
+    isLoading: true,
   });
 
   useEffect(() => {

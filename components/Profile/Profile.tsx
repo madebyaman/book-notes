@@ -36,13 +36,23 @@ export const Profile = () => {
   const toast = useToast();
 
   useEffect(() => {
-    const updateName = async () => {
+    let done = false;
+    let timer: NodeJS.Timeout;
+    const updateName = async (attempt: number) => {
       const user = await getCurrentUserInfo();
       if (user) {
+        done = true;
         dispatch({ type: 'UPDATE_NAME', payload: user.name });
       }
+      timer = setTimeout(() => {
+        if (done) return;
+        else if (attempt < 3) updateName(attempt + 1);
+        else return;
+      }, 1_000);
     };
-    updateName();
+    updateName(1);
+
+    return () => clearTimeout(timer);
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

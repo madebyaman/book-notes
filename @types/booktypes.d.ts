@@ -1,7 +1,7 @@
 export type Book = {
   key: string;
   title: string;
-  photoURL?: string;
+  photoURL: string;
   cover: string;
   author: string;
   year: number;
@@ -29,6 +29,7 @@ export type DashboardNote = {
 
 export type BookNote = DashboardNote & {
   content: string;
+  userId: string;
 };
 
 export type BookNoteState = {

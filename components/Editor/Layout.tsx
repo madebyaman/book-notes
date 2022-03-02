@@ -1,9 +1,7 @@
 import { Box, Flex, useToast } from '@chakra-ui/react';
-import { QueryDocumentSnapshot } from 'firebase/firestore';
 
 import { Book } from '../../@types/booktypes';
 import { useAuth } from '../../utils/auth';
-import { fetchDoc } from '../../utils/fetchDoc';
 import {
   createDocument,
   createOrUpdateDocument,
@@ -13,6 +11,7 @@ import { useStoreState } from './store';
 import { EditingSection } from './Main';
 import { EditorSidebar } from './Sidebar';
 import TopBar from './TopBar';
+import { getBook } from './getBook';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished } =
@@ -74,9 +73,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
 
     if (selectedBook) {
       // Check if document exists with id = selectedBook.key
-      const bookDocSnap = (await fetchDoc(
-        `books/${selectedBook.key}`
-      )) as QueryDocumentSnapshot<Book>;
+      const bookDocSnap = await getBook(selectedBook.key);
       // If no book found, create a new book
       if (!bookDocSnap) {
         // First upload the book cover if selectedBook.cover exists

@@ -7,7 +7,7 @@ import {
   useToast,
   Text,
 } from '@chakra-ui/react';
-import { useEffect, useReducer } from 'react';
+import { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import { getCurrentUserInfo } from './getCurrentUserInfo';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
 
@@ -33,26 +33,24 @@ function reducer(state: typeof initialState, action: ProfileActions) {
 
 export const Profile = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [profilePicture, setProfilePicture] = useState<File | undefined>();
   const toast = useToast();
 
   useEffect(() => {
-    let done = false;
-    let timer: NodeJS.Timeout;
-    const updateName = async (attempt: number) => {
-      const user = await getCurrentUserInfo();
-      if (user) {
-        done = true;
-        dispatch({ type: 'UPDATE_NAME', payload: user.name });
+    let isSubscribed = true;
+    const updateName = async () => {
+      if (isSubscribed) {
+        const user = await getCurrentUserInfo();
+        if (user) {
+          dispatch({ type: 'UPDATE_NAME', payload: user.name });
+        }
       }
-      timer = setTimeout(() => {
-        if (done) return;
-        else if (attempt < 3) updateName(attempt + 1);
-        else return;
-      }, 1_000);
     };
-    updateName(1);
+    updateName();
 
-    return () => clearTimeout(timer);
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -114,6 +112,13 @@ export const Profile = () => {
     }
   };
 
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target && e.target.files && e.target.files.length) {
+      const file = e.target.files[0] as File;
+      setProfilePicture(file);
+    }
+  };
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -134,7 +139,14 @@ export const Profile = () => {
             <Text fontSize={'sm'} my="2">
               Upload 150px * 150px photo for best results
             </Text>
-            <input type="file" name="uploadImage" id="uploadImage" />
+            <input
+              type="file"
+              accept="image/png, image/jpeg"
+              disabled={state.loading}
+              onChange={handleFileChange}
+              name="uploadImage"
+              id="uploadImage"
+            />
           </FormControl>
         </Stack>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} px={6}>

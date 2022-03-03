@@ -1,8 +1,10 @@
 import { useRouter } from 'next/router';
-import { ReactNode, useEffect } from 'react';
+import { createContext, ReactNode, useContext, useEffect } from 'react';
 import { useAuth } from '../../utils/auth';
 
-export const AuthComponent = ({ children }: { children: ReactNode }) => {
+const Auth = createContext<{ id: string; emailVerified: boolean } | null>(null);
+
+export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const { isLoading, user } = useAuth();
   const router = useRouter();
   const protectedRoutes = ['/', '/dashboard', '/edit/:id', '/add']; // TODO check edit
@@ -34,5 +36,5 @@ export const AuthComponent = ({ children }: { children: ReactNode }) => {
     return () => clearTimeout(timerId);
   }, [isLoading, user, router]);
 
-  return <>{children}</>;
+  return <Auth.Provider value={user}>{children}</Auth.Provider>;
 };

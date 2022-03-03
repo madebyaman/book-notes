@@ -26,7 +26,7 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <Box backgroundColor={'gray.50'}>
+      <Box backgroundColor={'#F7FAFC'}>
         <Container maxW="container.lg" pt={'16'}>
           <Flex justify="center" align={'center'}>
             {user && user.photo ? (

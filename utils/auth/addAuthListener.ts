@@ -2,12 +2,12 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '../../firebase';
 
 export const addAuthListener = (
-  callback: (user: { id: string } | null) => void
+  callback: (user: { id: string; emailVerified: boolean } | null) => void
 ) => {
   // Intermediate wrapper callback for callback. This is so we only send the relevant information that callback needs.
   const onChange = (user: User | null) => {
     if (user) {
-      callback({ id: user.uid });
+      callback({ id: user.uid, emailVerified: user.emailVerified });
     } else {
       callback(null);
     }

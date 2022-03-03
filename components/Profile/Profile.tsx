@@ -10,6 +10,7 @@ import {
 import { ChangeEvent, useEffect, useReducer, useState } from 'react';
 import { getCurrentUserInfo } from './getCurrentUserInfo';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
+import { uploadProfilePicture } from './uploadProfilePicture';
 
 const initialState = {
   name: '',
@@ -55,44 +56,23 @@ export const Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
-    e.preventDefault();
-    if (!process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE) {
-      return;
-    }
-
-    const fileInput = Array.from(e.currentTarget.elements).find(
-      ({ name }): boolean => {
-        return name === 'uploadImage';
-      }
-    );
-
-    let profile = {
-      name: state.name,
-    };
-    if (fileInput && fileInput.files.length) {
-      const formData = new FormData();
-      const files = fileInput.files || [];
-      for (const file of files) {
-        formData.append('file', file);
-        formData.append(
-          'upload_preset',
-          process.env.NEXT_PUBLIC_COUDINARY_UPLOAD_PRESET_PROFILE
-        );
-      }
-
-      const data = await fetch(
-        'https://api.cloudinary.com/v1_1/dksughwo7/image/upload',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      ).then((res) => res.json());
-
-      profile.photo = data.secure_url;
+    let profilePhoto: string | undefined;
+    try {
+      profilePhoto = await uploadProfilePicture(profilePicture);
+    } catch (e) {
+      toast({
+        title: 'Error uploading your profile picture. Try again',
+        status: 'error',
+        duration: 1_000,
+        isClosable: true,
+      });
     }
 
     try {
-      await updateCurrentUserInfo(profile);
+      await updateCurrentUserInfo({
+        name: state.name,
+        photoUrl: profilePhoto,
+      });
       toast({
         title: 'Successfully saved your profile',
         status: 'success',

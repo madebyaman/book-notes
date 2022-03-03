@@ -1,17 +1,14 @@
 import { Box, Flex, useToast } from '@chakra-ui/react';
 
-import { Book } from '../../@types/booktypes';
 import { useAuth } from '../../utils/auth';
-import {
-  createDocument,
-  createOrUpdateDocument,
-  uploadImageFromCoverID,
-} from './utils';
 import { useStoreState } from './store';
 import { EditingSection } from './Main';
 import { EditorSidebar } from './Sidebar';
 import TopBar from './TopBar';
 import { getBook } from './getBook';
+import { uploadBookCover } from './uploadBookCover';
+import { addBook } from './addBook';
+import { createOrUpdateNote } from './createOrUpdateNote';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished } =
@@ -21,8 +18,6 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
 
   /**
    * Displays a flash message of success or failure
-   * @param success If true then success message. Else failure message
-   * @param message Message to display
    */
   const showFlashMessage = ({
     success,
@@ -48,13 +43,6 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
     }
   };
 
-  /**
-   * It does the following:
-   * 1. Computes excerpt from content.
-   * 2. Adds bookId to the document to attach a book to the note.
-   * 3. If a book doesn't exist in db with id of `selectedBook.key`, upload cover to Cloudinary and add photoURL to db
-   * 4. If `docId` is provided, update the document. Else, create a new document
-   */
   const onSave = async () => {
     if (!user) return;
     const firstParagraphElement = content.split('</p>', 1)[0];
@@ -77,21 +65,15 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
       // If no book found, create a new book
       if (!bookDocSnap) {
         // First upload the book cover if selectedBook.cover exists
-        const coverURL = await uploadImageFromCoverID(selectedBook.cover);
-        let newBook: Book;
-
-        if (coverURL) {
-          newBook = {
-            ...selectedBook,
-            photoURL: coverURL,
-          };
-        } else {
-          newBook = selectedBook;
-        }
+        const coverURL = await uploadBookCover(selectedBook.cover);
+        const newBook = {
+          ...selectedBook,
+          photoURL: coverURL || undefined,
+        };
 
         // The, get the URL of the uploaded image and set it to selectedBook.photoURL
         try {
-          createDocument('books', newBook, newBook.key);
+          addBook(newBook);
         } catch (e) {
           showFlashMessage({
             success: false,
@@ -104,7 +86,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
 
     // Finally set the document if !docID, else update it
     try {
-      createOrUpdateDocument('book-notes', document, docId);
+      createOrUpdateNote(document, docId);
       showFlashMessage({ success: true });
     } catch (error) {
       showFlashMessage({ success: false });

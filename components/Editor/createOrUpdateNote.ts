@@ -2,8 +2,11 @@ import { addDoc, collection, doc, setDoc } from 'firebase/firestore';
 import { BookNote } from '../../@types/booktypes';
 import db from '../../firebase';
 
-export const createOrUpdateDocument = async (
-  newDoc: BookNote,
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+type NewBookNote = Optional<BookNote, 'id'>;
+
+export const createOrUpdateNote = async (
+  newDoc: NewBookNote,
   docId?: string
 ) => {
   if (docId) {

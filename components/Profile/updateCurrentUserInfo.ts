@@ -2,7 +2,10 @@ import { doc, updateDoc } from 'firebase/firestore';
 import db from '../../firebase';
 import { getCurrentUser } from '../../utils/auth';
 
-export const updateCurrentUserInfo = async (updates) => {
+export const updateCurrentUserInfo = async (updates: {
+  name: string;
+  photoUrl?: string;
+}) => {
   const currentUser = await getCurrentUser();
 
   if (!currentUser) return;

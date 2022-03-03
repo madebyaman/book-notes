@@ -1,7 +1,7 @@
 export type Book = {
   key: string;
   title: string;
-  photoURL: string;
+  photoURL?: string;
   cover: string;
   author: string;
   year: number;

@@ -1,8 +1,10 @@
 /**
  * Function to upload an image to cloudinary.
  */
-export const uploadImage = async (file: File | string) => {
-  const cloudinaryPreset = process.env.NEXT_PUBLIC_COUDINARY_PRESET;
+export const uploadImage = async (file: File | string, preset?: string) => {
+  const cloudinaryPreset = preset
+    ? preset
+    : process.env.NEXT_PUBLIC_COUDINARY_PRESET;
   if (!cloudinaryPreset) {
     throw new Error('No cloudinary preset defined in environment variable');
   }
@@ -10,7 +12,7 @@ export const uploadImage = async (file: File | string) => {
   formdata.append('file', file);
   formdata.append('upload_preset', cloudinaryPreset);
   const data = await fetch(
-    `https://api.cloundinary.com/v1_1/dksughwo7/upload`,
+    `https://api.cloudinary.com/v1_1/dksughwo7/image/upload`,
     {
       method: 'POST',
       body: formdata,

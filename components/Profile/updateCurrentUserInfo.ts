@@ -4,7 +4,7 @@ import { getCurrentUser } from '../../utils/auth';
 
 export const updateCurrentUserInfo = async (updates: {
   name: string;
-  photoUrl?: string;
+  photo: string | null;
 }) => {
   const currentUser = await getCurrentUser();
 

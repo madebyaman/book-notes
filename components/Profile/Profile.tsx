@@ -55,23 +55,13 @@ export const Profile = () => {
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
-    let profilePhoto: string | undefined;
     try {
-      profilePhoto = await uploadProfilePicture(profilePicture);
-    } catch (e) {
-      toast({
-        title: 'Error uploading your profile picture. Try again',
-        status: 'error',
-        duration: 1_000,
-        isClosable: true,
-      });
-    }
-
-    try {
+      const profilePhoto = await uploadProfilePicture(profilePicture);
       await updateCurrentUserInfo({
         name: state.name,
-        photoUrl: profilePhoto,
+        photo: profilePhoto || null,
       });
       toast({
         title: 'Successfully saved your profile',
@@ -104,15 +94,16 @@ export const Profile = () => {
       <form onSubmit={handleSubmit}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} pb={12} px={6}>
           <FormControl>
-            <FormLabel htmlFor="name">Name</FormLabel>
-            <Input
-              id="name"
-              value={state.name}
-              placeholder="Your Name"
-              onChange={(e) =>
-                dispatch({ type: 'UPDATE_NAME', payload: e.target.value })
-              }
-            />
+            <FormLabel>
+              Name
+              <Input
+                value={state.name}
+                placeholder="Your Name"
+                onChange={(e) =>
+                  dispatch({ type: 'UPDATE_NAME', payload: e.target.value })
+                }
+              />
+            </FormLabel>
           </FormControl>
           <FormControl>
             <FormLabel htmlFor="uploadImage">Upload Image</FormLabel>

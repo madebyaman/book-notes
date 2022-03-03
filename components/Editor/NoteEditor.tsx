@@ -44,6 +44,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       // If no docId, meaning it is inside add page, then reset state
       // If you don't reset state, then new document starts with already loaded state
       resetState();
+      dispatch({ type: 'LOADED' });
     }
 
     return () => {

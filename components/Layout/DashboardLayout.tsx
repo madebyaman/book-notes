@@ -1,18 +1,25 @@
 import { Box, Container, Flex, Heading, Image, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { ImUser } from 'react-icons/im';
 
-import { Tab } from '.';
+import { Tab } from '../Dashboard';
 import { CustomUser } from '../../@types/types';
 import { signout } from '../../utils/auth';
 import { getCurrentUserInfo } from '../Profile';
+import { AuthContext } from '../Auth';
+import { ResendVerificationEmail } from './ResendVerificationEmail';
 
-export const Layout = ({ children }: { children: React.ReactNode }) => {
+export const DashboardLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   const router = useRouter();
   const [user, setUser] = useState<CustomUser | undefined>();
-  const isDashboardActive = router.pathname === '/dashboard';
+  const isDashboardActive = router.pathname === '/dashboard'; // To figure whether the page is dashboard or profile page.
+  const userInfo = useContext(AuthContext);
 
   useEffect(() => {
     const loadUser = async () => {
@@ -26,7 +33,14 @@ export const Layout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
-      <Box backgroundColor={'#F7FAFC'}>
+      {!userInfo?.emailVerified && (
+        <Box backgroundColor={'#FC8181'} textAlign="center">
+          <Container py="2">
+            Your email is not verified. <ResendVerificationEmail />
+          </Container>
+        </Box>
+      )}
+      <Box backgroundColor={'#EDF2F7'}>
         <Container maxW="container.lg" pt={'16'}>
           <Flex justify="center" align={'center'}>
             {user && user.photo ? (

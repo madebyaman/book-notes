@@ -1,10 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { StoreProvider } from 'easy-peasy';
 
 import { NoteEditorStore, useStoreActions, useStoreState } from './store';
 import { Layout } from './Layout';
 import { useStatus, StatusWrapper } from '../Status';
 import ErrorFetchingNote from './ErrorFetchingNote';
+import { AuthContext } from '../Auth';
+import { CenteredLayout } from '../Layout';
+import { Link } from '@chakra-ui/react';
+import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
+import { useRouter } from 'next/router';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const bookId = useStoreState((state) => state.bookId);
@@ -64,9 +69,28 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
 };
 
 export const NoteEditor = ({ docId }: { docId?: string }) => {
+  const user = useContext(AuthContext);
+  const router = useRouter();
+
+  if (user) {
+    if (!user.emailVerified) {
+      return (
+        <StoreProvider store={NoteEditorStore}>
+          <NoteEditorConsumer docId={docId} />
+        </StoreProvider>
+      );
+    }
+    return (
+      <CenteredLayout>
+        You cannot create a note without verifying your email.{' '}
+        <ResendVerificationEmail color="teal" />
+      </CenteredLayout>
+    );
+  }
   return (
-    <StoreProvider store={NoteEditorStore}>
-      <NoteEditorConsumer docId={docId} />
-    </StoreProvider>
+    <CenteredLayout>
+      You are not logged in.{' '}
+      <Link onClick={() => router.push('/signin')}>Sign in</Link>
+    </CenteredLayout>
   );
 };

@@ -21,7 +21,7 @@ export const signup: Signup = async ({ name, email, password }) => {
       await setDoc(doc(db, 'users', userCredential.user.uid), { name: name });
     }
   } catch (e) {
-    console.log(e);
+    console.log(e); // Should I rethrow it?
     throw new Error('Error signing up');
   }
 };

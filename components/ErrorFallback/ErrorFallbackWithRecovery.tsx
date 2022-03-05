@@ -6,7 +6,7 @@ import {
 } from '@chakra-ui/react';
 import { FallbackProps } from 'react-error-boundary';
 
-export const ErrorFallback = ({
+export const ErrorFallbackWithRecovery = ({
   error,
   resetErrorBoundary,
 }: FallbackProps): JSX.Element => {
@@ -26,6 +26,7 @@ export const ErrorFallback = ({
           Something went wrong!
         </AlertTitle>
         <AlertDescription>{error.message}</AlertDescription>
+        <button onClick={resetErrorBoundary}>Try again</button>
       </Alert>
     </div>
   );

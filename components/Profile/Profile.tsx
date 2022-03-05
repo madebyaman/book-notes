@@ -8,6 +8,8 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { ChangeEvent, useEffect, useReducer, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallback } from '../ErrorFallback/General';
 import { getCurrentUserInfo } from './getCurrentUserInfo';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
 import { uploadProfilePicture } from './uploadProfilePicture';
@@ -70,9 +72,9 @@ export const Profile = () => {
         isClosable: true,
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
       toast({
-        title: 'Error saving your profile. Try again',
+        title: 'Failed to save your profile',
         status: 'error',
         duration: 1_000,
         isClosable: true,
@@ -90,7 +92,7 @@ export const Profile = () => {
   };
 
   return (
-    <div>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <form onSubmit={handleSubmit}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} pb={12} px={6}>
           <FormControl>
@@ -126,6 +128,6 @@ export const Profile = () => {
           </Button>
         </Stack>
       </form>
-    </div>
+    </ErrorBoundary>
   );
 };

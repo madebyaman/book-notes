@@ -1,6 +1,8 @@
 import { NextPage } from 'next';
-import { BookCards } from '../../components/Dashboard';
-import { DashboardLayout as Layout } from '../../components/Layout';
+import {
+  BookCards,
+  DashboardLayout as Layout,
+} from '../../components/Dashboard';
 
 const Dashboard: NextPage = function () {
   return (

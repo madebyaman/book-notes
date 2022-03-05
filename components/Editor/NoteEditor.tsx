@@ -9,7 +9,9 @@ import { AuthContext } from '../Auth';
 import { CenteredLayout } from '../Layout';
 import { Link } from '@chakra-ui/react';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
-import { useRouter } from 'next/router';
+import { Router, useRouter } from 'next/router';
+import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorFallbackWithRecovery } from '../ErrorFallback';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const bookId = useStoreState((state) => state.bookId);
@@ -30,7 +32,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
           await fetchDocument({ docId, isSubscribed });
           dispatch({ type: 'LOADED' });
         } catch (e) {
-          dispatch({ type: 'ERROR', payload: 'Note not found' });
+          throw e;
         }
       })();
 
@@ -58,13 +60,20 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   }, [docId]);
 
   return (
-    <StatusWrapper
-      loading={<div>Loading...</div>}
-      error={<ErrorFetchingNote />}
-      status={status.status}
+    <ErrorBoundary
+      FallbackComponent={ErrorFallbackWithRecovery}
+      onReset={() => {
+        resetState();
+      }}
     >
-      <Layout docId={docId} />
-    </StatusWrapper>
+      <StatusWrapper
+        loading={<div>Loading...</div>}
+        error={<ErrorFetchingNote />}
+        status={status.status}
+      >
+        <Layout docId={docId} />
+      </StatusWrapper>
+    </ErrorBoundary>
   );
 };
 

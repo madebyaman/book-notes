@@ -1,9 +1,11 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Text, Grid, GridItem, Flex, IconButton } from '@chakra-ui/react';
+import { Text, Grid, GridItem, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { BookNote } from '../../@types/booktypes';
+import { ErrorFallbackWithRecovery as ErrorFallback } from '../ErrorFallback/ErrorFallbackWithRecovery';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
 import { BookCard } from './BookCard';
@@ -16,52 +18,64 @@ export const BookCards = () => {
 
   useEffect(() => {
     const setBooks = async () => {
-      const unsub = await subscribeToCurrentUserNotes((result) => {
-        dispatch({ type: 'LOADING' });
-        setCards(result);
-        dispatch({ type: 'LOADED' });
-      });
-      return unsub;
+      try {
+        const unsub = await subscribeToCurrentUserNotes((result) => {
+          dispatch({ type: 'LOADING' });
+          setCards(result);
+          dispatch({ type: 'LOADED' });
+        });
+        return unsub;
+      } catch (e) {
+        throw e;
+      }
     };
     setBooks();
   }, []);
 
   return (
-    <StatusWrapper
-      status={state.status}
-      loading={<div>Loading...</div>}
-      error={<div>{state.error}</div>}
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        setCards([]);
+      }}
+      resetKeys={[cards]}
     >
-      <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
-        {cards.length > 0 ? (
-          cards.map((card) => <BookCard key={card.id} card={card} />)
-        ) : (
-          <EmptyCard />
-        )}
-      </Grid>
-      <Flex
-        pos={'fixed'}
-        bottom="10"
-        right="10"
-        backgroundColor={'teal'}
-        borderRadius="md"
-        cursor="pointer"
-        aria-label="Add a new note"
-        p="4"
-        gap="2"
-        boxShadow={'xl'}
-        alignItems="center"
-        transition={'transform 200ms ease-out'}
-        color="white"
-        onClick={() => router.push('/add')}
-        _hover={{
-          transform: 'translateY(-5px)',
-        }}
+      <StatusWrapper
+        status={state.status}
+        loading={<div>Loading...</div>}
+        error={<div>{state.error}</div>}
       >
-        <AddIcon />
-        <Text>Add a new note</Text>
-      </Flex>
-    </StatusWrapper>
+        <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
+          {cards.length > 0 ? (
+            cards.map((card) => <BookCard key={card.id} card={card} />)
+          ) : (
+            <EmptyCard />
+          )}
+        </Grid>
+        <Flex
+          pos={'fixed'}
+          bottom="10"
+          right="10"
+          backgroundColor={'teal'}
+          borderRadius="md"
+          cursor="pointer"
+          aria-label="Add a new note"
+          p="4"
+          gap="2"
+          boxShadow={'xl'}
+          alignItems="center"
+          transition={'transform 200ms ease-out'}
+          color="white"
+          onClick={() => router.push('/add')}
+          _hover={{
+            transform: 'translateY(-5px)',
+          }}
+        >
+          <AddIcon />
+          <Text>Add a new note</Text>
+        </Flex>
+      </StatusWrapper>
+    </ErrorBoundary>
   );
 };
 

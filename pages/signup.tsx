@@ -8,6 +8,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { Dispatch, SetStateAction, useState } from 'react';
+
 import AuthForm from '../components/AuthForm';
 
 const FormHeading = () => (

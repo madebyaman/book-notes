@@ -1,6 +1,7 @@
 import { Text, Heading, Link, Checkbox, Stack } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import { Dispatch, SetStateAction, useState } from 'react';
+
 import AuthForm from '../components/AuthForm';
 
 const FormHeading = () => (

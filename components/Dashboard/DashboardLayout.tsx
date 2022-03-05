@@ -3,13 +3,15 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect, useState } from 'react';
 import { FiBook, FiLogOut, FiUser } from 'react-icons/fi';
 import { ImUser } from 'react-icons/im';
+import { ErrorBoundary } from 'react-error-boundary';
 
-import { Tab } from '../Dashboard';
-import { CustomUser } from '../../@types/types';
+import { Tab } from '.';
 import { signout } from '../../utils/auth';
 import { getCurrentUserInfo } from '../Profile';
 import { AuthContext } from '../Auth';
-import { ResendVerificationEmail } from './ResendVerificationEmail';
+import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
+import { UserProfile } from '../../@types/types';
+import { ErrorFallbackWithRecovery as ErrorFallback } from '../ErrorFallback/ErrorFallbackWithRecovery';
 
 export const DashboardLayout = ({
   children,
@@ -17,22 +19,32 @@ export const DashboardLayout = ({
   children: React.ReactNode;
 }) => {
   const router = useRouter();
-  const [user, setUser] = useState<CustomUser | undefined>();
+  const [user, setUser] = useState<UserProfile | undefined>();
   const isDashboardActive = router.pathname === '/dashboard'; // To figure whether the page is dashboard or profile page.
   const userInfo = useContext(AuthContext);
 
   useEffect(() => {
     const loadUser = async () => {
-      const currentUser = await getCurrentUserInfo();
-      if (currentUser) {
-        setUser(currentUser);
+      try {
+        const currentUser = await getCurrentUserInfo();
+        if (currentUser) {
+          setUser(currentUser);
+        }
+      } catch (e) {
+        throw e;
       }
     };
     loadUser();
   }, []);
 
   return (
-    <>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => {
+        setUser(undefined);
+      }}
+      resetKeys={[user]}
+    >
       {!userInfo?.emailVerified && (
         <Box backgroundColor={'#FC8181'} textAlign="center">
           <Container py="2">
@@ -86,6 +98,6 @@ export const DashboardLayout = ({
       <Container maxW="container.lg" mt={16} mb={12}>
         {children}
       </Container>
-    </>
+    </ErrorBoundary>
   );
 };

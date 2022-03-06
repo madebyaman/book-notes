@@ -1,24 +1,16 @@
 import { Timestamp } from 'firebase/firestore';
 
-export type SignupProps = {
-  name?: string;
-  email: string;
-  password: string;
-};
-
 export type SigninProps = {
   email: string;
   password: string;
   remember?: boolean;
 };
 
-export type Signup = ({ name, email, password }: SignupProps) => Promise<void>;
-
 export type Signin = ({ email, password }: SigninProps) => Promise<void>;
 
 export type UserProfile = {
   id: string;
-  userId: string;
+  username: string;
   email: string;
   name: string;
   photo: string;
@@ -43,20 +35,27 @@ export type BookJSON = {
   author_name?: string[];
 };
 
-export type DashboardNote = {
-  id: string;
-  slug: string;
-  bookId?: string;
+type DefaultNote = {
+  content: string;
   isPublished: boolean;
   rating: number;
   title: string;
-  lastUpdated: Date | Timestamp;
   excerpt: string;
+  slug: string;
+  bookId?: string;
 };
 
-export type BookNote = DashboardNote & {
-  content: string;
+/**Book Note that we get from firestore */
+export interface DashboardNote extends DefaultNote {
+  id: string;
+  lastUpdated: Timestamp;
   userId: string;
+}
+
+/** Book note that we are trying to save */
+export type BookNote = DefaultNote & {
+  userId: string;
+  lastUpdated: Date;
 };
 
 export type BookNoteState = {

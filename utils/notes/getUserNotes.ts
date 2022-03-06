@@ -30,7 +30,7 @@ export const getUserNotes = async ({
     orderBy('lastUpdated', 'desc'),
     start ? startAt(start) : limit(5)
   );
-  const docSnap = (await getDocs(q)) as QuerySnapshot<BookNote>;
+  const docSnap = (await getDocs(q)) as QuerySnapshot<DashboardNote>;
   const notes = docSnap.docs.map((note) => ({
     ...note.data(),
     lastUpdated: note.data().lastUpdated.toDate(),

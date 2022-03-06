@@ -17,9 +17,9 @@ import { ImUser } from 'react-icons/im';
 
 import { getUserProfileFromUsername } from '../utils/auth';
 import { getUserNotes, mapUserNotes } from '../utils/notes';
-import { BookNote } from '../@types';
+import { DashboardNote } from '../@types';
 
-interface NotesInterface extends BookNote {
+interface NotesInterface extends DashboardNote {
   image?: string;
 }
 

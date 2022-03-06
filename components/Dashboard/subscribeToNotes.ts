@@ -6,15 +6,15 @@ import {
   QuerySnapshot,
   where,
 } from 'firebase/firestore';
-import { BookNote } from '../../@types';
+import { DashboardNote } from '../../@types';
 import db from '../../firebase';
 
 export const subscribeToNotes = (
   userId: string,
-  cb: (notes: BookNote[]) => void
+  cb: (notes: DashboardNote[]) => void
 ) => {
   const callback = (querySnap: QuerySnapshot<DocumentData>) => {
-    const notes: BookNote[] = [];
+    const notes: DashboardNote[] = [];
     querySnap.forEach((doc: any) => {
       notes.push({
         ...doc.data(),

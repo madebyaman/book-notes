@@ -15,7 +15,6 @@ import { useRouter } from 'next/router';
 import { FormEvent, ReactNode, useState } from 'react';
 
 import { signin, signup } from '../utils/auth';
-import ChakraNextLinkButton from './ChakraNextLink';
 
 interface AuthFormInterface {
   mode?: 'LOGIN' | 'SIGNUP';
@@ -58,16 +57,6 @@ const AuthForm = ({
       }
     } else {
       // Signup mode
-      try {
-        await signup({ email, password, name });
-        router.push('/dashboard');
-      } catch (e) {
-        let message = 'Error: ';
-        if (e instanceof Error) message = e.message;
-        setError(message);
-      } finally {
-        setLoading(false);
-      }
     }
   };
 

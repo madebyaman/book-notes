@@ -1,2 +1,2 @@
 export { Profile } from './Profile';
-export { getCurrentUserInfo } from './getCurrentUserInfo';
+export { getCurrentUserProfile } from './getCurrentUserProfile';

@@ -5,13 +5,13 @@ import { useStoreState } from './store';
 import { EditingSection } from './Main';
 import { EditorSidebar } from './Sidebar';
 import TopBar from './TopBar';
-import { getBook } from './getBook';
+import { getBook } from '../../utils/notes';
 import { uploadBookCover } from './uploadBookCover';
 import { addBook } from './addBook';
 import { createOrUpdateNote } from './createOrUpdateNote';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
-  const { content, rating, title, selectedBook, bookId, isPublished } =
+  const { content, rating, title, selectedBook, bookId, isPublished, slug } =
     useStoreState((state) => state);
   const { user, isLoading } = useAuth();
   const toast = useToast();
@@ -57,6 +57,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
       excerpt: newExcerpt,
       bookId: bookId,
       lastUpdated: new Date(),
+      slug,
     };
 
     if (selectedBook) {

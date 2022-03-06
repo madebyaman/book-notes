@@ -6,12 +6,13 @@ import {
   thunk,
   Thunk,
 } from 'easy-peasy';
-import { BookNoteState, Book } from '../../@types/booktypes';
-import { getBook } from './getBook';
-import { getNote } from './getNote';
+
+import { Book, BookNoteState } from '../../@types';
+import { getNote, getBook } from '../../utils/notes';
 
 type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;
+  updateSlug: Action<StoreModel, string>;
   updateSelectedBook: Action<StoreModel, Book | null>;
   updateRating: Action<StoreModel, number>;
   updateTitle: Action<StoreModel, string>;
@@ -29,7 +30,11 @@ export const NoteEditorStore = createStore<StoreModel>(
     rating: 0,
     title: '',
     bookId: undefined,
+    slug: '',
     isPublished: false,
+    updateSlug: action((state, payload) => {
+      state.slug = payload;
+    }),
     updateIsPublished: action((state, payload) => {
       state.isPublished = payload;
     }),
@@ -55,6 +60,7 @@ export const NoteEditorStore = createStore<StoreModel>(
       state.title = '';
       state.bookId = undefined;
       state.isPublished = false;
+      state.slug = '';
     }),
     /**
      * Fetch a document with a url. It should update the note state if everything went well.
@@ -67,6 +73,7 @@ export const NoteEditorStore = createStore<StoreModel>(
         actions.updateTitle(note.title || '');
         actions.updateBookId(note.bookId || '');
         actions.updateIsPublished(note.isPublished || false);
+        actions.updateSlug(note.slug);
       }
     }),
     /**

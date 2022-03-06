@@ -1,5 +1,5 @@
 import { NextPage } from 'next';
-import { DashboardLayout as Layout } from '../../components/Layout';
+import { DashboardLayout as Layout } from '../../components/Dashboard';
 import { Profile } from '../../components/Profile';
 
 const Dashboard: NextPage = function () {

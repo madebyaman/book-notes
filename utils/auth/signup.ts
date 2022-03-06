@@ -1,16 +1,23 @@
 import {
-  browserLocalPersistence,
   createUserWithEmailAndPassword,
   sendEmailVerification,
-  setPersistence,
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
-import { Signup } from '../../@types/types';
+
 import db, { auth } from '../../firebase';
 
-export const signup: Signup = async ({ name, email, password }) => {
+export const signup = async ({
+  name,
+  email,
+  password,
+  username,
+}: {
+  name: string;
+  email: string;
+  password: string;
+  username: string;
+}) => {
   try {
-    setPersistence(auth, browserLocalPersistence);
     const userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
@@ -18,7 +25,10 @@ export const signup: Signup = async ({ name, email, password }) => {
     );
     if (userCredential.user) {
       sendEmailVerification(userCredential.user);
-      await setDoc(doc(db, 'users', userCredential.user.uid), { name: name });
+      await setDoc(doc(db, 'users', username), {
+        name: name,
+        userId: userCredential.user.uid,
+      });
     }
   } catch (e) {
     console.log(e); // Should I rethrow it?

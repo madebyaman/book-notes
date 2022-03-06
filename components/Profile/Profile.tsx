@@ -7,10 +7,17 @@ import {
   useToast,
   Text,
 } from '@chakra-ui/react';
-import { ChangeEvent, useEffect, useReducer, useState } from 'react';
+import {
+  ChangeEvent,
+  useContext,
+  useEffect,
+  useReducer,
+  useState,
+} from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { AuthContext } from '../Auth';
 import { ErrorFallback } from '../ErrorFallback/General';
-import { getCurrentUserInfo } from './getCurrentUserInfo';
+import { getCurrentUserProfile } from './getCurrentUserProfile';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
 import { uploadProfilePicture } from './uploadProfilePicture';
 
@@ -37,13 +44,14 @@ function reducer(state: typeof initialState, action: ProfileActions) {
 export const Profile = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [profilePicture, setProfilePicture] = useState<File | undefined>();
+  const user = useContext(AuthContext);
   const toast = useToast();
 
   useEffect(() => {
     let isSubscribed = true;
     const updateName = async () => {
       if (isSubscribed) {
-        const user = await getCurrentUserInfo();
+        const user = await getCurrentUserProfile();
         if (user) {
           dispatch({ type: 'UPDATE_NAME', payload: user.name });
         }
@@ -58,6 +66,7 @@ export const Profile = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!user) throw new Error('You are not logged in');
     dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
     try {
       const profilePhoto = await uploadProfilePicture(profilePicture);

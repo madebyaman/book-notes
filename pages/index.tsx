@@ -1,19 +1,34 @@
+import { Button, Container, Heading, Text } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Home: NextPage = function () {
+  const router = useRouter();
+
   return (
-    <div>
-      <Link href="/add-book">
-        <a className="text-lg">Add a new book</a>
-      </Link>
-      <Link href={'/signin'}>
-        <a>Login</a>
-      </Link>
-      <Link href={'/dashboard'}>
-        <a>Dashboard</a>
-      </Link>
-    </div>
+    <main style={{ backgroundColor: '#F7FAFC', minHeight: '100vh' }}>
+      <Container maxW="container.lg" textAlign="center">
+        <Heading as="h1" pt="32" fontSize={'54px'}>
+          Write, publish, and share your book notes with ease
+        </Heading>
+        <Container>
+          <Text fontSize={'24px'} color="gray.500" my="8">
+            Boomaries is a powerful app to help your write your book notes and
+            share them with other people.
+          </Text>
+          <Button
+            textTransform={'uppercase'}
+            rounded="none"
+            px="8"
+            py="5"
+            colorScheme={'teal'}
+            onClick={() => router.push('/signin')}
+          >
+            Start writing book notes
+          </Button>
+        </Container>
+      </Container>
+    </main>
   );
 };
 

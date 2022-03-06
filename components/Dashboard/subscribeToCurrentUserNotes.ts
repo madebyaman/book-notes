@@ -1,6 +1,6 @@
 import { subscribeToNotes } from './subscribeToNotes';
 import { getCurrentUser } from '../../utils/auth';
-import { BookNote } from '../../@types/booktypes';
+import { BookNote } from '../../@types';
 
 export const subscribeToCurrentUserNotes = async (
   cb: (notes: BookNote[]) => void

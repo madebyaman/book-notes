@@ -9,11 +9,11 @@ import {
   Link as ChakraLink,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import { DashboardNote } from '../../@types/booktypes';
+import { DashboardNote } from '../../@types';
 import BookCover from './BookCover';
 
 export const BookCard = ({ card }: { card: DashboardNote }) => {
-  const { id, isPublished, excerpt, title, bookId } = card;
+  const { slug, isPublished, excerpt, title, bookId } = card;
   return (
     <GridItem
       p={5}
@@ -44,14 +44,14 @@ export const BookCard = ({ card }: { card: DashboardNote }) => {
           </Heading>
           {excerpt && (
             <Box my="4">
-              <Box dangerouslySetInnerHTML={{ __html: excerpt }}></Box>
+              <Box>{excerpt}</Box>
             </Box>
           )}
           <Flex justify={'flex-start'} alignItems="center" mt={4}>
             <Link
               href={{
                 pathname: '/edit/[id]',
-                query: { id: id },
+                query: { id: slug },
               }}
               passHref
             >

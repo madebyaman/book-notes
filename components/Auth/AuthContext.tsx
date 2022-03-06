@@ -10,7 +10,7 @@ export const AuthContext = createContext<{
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const { isLoading, user } = useAuth();
   const router = useRouter();
-  const protectedRoutes = ['/', '/dashboard', '/edit', '/add']; // TODO check edit
+  const protectedRoutes = ['/dashboard', '/add', '/dashboard/profile']; // TODO check edit
 
   // Redirect to login page if user is not signed in. Else,
   useEffect(() => {

@@ -7,11 +7,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { Tab } from '.';
 import { signout } from '../../utils/auth';
-import { getCurrentUserInfo } from '../Profile';
 import { AuthContext } from '../Auth';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
-import { UserProfile } from '../../@types/types';
+import { UserProfile } from '../../@types';
 import { ErrorFallbackWithRecovery as ErrorFallback } from '../ErrorFallback/ErrorFallbackWithRecovery';
+import { getCurrentUserProfile } from '../Profile';
 
 export const DashboardLayout = ({
   children,
@@ -26,7 +26,7 @@ export const DashboardLayout = ({
   useEffect(() => {
     const loadUser = async () => {
       try {
-        const currentUser = await getCurrentUserInfo();
+        const currentUser = await getCurrentUserProfile();
         if (currentUser) {
           setUser(currentUser);
         }

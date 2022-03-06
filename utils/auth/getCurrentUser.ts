@@ -1,5 +1,4 @@
 import { onAuthStateChanged } from 'firebase/auth';
-import { addAuthListener } from '.';
 import { auth } from '../../firebase';
 
 export const getCurrentUser = async (): Promise<{ id: string } | undefined> => {

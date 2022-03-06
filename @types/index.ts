@@ -1,3 +1,29 @@
+import { Timestamp } from 'firebase/firestore';
+
+export type SignupProps = {
+  name?: string;
+  email: string;
+  password: string;
+};
+
+export type SigninProps = {
+  email: string;
+  password: string;
+  remember?: boolean;
+};
+
+export type Signup = ({ name, email, password }: SignupProps) => Promise<void>;
+
+export type Signin = ({ email, password }: SigninProps) => Promise<void>;
+
+export type UserProfile = {
+  id: string;
+  userId: string;
+  email: string;
+  name: string;
+  photo: string;
+};
+
 export type Book = {
   key: string;
   title: string;
@@ -19,11 +45,12 @@ export type BookJSON = {
 
 export type DashboardNote = {
   id: string;
+  slug: string;
   bookId?: string;
   isPublished: boolean;
   rating: number;
   title: string;
-  lastUpdated: date;
+  lastUpdated: Date | Timestamp;
   excerpt: string;
 };
 
@@ -39,4 +66,5 @@ export type BookNoteState = {
   title: string;
   bookId?: string;
   isPublished: boolean;
+  slug: string;
 };

@@ -1,5 +1,5 @@
 import { doc, DocumentSnapshot, getDoc } from 'firebase/firestore';
-import { BookNote } from '../../@types/booktypes';
+import { BookNote } from '../../@types';
 import db from '../../firebase';
 
 export const getNote = async (noteId: string) => {

@@ -1,11 +1,17 @@
-import { Text, Flex, Spacer, Box, Heading } from '@chakra-ui/react';
-import { useStoreState } from '../store';
+import { Text, Flex, Spacer, Box, Heading, Input } from '@chakra-ui/react';
+import { useStoreActions, useStoreState } from '../store';
 import BookSelect from './BookSelect';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
+import { checkNoteSlugExists } from './checkNoteSlugExists';
+import { useContext } from 'react';
+import { AuthContext } from '../../Auth';
 
 export const EditorSidebar = () => {
+  const user = useContext(AuthContext);
   const selectedBook = useStoreState((state) => state.selectedBook);
+  const slug = useStoreState((state) => state.slug);
+  const updateSlug = useStoreActions((state) => state.updateSlug);
 
   return (
     <Flex
@@ -17,6 +23,12 @@ export const EditorSidebar = () => {
       height={'calc(100vh - 80px)'}
     >
       <BookSelect />
+      <Input
+        value={slug}
+        onChange={(e) => updateSlug(e.target.value)}
+        placeholder={'slug'}
+        onBlur={() => user && checkNoteSlugExists({ slug, userId: user?.id })}
+      />
       <Text fontSize={'md'} mt="12" mb="2">
         How strongly would you recommend it?
       </Text>

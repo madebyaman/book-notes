@@ -3,8 +3,8 @@ import { Text, Grid, GridItem, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { BookNote } from '../../@types';
 
-import { BookNote } from '../../@types/booktypes';
 import { ErrorFallbackWithRecovery as ErrorFallback } from '../ErrorFallback/ErrorFallbackWithRecovery';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
@@ -47,7 +47,7 @@ export const BookCards = () => {
       >
         <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
           {cards.length > 0 ? (
-            cards.map((card) => <BookCard key={card.id} card={card} />)
+            cards.map((card) => <BookCard key={card.slug} card={card} />)
           ) : (
             <EmptyCard />
           )}

@@ -1,0 +1,56 @@
+[
+  {
+    "lastUpdated": "Timestamp" : { "seconds": 1644598757, "nanoseconds": 916000000 },
+    "content": "<p>This is a great book about js. Another great book for learning JS. </p><p>I loved the book. However, it could use more reading-friendly english.</p>",
+    "published": true,
+    "bookId": "+works+OL19542287W",
+    "isPublished": true,
+    "excerpt": "This is a great book about js. Another great book for learning JS. ",
+    "title": "Eloquent JS",
+    "rating": 4,
+    "userId": "tR1ZiSdGBOVKPaPFYNg9B56uXTZ2",
+    "id": "KLADq2kWfebtSnmH6yDu",
+    "image": "https: //res.cloudinary.com/dksughwo7/image/upload/v1644440731/book-notes-app/covers/s5l8nfxtghxtosqqnj6f.jpg"
+  },
+  {
+    "content": "<p>I have not yet <strong>read</strong> this book.</p><p>Let"s read this book.</p>",
+    "bookId": "+works+OL1864160W",
+    "userId": "tR1ZiSdGBOVKPaPFYNg9B56uXTZ2",
+    "isPublished": false,
+    "rating": 3,
+    "excerpt": "I have not yet <strong>read</strong> this book.",
+    "lastUpdated": Timestamp { seconds: 1644600425, nanoseconds: 106000000
+    },
+    "published": false,
+    "title": "Who moved my cheese?",
+    "id": "PBuKcv7pvanWMRe3TJ1b",
+    "image": "https: //res.cloudinary.com/dksughwo7/image/upload/v1644438042/book-notes-app/covers/p5pucpshyxdmdgvrwped.jpg"
+  },
+  {
+    "published": false,
+    "lastUpdated": Timestamp { seconds: 1646050657, nanoseconds: 245000000
+    },
+    "bookId": "",
+    "content": "<p>Something is happening.</p>",
+    "isPublished": false,
+    "excerpt": "Something is happening.",
+    "title": "Something",
+    "userId": "tR1ZiSdGBOVKPaPFYNg9B56uXTZ2",
+    "rating": 0,
+    "id": "ZfXNEqHSs3ZZevpPrdPs"
+  },
+  {
+    "title": "Deep Work Notes",
+    "slug": "deep-work",
+    "isPublished": false,
+    "excerpt": "This is one of my favourite book. The book 📕 teaches you about deep work. I wouldnt recommend reading the book cover to cover.",
+    "rating": 5,
+    "userId": "tR1ZiSdGBOVKPaPFYNg9B56uXTZ2",
+    "lastUpdated": Timestamp { seconds: 1646324618, nanoseconds: 453000000
+    },
+    "bookId": "+works+OL17713267W",
+    "content": "<p>This is one of my favourite book. The book 📕 teaches you about deep work. I wouldn"t recommend reading the book cover to cover.</p>",
+    "id": "FebIZ2Yqc5ghaJxPQqfi",
+    "image": "https: //res.cloudinary.com/dksughwo7/image/upload/v1646324627/book-notes-app/covers/axr8fsytwdnwtxc0kakw.jpg"
+  }
+]

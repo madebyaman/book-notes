@@ -6,7 +6,7 @@ import {
   QuerySnapshot,
   where,
 } from 'firebase/firestore';
-import { BookNote } from '../../@types/booktypes';
+import { BookNote } from '../../@types';
 import db from '../../firebase';
 
 export const subscribeToNotes = (

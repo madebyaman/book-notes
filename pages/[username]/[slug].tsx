@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import moment from 'moment';
 import Link from 'next/link';
+import { ImUser } from 'react-icons/im';
 import { DashboardNoteWithImage, UserProfile } from '../../@types';
 import { CenteredLayout } from '../../components/Layout';
 import { getUserProfileFromUsername } from '../../utils/auth';
@@ -35,19 +36,25 @@ const BookNote = ({
 
   return (
     <>
-      <Box bgColor="gray.50" py="10">
+      <Box bgColor="gray.50" py="20">
         <Container maxW="container.lg">
           <Flex alignItems={'center'} justifyContent="center">
-            <Image src={note.image} alt={note.title} boxShadow="md" />
+            {note.image && (
+              <Image src={note.image} alt={note.title} boxShadow="md" />
+            )}
             <Box ml="6">
               <Flex alignItems={'center'}>
-                <Image
-                  src={profile.photo}
-                  alt={profile.name}
-                  width="40px"
-                  height={'40px'}
-                  borderRadius="full"
-                />
+                {profile.photo ? (
+                  <Image
+                    src={profile.photo}
+                    alt={profile.name}
+                    width="40px"
+                    height={'40px'}
+                    borderRadius="full"
+                  />
+                ) : (
+                  <ImUser fontSize={'50px'} />
+                )}
                 <Text
                   color="gray.400"
                   fontWeight={'bold'}

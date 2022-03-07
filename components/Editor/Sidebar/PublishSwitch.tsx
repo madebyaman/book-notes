@@ -9,7 +9,6 @@ const PublishSwitch = () => {
 
   return (
     <Checkbox
-      my="4"
       isChecked={isPublished}
       onChange={(e) => updateIsPublished(e.target.checked)}
       colorScheme="teal"

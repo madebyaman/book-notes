@@ -3,12 +3,14 @@ import { Box, Button, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FaSave } from 'react-icons/fa';
 
-const TopBar = ({
+const Topbar = ({
   onSave,
   isEditing = false,
+  loading,
 }: {
   onSave: () => void;
-  isEditing?: Boolean;
+  loading: boolean;
+  isEditing?: boolean;
 }) => {
   const router = useRouter();
 
@@ -39,6 +41,7 @@ const TopBar = ({
           borderRadius="md"
           colorScheme={'teal'}
           onClick={onSave}
+          isLoading={loading}
         >
           Save
         </Button>
@@ -47,4 +50,4 @@ const TopBar = ({
   );
 };
 
-export default TopBar;
+export default Topbar;

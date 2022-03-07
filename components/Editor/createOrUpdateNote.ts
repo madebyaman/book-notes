@@ -3,10 +3,25 @@ import { BookNote } from '../../@types';
 import db from '../../firebase';
 import { checkNoteSlugExists } from '../../utils/notes';
 
-export const createOrUpdateNote = async (newDoc: BookNote, docId?: string) => {
+export class SlugError extends Error {}
+export class RatingError extends Error {}
+
+export const createOrUpdateNote = async ({
+  newDoc,
+  docId,
+}: {
+  newDoc: BookNote;
+  docId?: string;
+}) => {
   // First, check if slug is valid
-  if (await checkNoteSlugExists({ slug: newDoc.slug, userId: newDoc.userId }))
-    throw new Error('Provided slug exists');
+  if (
+    newDoc.slug &&
+    (await checkNoteSlugExists({ slug: newDoc.slug, userId: newDoc.userId }))
+  )
+    throw new SlugError('Provided slug exists');
+
+  if (newDoc.isPublished && !Boolean(newDoc.rating))
+    throw new RatingError('Rating not found');
 
   if (docId) {
     await setDoc(doc(db, 'book-notes', docId), newDoc);

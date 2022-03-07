@@ -14,6 +14,7 @@ export type UserProfile = {
   email: string;
   name: string;
   photo?: string;
+  emailVerified?: boolean;
 };
 
 export type Book = {

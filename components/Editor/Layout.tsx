@@ -1,20 +1,26 @@
 import { Box, Flex, useToast } from '@chakra-ui/react';
+import { useContext, useState } from 'react';
 
-import { useAuth } from '../../utils/auth';
 import { useStoreState } from './store';
 import { EditingSection } from './Main';
 import { EditorSidebar } from './Sidebar';
-import TopBar from './TopBar';
+import Topbar from './Topbar';
 import { getBook } from '../../utils/notes';
 import { uploadBookCover } from './uploadBookCover';
 import { addBook } from './addBook';
-import { createOrUpdateNote } from './createOrUpdateNote';
+import {
+  createOrUpdateNote,
+  RatingError,
+  SlugError,
+} from './createOrUpdateNote';
+import { AuthContext } from '../Auth';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished, slug } =
     useStoreState((state) => state);
-  const { user, isLoading } = useAuth();
+  const user = useContext(AuthContext);
   const toast = useToast();
+  const [loading, setLoading] = useState(false);
 
   /**
    * Displays a flash message of success or failure
@@ -44,7 +50,8 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
   };
 
   const onSave = async () => {
-    if (!user) return;
+    if (!user || !user.emailVerified) return;
+    setLoading(true);
     const firstParagraphElement = content.split('</p>', 1)[0];
     const newExcerpt = firstParagraphElement.replace('<p>', '');
 
@@ -80,18 +87,27 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
             success: false,
             message: 'Error saving the selected book',
           });
+        } finally {
+          setLoading(false);
         }
       }
-      // Else we don't need to do anything. As it means book already exists in db
     }
 
     // Finally set the document if !docID, else update it
     try {
-      createOrUpdateNote(document, docId);
+      createOrUpdateNote({
+        newDoc: document,
+        docId,
+      });
       showFlashMessage({ success: true });
     } catch (error) {
-      showFlashMessage({ success: false });
-      return;
+      let message = 'Error saving your content';
+      if (error instanceof SlugError || error instanceof RatingError) {
+        message = error.message;
+      }
+      showFlashMessage({ success: false, message });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,7 +123,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         px="2"
       >
         {/* Section for Top Bar */}
-        <TopBar onSave={onSave} />
+        <Topbar onSave={onSave} loading={loading} />
       </Box>
       <Flex margin="0 auto" mt={'80px'} w="100%">
         {/* EditingSection */}

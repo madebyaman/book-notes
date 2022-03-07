@@ -9,14 +9,13 @@ import {
   Image,
   Tag,
 } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import moment from 'moment';
 import { ImUser } from 'react-icons/im';
+import Link from 'next/link';
 
 import { getUserProfileFromUsername } from '../../utils/auth';
 import { getUserNotes, mapUserNotes } from '../../utils/notes';
 import { DashboardNoteWithImage, UserProfile } from '../../@types';
-import Link from 'next/link';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithImage[];
@@ -24,9 +23,6 @@ interface UsernameNotesInterface {
 }
 
 const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
-  const router = useRouter();
-  const username: string = router.query.username as string;
-
   return (
     <>
       <Box bgColor="gray.50" py="10">

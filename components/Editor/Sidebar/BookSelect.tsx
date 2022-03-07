@@ -30,7 +30,7 @@ const BookSelect = () => {
     const timer = setTimeout(() => {
       dispatch({ type: 'LOADING' });
       fetch(
-        `http://openlibrary.org/search.json?q=${convertToPlus(
+        `https://openlibrary.org/search.json?q=${convertToPlus(
           bookSearchString
         )}`
       )

@@ -8,7 +8,7 @@ export class UsernameError extends Error {}
 
 export const updateCurrentUserInfo = async (updates: {
   name: string;
-  photo: string | null;
+  photo?: string;
   username: string;
 }) => {
   // 1. Check user is logged in.
@@ -21,5 +21,14 @@ export const updateCurrentUserInfo = async (updates: {
   }
 
   const userRef = doc(db, 'users', currentUser.id);
-  await updateDoc(userRef, updates);
+  const updatedProfile: {
+    name: string;
+    username: string;
+    photo?: string;
+  } = {
+    name: updates.name,
+    username: updates.username,
+  };
+  if (updates.photo) updatedProfile['photo'] = updates.photo;
+  await updateDoc(userRef, updatedProfile);
 };

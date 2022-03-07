@@ -92,11 +92,12 @@ export const Profile = () => {
     dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
     try {
       const profilePhoto = await uploadProfilePicture(profilePicture);
-      await updateCurrentUserInfo({
+      const updates: { name: string; username: string; photo?: string } = {
         name: state.name,
         username: state.username,
-        photo: profilePhoto || null,
-      });
+      };
+      if (profilePhoto) updates.photo = profilePhoto;
+      await updateCurrentUserInfo(updates);
       toast({
         title: 'Successfully saved your profile',
         status: 'success',

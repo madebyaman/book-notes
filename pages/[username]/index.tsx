@@ -15,12 +15,8 @@ import { ImUser } from 'react-icons/im';
 
 import { getUserProfileFromUsername } from '../../utils/auth';
 import { getUserNotes, mapUserNotes } from '../../utils/notes';
-import { DashboardNoteWithImage } from '../../@types';
-
-type UserProfile = {
-  name: string;
-  photo?: string;
-};
+import { DashboardNoteWithImage, UserProfile } from '../../@types';
+import Link from 'next/link';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithImage[];
@@ -30,8 +26,6 @@ interface UsernameNotesInterface {
 const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
   const router = useRouter();
   const username: string = router.query.username as string;
-
-  const date = (note: DashboardNoteWithImage) => note.lastUpdated.toDate();
 
   return (
     <>
@@ -84,19 +78,21 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
               }}
             >
               <Flex alignItems="flex-start">
-                <Image src={note.image} mr="5" maxW="100" />
+                {note.image && <Image src={note.image} mr="5" maxW="100" />}
                 <Box>
-                  <Heading
-                    as="h2"
-                    fontSize="30px"
-                    fontWeight={'medium'}
-                    cursor={'pointer'}
-                    _hover={{
-                      color: 'teal.500',
-                    }}
-                  >
-                    {note.title}
-                  </Heading>
+                  <Link href={`/${profile.username}/${note.slug}`}>
+                    <Heading
+                      as="h2"
+                      fontSize="30px"
+                      fontWeight={'medium'}
+                      cursor={'pointer'}
+                      _hover={{
+                        color: 'teal.500',
+                      }}
+                    >
+                      {note.title}
+                    </Heading>
+                  </Link>
                   <Tag
                     rounded={'none'}
                     my="2"
@@ -104,7 +100,7 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
                     fontSize={'12px'}
                     fontWeight="normal"
                   >
-                    {moment(date(note)).format('LL')}
+                    {moment(note.lastUpdated).format('LL')}
                   </Tag>
                   <Text
                     color="gray.600"

@@ -1,4 +1,4 @@
-import { DashboardNote, DashboardNoteWithImage } from '../../@types';
+import { DashboardNoteWithDate, DashboardNoteWithImage } from '../../@types';
 import { getBook } from './getBook';
 
 /**
@@ -7,11 +7,11 @@ import { getBook } from './getBook';
 export const mapUserNote = async ({
   note,
 }: {
-  note: DashboardNote;
-}): Promise<DashboardNoteWithImage | DashboardNote> => {
+  note: DashboardNoteWithDate;
+}): Promise<DashboardNoteWithImage | DashboardNoteWithDate> => {
   if (!note.bookId) return note;
   const book = await getBook(note.bookId);
-  const newNote: DashboardNoteWithImage = {
+  const newNote = {
     ...note,
     image: book?.photoURL || null,
   };

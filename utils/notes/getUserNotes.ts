@@ -9,7 +9,7 @@ import {
   startAt,
   where,
 } from 'firebase/firestore';
-import { DashboardNote } from '../../@types';
+import { DashboardNote, DashboardNoteWithDate } from '../../@types';
 import db from '../../firebase';
 
 export const getUserNotes = async ({
@@ -32,6 +32,7 @@ export const getUserNotes = async ({
   const docSnap = (await getDocs(q)) as QuerySnapshot<DashboardNote>;
   const notes = docSnap.docs.map((note) => ({
     ...note.data(),
+    lastUpdated: note.data().lastUpdated.toDate(),
     id: note.id,
   }));
   return notes;

@@ -13,13 +13,14 @@ export const getUserProfileFromUsername = async (username: string) => {
   const q = query(userCollectionRef, where('username', '==', username));
   try {
     const userProfileSnap = (await getDocs(q)) as QuerySnapshot<UserProfile>;
-    if (userProfileSnap.empty) throw new Error("User profile doesn't exist");
+    if (userProfileSnap.empty) return null;
     const profiles: UserProfile[] = [];
     userProfileSnap.forEach((profile) => {
       profiles.push({ ...profile.data(), id: profile.id });
     });
     return profiles[0];
   } catch (e) {
-    throw e;
+    console.error(e);
+    return null;
   }
 };

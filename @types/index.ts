@@ -13,7 +13,7 @@ export type UserProfile = {
   username: string;
   email: string;
   name: string;
-  photo: string;
+  photo?: string;
 };
 
 export type Book = {
@@ -52,8 +52,12 @@ export interface DashboardNote extends DefaultNote {
   userId: string;
 }
 
-export interface DashboardNoteWithImage extends DashboardNote {
-  image: string;
+export type DashboardNoteWithDate = Omit<DashboardNote, 'lastUpdated'> & {
+  lastUpdated: Date;
+};
+
+export interface DashboardNoteWithImage extends DashboardNoteWithDate {
+  image?: string;
 }
 
 /** Book note that we are trying to save */

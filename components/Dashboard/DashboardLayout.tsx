@@ -10,7 +10,7 @@ import { signout } from '../../utils/auth';
 import { AuthContext } from '../Auth';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
 import { UserProfile } from '../../@types';
-import { ErrorFallbackWithRecovery as ErrorFallback } from '../ErrorFallback/ErrorFallbackWithRecovery';
+import { ErrorFallback } from '../Error';
 import { getCurrentUserProfile } from '../Profile';
 
 export const DashboardLayout = ({

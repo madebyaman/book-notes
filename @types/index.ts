@@ -52,6 +52,10 @@ export interface DashboardNote extends DefaultNote {
   userId: string;
 }
 
+export interface DashboardNoteWithImage extends DashboardNote {
+  image: string;
+}
+
 /** Book note that we are trying to save */
 export type BookNote = DefaultNote & {
   userId: string;

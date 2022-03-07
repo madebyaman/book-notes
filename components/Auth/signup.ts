@@ -5,6 +5,9 @@ import {
 import { doc, setDoc } from 'firebase/firestore';
 
 import db, { auth } from '../../firebase';
+import { checkUsernameExist } from './checkUsernameExist';
+
+export class UsernameError extends Error {}
 
 export const signup = async ({
   name,
@@ -17,6 +20,10 @@ export const signup = async ({
   password: string;
   username: string;
 }) => {
+  // 1. If username is not unique, throw error.
+  if (await checkUsernameExist(username))
+    throw new UsernameError('Username already exists');
+
   try {
     const userCredential = await createUserWithEmailAndPassword(
       auth,

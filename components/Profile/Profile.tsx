@@ -16,7 +16,7 @@ import {
 } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthContext } from '../Auth';
-import { ErrorFallback } from '../ErrorFallback/General';
+import { ErrorFallback } from '../Error';
 import { getCurrentUserProfile } from './getCurrentUserProfile';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
 import { uploadProfilePicture } from './uploadProfilePicture';

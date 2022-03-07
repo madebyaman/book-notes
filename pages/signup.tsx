@@ -20,8 +20,7 @@ import {
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 
-import { checkUsernameExist } from '../components/Auth/checkUsernameExist';
-import { signup } from '../utils/auth';
+import { checkUsernameExist, signup, UsernameError } from '../components/Auth';
 
 export default function Signup() {
   const router = useRouter();
@@ -73,7 +72,8 @@ export default function Signup() {
       router.push('/dashboard');
     } catch (e) {
       let message = 'Error signing up. Try again';
-      if (e instanceof Error) message = e.message;
+      if (e instanceof UsernameError) message = e.message;
+      else console.error(e);
       setErrorState({ ...errorState, customError: message, showErrors: true });
     } finally {
       setIsLoading(false);

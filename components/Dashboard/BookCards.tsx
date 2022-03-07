@@ -3,9 +3,9 @@ import { Text, Grid, GridItem, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { BookNote } from '../../@types';
+import { DashboardNote } from '../../@types';
 
-import { ErrorFallbackWithRecovery as ErrorFallback } from '../ErrorFallback/ErrorFallbackWithRecovery';
+import { ErrorFallback } from '../Error';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
 import { BookCard } from './BookCard';
@@ -13,7 +13,7 @@ import { subscribeToCurrentUserNotes } from './subscribeToCurrentUserNotes';
 
 export const BookCards = () => {
   const router = useRouter();
-  const [cards, setCards] = useState<BookNote[]>([]);
+  const [cards, setCards] = useState<DashboardNote[]>([]);
   const { state, dispatch } = useStatus();
 
   useEffect(() => {

@@ -11,7 +11,7 @@ import { Link } from '@chakra-ui/react';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
 import { Router, useRouter } from 'next/router';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallbackWithRecovery } from '../ErrorFallback/ErrorFallbackWithRecovery';
+import { ErrorFallback } from '../Error';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const bookId = useStoreState((state) => state.bookId);
@@ -61,7 +61,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
 
   return (
     <ErrorBoundary
-      FallbackComponent={ErrorFallbackWithRecovery}
+      FallbackComponent={ErrorFallback}
       onReset={() => {
         resetState();
       }}

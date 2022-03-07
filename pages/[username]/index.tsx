@@ -1,8 +1,6 @@
 import {
-  Badge,
   Box,
   Container,
-  Divider,
   Flex,
   Grid,
   GridItem,
@@ -15,13 +13,9 @@ import { useRouter } from 'next/router';
 import moment from 'moment';
 import { ImUser } from 'react-icons/im';
 
-import { getUserProfileFromUsername } from '../utils/auth';
-import { getUserNotes, mapUserNotes } from '../utils/notes';
-import { DashboardNote } from '../@types';
-
-interface NotesInterface extends DashboardNote {
-  image?: string;
-}
+import { getUserProfileFromUsername } from '../../utils/auth';
+import { getUserNotes, mapUserNotes } from '../../utils/notes';
+import { DashboardNoteWithImage } from '../../@types';
 
 type UserProfile = {
   name: string;
@@ -29,13 +23,15 @@ type UserProfile = {
 };
 
 interface UsernameNotesInterface {
-  notes: NotesInterface[];
+  notes: DashboardNoteWithImage[];
   profile: UserProfile;
 }
 
 const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
   const router = useRouter();
   const username: string = router.query.username as string;
+
+  const date = (note: DashboardNoteWithImage) => note.lastUpdated.toDate();
 
   return (
     <>
@@ -108,7 +104,7 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
                     fontSize={'12px'}
                     fontWeight="normal"
                   >
-                    {moment(note.lastUpdated).format('LL')}
+                    {moment(date(note)).format('LL')}
                   </Tag>
                   <Text
                     color="gray.600"
@@ -132,7 +128,7 @@ export async function getServerSideProps(context: {
   if (!username) return;
   const profile = await getUserProfileFromUsername(username);
   if (!profile) throw new Error('profile not found');
-  const userNotes = await getUserNotes({ userId: profile?.id });
+  const userNotes = await getUserNotes({ userId: profile.id });
   const notes = await mapUserNotes(userNotes);
   return {
     props: {

@@ -3,7 +3,7 @@ import { useStoreActions, useStoreState } from '../store';
 import BookSelect from './BookSelect';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
-import { checkNoteSlugExists } from './checkNoteSlugExists';
+import { checkNoteSlugExists } from '../../../utils/notes';
 import { useContext } from 'react';
 import { AuthContext } from '../../Auth';
 

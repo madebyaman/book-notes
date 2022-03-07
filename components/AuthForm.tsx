@@ -14,7 +14,7 @@ import {
 import { useRouter } from 'next/router';
 import { FormEvent, ReactNode, useState } from 'react';
 
-import { signin, signup } from '../utils/auth';
+import { signin } from './Auth';
 
 interface AuthFormInterface {
   mode?: 'LOGIN' | 'SIGNUP';

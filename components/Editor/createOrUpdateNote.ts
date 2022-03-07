@@ -16,7 +16,11 @@ export const createOrUpdateNote = async ({
   // First, check if slug is valid
   if (
     newDoc.slug &&
-    (await checkNoteSlugExists({ slug: newDoc.slug, userId: newDoc.userId }))
+    (await checkNoteSlugExists({
+      slug: newDoc.slug,
+      userId: newDoc.userId,
+      docId,
+    }))
   )
     throw new SlugError('Provided slug exists');
 

@@ -27,7 +27,7 @@ import { uploadProfilePicture } from './uploadProfilePicture';
 const initialState = {
   name: '',
   username: '',
-  usernameValid: false,
+  usernameValid: true,
   loading: false,
 };
 
@@ -60,10 +60,10 @@ export const Profile = () => {
 
   const onUsernameBlur = async () => {
     if (state.username) {
-      if (await checkUsernameExist(state.username)) {
-        dispatch({ type: 'UPDATE_USERNAME_STATE', payload: true });
-      } else {
+      if (await checkUsernameExist(state.username, user?.id)) {
         dispatch({ type: 'UPDATE_USERNAME_STATE', payload: false });
+      } else {
+        dispatch({ type: 'UPDATE_USERNAME_STATE', payload: true });
       }
     }
   };
@@ -75,6 +75,7 @@ export const Profile = () => {
         const user = await getCurrentUserProfile();
         if (user) {
           dispatch({ type: 'UPDATE_NAME', payload: user.name });
+          dispatch({ type: 'UPDATE_USERNAME', payload: user.username });
         }
       }
     };

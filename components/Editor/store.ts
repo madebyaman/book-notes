@@ -67,7 +67,7 @@ export const NoteEditorStore = createStore<StoreModel>(
      */
     fetchDocument: thunk(async (actions, payload) => {
       const note = await getNote(payload.docId);
-      if (note) {
+      if (note && payload.isSubscribed) {
         actions.updateContent(note.content);
         actions.updateRating(note.rating || 0);
         actions.updateTitle(note.title || '');
@@ -81,7 +81,7 @@ export const NoteEditorStore = createStore<StoreModel>(
      */
     fetchBook: thunk(async (actions, payload) => {
       const book = await getBook(payload.bookId);
-      if (book) {
+      if (book && payload.isSubscribed) {
         actions.updateSelectedBook(book);
       }
     }),

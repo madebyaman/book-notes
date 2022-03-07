@@ -31,20 +31,9 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
         try {
           await fetchDocument({ docId, isSubscribed });
           dispatch({ type: 'LOADED' });
+          bookId && (await fetchBook({ bookId, isSubscribed }));
         } catch (e) {
           throw e;
-        }
-      })();
-
-      // Now, if `bookId` exists fetch the given book
-      (async function () {
-        if (bookId) {
-          try {
-            await fetchBook({ bookId, isSubscribed });
-          } catch (e) {
-            // Now if there is an error fetching the book, I don't want to throw an error
-            console.log(e);
-          }
         }
       })();
     } else {
@@ -82,7 +71,7 @@ export const NoteEditor = ({ docId }: { docId?: string }) => {
   const router = useRouter();
 
   if (user) {
-    if (!user.emailVerified) {
+    if (user.emailVerified) {
       return (
         <StoreProvider store={NoteEditorStore}>
           <NoteEditorConsumer docId={docId} />

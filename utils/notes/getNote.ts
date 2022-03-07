@@ -3,7 +3,7 @@ import { BookNote } from '../../@types';
 import db from '../../firebase';
 
 export const getNote = async (noteId: string) => {
-  const noteRef = doc(db, 'books', noteId);
+  const noteRef = doc(db, 'book-notes', noteId);
   const noteSnap = (await getDoc(noteRef)) as DocumentSnapshot<BookNote>;
 
   if (noteSnap.exists()) {

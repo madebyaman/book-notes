@@ -7,6 +7,7 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  FormLabel,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 
@@ -18,17 +19,17 @@ import { checkNoteSlugExists } from '../../../utils/notes';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../Auth';
 
-export const EditorSidebar = () => {
+export const EditorSidebar = ({ docId }: { docId?: string }) => {
   const user = useContext(AuthContext);
   const selectedBook = useStoreState((state) => state.selectedBook);
   const slug = useStoreState((state) => state.slug);
   const updateSlug = useStoreActions((state) => state.updateSlug);
   const [slugValid, setSlugValid] = useState(true);
   const onBlurSlug = async () => {
-    if (user && (await checkNoteSlugExists({ slug, userId: user.id }))) {
-      setSlugValid(true);
-    } else {
+    if (user && (await checkNoteSlugExists({ slug, userId: user.id, docId }))) {
       setSlugValid(false);
+    } else {
+      setSlugValid(true);
     }
   };
 
@@ -42,24 +43,29 @@ export const EditorSidebar = () => {
       height={'calc(100vh - 80px)'}
     >
       <BookSelect />
-      <InputGroup my="6">
-        <Input
-          value={slug}
-          onChange={(e) => updateSlug(e.target.value)}
-          placeholder={'Slug'}
-          onBlur={onBlurSlug}
-        />
-        <InputRightElement
-          children={
-            slugValid ? (
-              <CheckCircleIcon color="green.500" />
-            ) : (
-              <WarningIcon color="red.500" />
-            )
-          }
-        />
-      </InputGroup>
-      <Text fontSize={'md'} mt="12" mb="2">
+      <FormLabel my="12">
+        <Text fontSize={'sm'} mb="1">
+          Slug
+        </Text>
+        <InputGroup>
+          <Input
+            value={slug}
+            onChange={(e) => updateSlug(e.target.value)}
+            placeholder={'Slug'}
+            onBlur={onBlurSlug}
+          />
+          <InputRightElement
+            children={
+              slugValid ? (
+                <CheckCircleIcon color="green.500" />
+              ) : (
+                <WarningIcon color="red.500" />
+              )
+            }
+          />
+        </InputGroup>
+      </FormLabel>
+      <Text fontSize={'md'} mb="2">
         How strongly would you recommend it?
       </Text>
       <Ratings />

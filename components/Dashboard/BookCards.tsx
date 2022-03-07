@@ -1,15 +1,16 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Text, Grid, GridItem, Flex } from '@chakra-ui/react';
+import { Text, Grid, GridItem, Flex, Heading } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { DashboardNote } from '../../@types';
 
+import { DashboardNote } from '../../@types';
 import { ErrorFallback } from '../Error';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
 import { BookCard } from './BookCard';
 import { subscribeToCurrentUserNotes } from './subscribeToCurrentUserNotes';
+import { EmptyState } from './EmptyState';
 
 export const BookCards = () => {
   const router = useRouter();
@@ -45,11 +46,15 @@ export const BookCards = () => {
         loading={<div>Loading...</div>}
         error={<div>{state.error}</div>}
       >
-        <Grid templateColumns="repeat(auto-fit, minmax(400px, 1fr))" gap={6}>
+        <Grid
+          templateColumns="repeat(auto-fit, minmax(400px, 1fr))"
+          columnGap={12}
+          rowGap="16"
+        >
           {cards.length > 0 ? (
             cards.map((card) => <BookCard key={card.slug} card={card} />)
           ) : (
-            <EmptyCard />
+            <EmptyState />
           )}
         </Grid>
         <Flex
@@ -76,34 +81,5 @@ export const BookCards = () => {
         </Flex>
       </StatusWrapper>
     </ErrorBoundary>
-  );
-};
-
-const EmptyCard = () => {
-  const router = useRouter();
-  return (
-    <GridItem
-      borderWidth={'1px'}
-      flex={'1'}
-      borderRadius={'md'}
-      minW={'250px'}
-      minH={'250px'}
-      p={5}
-      _hover={{ boxShadow: 'md' }}
-      cursor="pointer"
-      mt="12"
-      onClick={() => router.push('/add')}
-    >
-      <Flex
-        w={'100%'}
-        h={'100%'}
-        flexDir={'column'}
-        justify="center"
-        align={'center'}
-      >
-        <AddIcon mb={'4'} />
-        <Text>Add a new book note</Text>
-      </Flex>
-    </GridItem>
   );
 };

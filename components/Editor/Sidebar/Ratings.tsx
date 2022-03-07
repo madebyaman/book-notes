@@ -7,7 +7,7 @@ const Ratings = () => {
   const updateRating = useStoreActions((state) => state.updateRating);
 
   return (
-    <Box mb="6">
+    <Box mb="10">
       {[...Array(5)].map((_star, id) => {
         id += 1;
         const stars = rating || 0;

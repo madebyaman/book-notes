@@ -95,7 +95,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
 
     // Finally set the document if !docID, else update it
     try {
-      createOrUpdateNote({
+      await createOrUpdateNote({
         newDoc: document,
         docId,
       });
@@ -133,7 +133,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         <Box w={'30%'}>
           <Box pos={'sticky'} top="73px">
             {/* Sidebar sticky area */}
-            <EditorSidebar />
+            <EditorSidebar docId={docId} />
           </Box>
         </Box>
       </Flex>

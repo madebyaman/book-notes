@@ -13,7 +13,7 @@ import { DashboardNote } from '../../@types';
 import BookCover from './BookCover';
 
 export const BookCard = ({ card }: { card: DashboardNote }) => {
-  const { slug, isPublished, excerpt, title, bookId } = card;
+  const { id, slug, isPublished, excerpt, title, bookId } = card;
   return (
     <GridItem
       p={5}
@@ -51,7 +51,7 @@ export const BookCard = ({ card }: { card: DashboardNote }) => {
             <Link
               href={{
                 pathname: '/edit/[id]',
-                query: { id: slug },
+                query: { id: id },
               }}
               passHref
             >

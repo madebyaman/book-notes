@@ -8,6 +8,8 @@ import {
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react';
+import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
+
 import { useStoreActions, useStoreState } from '../store';
 import BookSelect from './BookSelect';
 import Ratings from './Ratings';
@@ -15,7 +17,6 @@ import PublishSwitch from './PublishSwitch';
 import { checkNoteSlugExists } from '../../../utils/notes';
 import { useContext, useState } from 'react';
 import { AuthContext } from '../../Auth';
-import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 
 export const EditorSidebar = () => {
   const user = useContext(AuthContext);
@@ -46,7 +47,7 @@ export const EditorSidebar = () => {
           value={slug}
           onChange={(e) => updateSlug(e.target.value)}
           placeholder={'Slug'}
-          onBlur={() => user && checkNoteSlugExists({ slug, userId: user?.id })}
+          onBlur={onBlurSlug}
         />
         <InputRightElement
           children={

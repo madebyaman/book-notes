@@ -1,3 +1,4 @@
+import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 import {
   Button,
   FormControl,
@@ -6,6 +7,8 @@ import {
   Stack,
   useToast,
   Text,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react';
 import {
   ChangeEvent,
@@ -15,7 +18,7 @@ import {
   useState,
 } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { AuthContext } from '../Auth';
+import { AuthContext, checkUsernameExist, UsernameError } from '../Auth';
 import { ErrorFallback } from '../Error';
 import { getCurrentUserProfile } from './getCurrentUserProfile';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
@@ -23,11 +26,15 @@ import { uploadProfilePicture } from './uploadProfilePicture';
 
 const initialState = {
   name: '',
+  username: '',
+  usernameValid: false,
   loading: false,
 };
 
 type ProfileActions =
   | { type: 'UPDATE_NAME'; payload: string }
+  | { type: 'UPDATE_USERNAME'; payload: string }
+  | { type: 'UPDATE_USERNAME_STATE'; payload: boolean }
   | { type: 'UPDATE_LOADING_STATE'; payload: boolean };
 
 function reducer(state: typeof initialState, action: ProfileActions) {
@@ -36,6 +43,10 @@ function reducer(state: typeof initialState, action: ProfileActions) {
       return { ...state, name: action.payload };
     case 'UPDATE_LOADING_STATE':
       return { ...state, loading: action.payload };
+    case 'UPDATE_USERNAME':
+      return { ...state, username: action.payload };
+    case 'UPDATE_USERNAME_STATE':
+      return { ...state, usernameValid: action.payload };
     default:
       return state;
   }
@@ -46,6 +57,16 @@ export const Profile = () => {
   const [profilePicture, setProfilePicture] = useState<File | undefined>();
   const user = useContext(AuthContext);
   const toast = useToast();
+
+  const onUsernameBlur = async () => {
+    if (state.username) {
+      if (await checkUsernameExist(state.username)) {
+        dispatch({ type: 'UPDATE_USERNAME_STATE', payload: true });
+      } else {
+        dispatch({ type: 'UPDATE_USERNAME_STATE', payload: false });
+      }
+    }
+  };
 
   useEffect(() => {
     let isSubscribed = true;
@@ -72,6 +93,7 @@ export const Profile = () => {
       const profilePhoto = await uploadProfilePicture(profilePicture);
       await updateCurrentUserInfo({
         name: state.name,
+        username: state.username,
         photo: profilePhoto || null,
       });
       toast({
@@ -81,9 +103,11 @@ export const Profile = () => {
         isClosable: true,
       });
     } catch (e) {
-      console.error(e);
+      let message = 'Failed to save your profile';
+      if (e instanceof UsernameError) message = 'Username already exists.';
+      else console.error(e);
       toast({
-        title: 'Failed to save your profile',
+        title: message,
         status: 'error',
         duration: 1_000,
         isClosable: true,
@@ -114,6 +138,32 @@ export const Profile = () => {
                   dispatch({ type: 'UPDATE_NAME', payload: e.target.value })
                 }
               />
+            </FormLabel>
+          </FormControl>
+          <FormControl>
+            <FormLabel>
+              Username
+              <InputGroup>
+                <Input
+                  value={state.username}
+                  onChange={(e) =>
+                    dispatch({
+                      type: 'UPDATE_USERNAME',
+                      payload: e.target.value,
+                    })
+                  }
+                  onBlur={onUsernameBlur}
+                />
+                <InputRightElement
+                  children={
+                    state.usernameValid ? (
+                      <CheckCircleIcon color="green.500" />
+                    ) : (
+                      <WarningIcon color="red.500" />
+                    )
+                  }
+                />
+              </InputGroup>
             </FormLabel>
           </FormControl>
           <FormControl>

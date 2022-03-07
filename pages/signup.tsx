@@ -32,7 +32,7 @@ export default function Signup() {
   const [errorState, setErrorState] = useState({
     usernameValid: false,
     passwordValid: false,
-    showErrors: true,
+    showErrors: false,
     customError: '',
   });
 

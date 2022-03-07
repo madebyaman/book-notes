@@ -1,12 +1,11 @@
 import * as firebase from 'firebase/app';
 import { initializeFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyA174aEiZHJWzPLox77Cwvn9ElRsYmJ57A',
-  authDomain: 'book-notes-app-9ea54.firebaseapp.com',
-  projectId: 'book-notes-app-9ea54',
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
 };
 
 /**
@@ -23,10 +22,5 @@ const db = initializeFirestore(fb, {});
  * Firebase Auth
  */
 export const auth = getAuth(fb);
-
-/**
- * Firebase storage
- */
-export const storage = getStorage(fb);
 
 export default db;

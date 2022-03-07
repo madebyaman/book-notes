@@ -61,7 +61,7 @@ const BookSelect = () => {
         });
     }, 1000);
     return () => clearTimeout(timer);
-  }, [bookSearchString]);
+  }, [bookSearchString, dispatch]);
 
   const formatOptionLabel = ({ title, author, year }: Book) => {
     return (

@@ -155,15 +155,13 @@ export const Profile = () => {
                   }
                   onBlur={onUsernameBlur}
                 />
-                <InputRightElement
-                  children={
-                    state.usernameValid ? (
-                      <CheckCircleIcon color="green.500" />
-                    ) : (
-                      <WarningIcon color="red.500" />
-                    )
-                  }
-                />
+                <InputRightElement>
+                  {state.usernameValid ? (
+                    <CheckCircleIcon color="green.500" />
+                  ) : (
+                    <WarningIcon color="red.500" />
+                  )}
+                </InputRightElement>
               </InputGroup>
             </FormLabel>
           </FormControl>

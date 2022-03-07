@@ -31,7 +31,7 @@ export const BookCards = () => {
       }
     };
     setBooks();
-  }, []);
+  }, [dispatch]);
 
   return (
     <ErrorBoundary

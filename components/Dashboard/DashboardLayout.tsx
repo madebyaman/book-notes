@@ -58,6 +58,7 @@ export const DashboardLayout = ({
             {user && user.photo ? (
               <Image
                 borderRadius={'full'}
+                alt={user.name}
                 src={user.photo}
                 w="100px"
                 h="100px"

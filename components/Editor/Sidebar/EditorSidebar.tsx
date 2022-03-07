@@ -8,6 +8,7 @@ import {
   InputGroup,
   InputRightElement,
   FormLabel,
+  Image,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 
@@ -54,15 +55,13 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
             placeholder={'Slug'}
             onBlur={onBlurSlug}
           />
-          <InputRightElement
-            children={
-              slugValid ? (
-                <CheckCircleIcon color="green.500" />
-              ) : (
-                <WarningIcon color="red.500" />
-              )
-            }
-          />
+          <InputRightElement>
+            {slugValid ? (
+              <CheckCircleIcon color="green.500" />
+            ) : (
+              <WarningIcon color="red.500" />
+            )}
+          </InputRightElement>
         </InputGroup>
       </FormLabel>
       <Text fontSize={'md'} mb="2">
@@ -74,7 +73,7 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
       {selectedBook && (
         <Flex bg="gray.100" borderRadius={'md'} p="4" mt={'auto'}>
           {(selectedBook.photoURL || selectedBook.cover) && (
-            <img
+            <Image
               src={
                 selectedBook.photoURL
                   ? selectedBook.photoURL

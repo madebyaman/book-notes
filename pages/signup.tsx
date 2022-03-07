@@ -133,9 +133,9 @@ export default function Signup() {
                           onBlur={onBlurUsername}
                         />
                         {username && (
-                          <InputRightElement
-                            children={ErrorIcon(errorState.usernameValid)}
-                          />
+                          <InputRightElement>
+                            {ErrorIcon(errorState.usernameValid)}
+                          </InputRightElement>
                         )}
                       </InputGroup>
                     </FormControl>

@@ -12,7 +12,7 @@ const EditBook = () => {
     if (!user) {
       router.push('/signin');
     }
-  }, []);
+  }, [router, user]);
 
   return <NoteEditor docId={id} />;
 };

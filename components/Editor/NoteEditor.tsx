@@ -46,7 +46,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
     return () => {
       isSubscribed = false;
     };
-  }, [docId]);
+  }, [bookId, dispatch, docId, fetchBook, fetchDocument, resetState]);
 
   return (
     <ErrorBoundary

@@ -10,10 +10,10 @@ export const AuthContext = createContext<{
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   const { isLoading, user } = useAuth();
   const router = useRouter();
-  const protectedRoutes = ['/dashboard', '/add', '/dashboard/profile']; // TODO check edit
 
   // Redirect to login page if user is not signed in. Else,
   useEffect(() => {
+    const protectedRoutes = ['/dashboard', '/add', '/dashboard/profile'];
     if (!isLoading && !user && protectedRoutes.includes(router.pathname)) {
       const timerId = setTimeout(() => {
         router.push('/signin');

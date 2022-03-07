@@ -31,6 +31,7 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
           {profile.photo ? (
             <Image
               src={profile.photo}
+              alt={profile.name}
               width="100px"
               height="100px"
               rounded={'full'}
@@ -39,7 +40,7 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
             <ImUser fontSize={'50px'} />
           )}
           <Heading as="h1" fontSize={'54px'}>
-            {profile.name}'s Book Notes
+            Book Notes of {profile.name}
           </Heading>
           <hr
             style={{
@@ -59,8 +60,8 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
           mt="10"
         >
           {notes.map((note) => (
-            <BookCardLayout bookId={note.bookId}>
-              <Link href={`/${profile.username}/${note.slug}`}>
+            <BookCardLayout bookId={note.bookId} key={note.id}>
+              <Link href={`/${profile.username}/${note.slug}`} passHref>
                 <Heading
                   as="h2"
                   fontSize="30px"

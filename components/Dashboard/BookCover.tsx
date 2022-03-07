@@ -45,7 +45,7 @@ const BookCover = ({ bookID }: { bookID: string | undefined }) => {
     return () => {
       isSubscribed = false;
     };
-  }, [bookID]);
+  }, [bookID, setFetchingBookCoverStatus]);
 
   return (
     <StatusWrapper

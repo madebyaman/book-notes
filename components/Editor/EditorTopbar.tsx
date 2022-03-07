@@ -3,7 +3,7 @@ import { Box, Button, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FaSave } from 'react-icons/fa';
 
-const Topbar = ({
+export const EditorTopbar = ({
   onSave,
   isEditing = false,
   loading,
@@ -49,5 +49,3 @@ const Topbar = ({
     </Flex>
   );
 };
-
-export default Topbar;

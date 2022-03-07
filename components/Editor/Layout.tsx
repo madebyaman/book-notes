@@ -4,7 +4,6 @@ import { useContext, useState } from 'react';
 import { useStoreState } from './store';
 import { EditingSection } from './Main';
 import { EditorSidebar } from './Sidebar';
-import Topbar from './Topbar';
 import { getBook } from '../../utils/notes';
 import { uploadBookCover } from './uploadBookCover';
 import { addBook } from './addBook';
@@ -14,6 +13,7 @@ import {
   SlugError,
 } from './createOrUpdateNote';
 import { AuthContext } from '../Auth';
+import { EditorTopbar } from './EditorTopbar';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished, slug } =
@@ -123,7 +123,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         px="2"
       >
         {/* Section for Top Bar */}
-        <Topbar onSave={onSave} loading={loading} />
+        <EditorTopbar onSave={onSave} loading={loading} />
       </Box>
       <Flex margin="0 auto" mt={'80px'} w="100%">
         {/* EditingSection */}

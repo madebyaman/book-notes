@@ -43,7 +43,7 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
       height={'calc(100vh - 80px)'}
     >
       <BookSelect />
-      <FormLabel my="12">
+      <FormLabel my="10">
         <Text fontSize={'sm'} mb="1">
           Slug
         </Text>

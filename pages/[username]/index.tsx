@@ -16,6 +16,7 @@ import Link from 'next/link';
 import { getUserProfileFromUsername } from '../../utils/auth';
 import { getUserNotes, mapUserNotes } from '../../utils/notes';
 import { DashboardNoteWithImage, UserProfile } from '../../@types';
+import { BookCardLayout } from '../../components/Dashboard/BookCardLayout';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithImage[];
@@ -58,54 +59,35 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
           mt="10"
         >
           {notes.map((note) => (
-            <GridItem
-              key={note.id}
-              border="1px"
-              borderColor={'#e7ebed'}
-              px="4"
-              py="10"
-              boxShadow={'none'}
-              transition={'all 200ms ease-out'}
-              rounded="md"
-              _hover={{
-                boxShadow: '0 3px 20px 0 rgb(84 110 122 / 10%)',
-                transform: 'translateY(-2px)',
-                borderColor: 'transparent',
-              }}
-            >
-              <Flex alignItems="flex-start">
-                {note.image && <Image src={note.image} mr="5" maxW="100" />}
-                <Box>
-                  <Link href={`/${profile.username}/${note.slug}`}>
-                    <Heading
-                      as="h2"
-                      fontSize="30px"
-                      fontWeight={'medium'}
-                      cursor={'pointer'}
-                      _hover={{
-                        color: 'teal.500',
-                      }}
-                    >
-                      {note.title}
-                    </Heading>
-                  </Link>
-                  <Tag
-                    rounded={'none'}
-                    my="2"
-                    variant="subtle"
-                    fontSize={'12px'}
-                    fontWeight="normal"
-                  >
-                    {moment(note.lastUpdated).format('LL')}
-                  </Tag>
-                  <Text
-                    color="gray.600"
-                    fontSize={'17px'}
-                    dangerouslySetInnerHTML={{ __html: note.excerpt }}
-                  />
-                </Box>
-              </Flex>
-            </GridItem>
+            <BookCardLayout bookId={note.bookId}>
+              <Link href={`/${profile.username}/${note.slug}`}>
+                <Heading
+                  as="h2"
+                  fontSize="30px"
+                  fontWeight={'medium'}
+                  cursor={'pointer'}
+                  _hover={{
+                    color: 'teal.500',
+                  }}
+                >
+                  {note.title}
+                </Heading>
+              </Link>
+              <Tag
+                rounded={'none'}
+                my="3"
+                variant="subtle"
+                fontSize={'12px'}
+                fontWeight="normal"
+              >
+                {moment(note.lastUpdated).format('LL')}
+              </Tag>
+              <Text
+                color="gray.600"
+                fontSize={'17px'}
+                dangerouslySetInnerHTML={{ __html: note.excerpt }}
+              />
+            </BookCardLayout>
           ))}
         </Grid>
       </Container>

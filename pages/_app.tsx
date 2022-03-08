@@ -5,10 +5,11 @@ import { ErrorBoundary } from 'react-error-boundary';
 import '../styles/globals.css';
 import { AuthContextProvider } from '../components/Auth';
 import ErrorFallback from '../components/ErrorFallback';
+import { theme } from '../components';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <AuthContextProvider>
           <Component {...pageProps} />

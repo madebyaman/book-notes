@@ -30,11 +30,11 @@ const Home: NextPage = function () {
               rounded="md"
               px="8"
               py="6"
-              backgroundColor={'primary.400'}
+              backgroundColor={'primary.700'}
               fontWeight="bold"
               color="white"
               _hover={{
-                backgroundColor: 'primary.700',
+                backgroundColor: 'teal.700',
               }}
               // color="white"
               onClick={() => router.push('/signin')}

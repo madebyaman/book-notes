@@ -1,5 +1,4 @@
-import { Box, Flex, Link as ChakraLink } from '@chakra-ui/react';
-import Image from 'next/image';
+import { Image, Flex, Link as ChakraLink } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useContext } from 'react';
 import { signout } from '../utils/auth';
@@ -12,12 +11,15 @@ export const Nav = () => {
   return (
     <header>
       <Flex mt="4" mb="6" justify={'space-between'} alignItems="center">
-        <Image
-          src="/logo.svg"
-          alt="Bummaries App"
-          width="169px"
-          height="93px"
-        />
+        <Link href="/" passHref>
+          <Image
+            cursor="pointer"
+            src="/logo.svg"
+            alt="Bummaries App"
+            width="135px"
+            height="74px"
+          />
+        </Link>
         <Link href={user ? '#' : '/signin'} passHref>
           <ChakraLink
             onClick={() => signout()}

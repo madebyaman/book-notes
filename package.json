@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^1.7.3",
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@reach/tabs": "^0.16.4",
     "@tiptap/extension-placeholder": "^2.0.0-beta.45",
     "@tiptap/react": "^2.0.0-beta.95",
     "@tiptap/starter-kit": "^2.0.0-beta.145",

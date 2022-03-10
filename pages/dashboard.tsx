@@ -1,20 +1,15 @@
 import { Box, Container } from '@chakra-ui/react';
+import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import { ErrorBoundary } from 'react-error-boundary';
 
-import { ErrorFallback } from '../Error';
-import { Nav } from '../nav';
-import { BookCards } from './BookCards';
+import { BookCards } from '../components/Dashboard';
+import { Nav } from '../components/nav';
 
-export const DashboardLayout = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+const Dashboard: NextPage = function () {
   const router = useRouter();
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <>
       <Box backgroundColor={'white'} shadow="md" py="4">
         <Container maxW="container.lg">
           <Nav showFullNav={true} route={router.pathname} />
@@ -25,6 +20,8 @@ export const DashboardLayout = ({
           <BookCards />
         </Container>
       </Box>
-    </ErrorBoundary>
+    </>
   );
 };
+
+export default Dashboard;

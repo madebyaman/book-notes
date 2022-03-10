@@ -1,4 +1,3 @@
-import { EditIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Text,

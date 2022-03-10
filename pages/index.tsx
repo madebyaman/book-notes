@@ -8,7 +8,7 @@ const Home: NextPage = function () {
   const router = useRouter();
 
   return (
-    <main>
+    <div>
       <Container maxW="container.lg">
         <Nav />
         <Flex
@@ -52,7 +52,7 @@ const Home: NextPage = function () {
           </Box>
         </Flex>
       </Container>
-    </main>
+    </div>
   );
 };
 

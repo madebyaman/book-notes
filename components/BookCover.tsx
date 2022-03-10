@@ -1,9 +1,9 @@
 import { doc, getDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
-import db from '../../firebase';
-import { useStatus } from '../Status';
+import db from '../firebase';
+import { useStatus } from './Status';
 import { Image } from '@chakra-ui/react';
-import { StatusWrapper } from '../Status';
+import { StatusWrapper } from './Status';
 
 const DefaultBookCover = () => (
   <Image src="./Book.png" alt="Book Cover" width={'150px'} />

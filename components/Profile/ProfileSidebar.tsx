@@ -48,7 +48,7 @@ export const ProfileSidebar = ({ profile }: ProfileSidebarPropsInterface) => {
         <Heading as="h1" fontSize={'46px'} color="text.400">
           Book notes: {name}
         </Heading>
-        <Text color="gray.500" fontSize="21px" fontWeight="semibold">
+        <Text color="gray.400" fontSize="21px" fontWeight="semibold">
           @{username}
         </Text>
         {bio && <Text>{bio}</Text>}

@@ -1,5 +1,5 @@
 import { AddIcon } from '@chakra-ui/icons';
-import { Text, Grid, GridItem, Flex, Heading } from '@chakra-ui/react';
+import { Text, Grid, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -8,12 +8,14 @@ import { DashboardNote } from '../../@types';
 import { ErrorFallback } from '../Error';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
-import { BookCard } from './BookCard';
+import { BookCard } from '../BookCard';
 import { subscribeToCurrentUserNotes } from './subscribeToCurrentUserNotes';
 import { EmptyState } from './EmptyState';
+import { useUserProfileHook } from '../Profile';
 
 export const BookCards = () => {
   const router = useRouter();
+  const user = useUserProfileHook();
   const [cards, setCards] = useState<DashboardNote[]>([]);
   const { state, dispatch } = useStatus();
 
@@ -51,8 +53,21 @@ export const BookCards = () => {
           columnGap={12}
           rowGap="16"
         >
-          {cards.length > 0 ? (
-            cards.map((card) => <BookCard key={card.slug} card={card} />)
+          {cards.length > 0 && user ? (
+            cards.map((card) => {
+              const cardWithDate = {
+                ...card,
+                lastUpdated: card.lastUpdated.toDate(),
+              };
+              return (
+                <BookCard
+                  key={card.slug}
+                  card={cardWithDate}
+                  isProfileCard={false}
+                  username={user?.username}
+                />
+              );
+            })
           ) : (
             <EmptyState />
           )}

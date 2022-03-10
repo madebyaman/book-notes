@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 import { DashboardLayout as Layout } from '../../components/Dashboard';
-import { Profile } from '../../components/Profile';
+import { ProfilePreferences as Profile } from '../../components/Profile';
 
 const Dashboard: NextPage = function () {
   return (

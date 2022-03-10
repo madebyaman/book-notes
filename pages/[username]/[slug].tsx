@@ -1,6 +1,7 @@
-import { StarIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, StarIcon } from '@chakra-ui/icons';
 import {
   Box,
+  Button,
   Container,
   Flex,
   Heading,
@@ -10,9 +11,12 @@ import {
 } from '@chakra-ui/react';
 import moment from 'moment';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { ImUser } from 'react-icons/im';
+
 import { DashboardNoteWithImage, UserProfile } from '../../@types';
 import { CenteredLayout } from '../../components/Layout';
+import { Nav } from '../../components/nav';
 import { getUserProfileFromUsername } from '../../utils/auth';
 import { mapUserNote } from '../../utils/notes';
 import { getNoteFromSlug } from '../../utils/notes/getNoteFromSlug';
@@ -24,70 +28,97 @@ const BookNote = ({
   note: DashboardNoteWithImage | null;
   profile: UserProfile | null;
 }) => {
+  const router = useRouter();
+
   if (!note) {
     return (
-      <CenteredLayout>404! Book note was not found. Try again.</CenteredLayout>
+      <CenteredLayout>
+        Uh oh! Book note was not found. Try again.
+      </CenteredLayout>
     );
   }
 
   if (!profile) {
-    return <CenteredLayout>404! User not found.</CenteredLayout>;
+    return <CenteredLayout>User not found.</CenteredLayout>;
   }
 
   return (
     <>
-      <Box bgColor="gray.50" py="20">
-        <Container maxW="container.lg">
-          <Flex alignItems={'center'} justifyContent="center">
-            {note.image && (
-              <Image src={note.image} alt={note.title} boxShadow="md" />
-            )}
-            <Box ml="6">
-              <Flex alignItems={'center'}>
+      <Container maxW="container.lg">
+        <Nav />
+        <Box py="16">
+          <Flex alignItems={'center'} justifyContent="center" gap="6">
+            <Box>
+              <Link passHref href={`/${profile.username}`}>
+                <Button
+                  leftIcon={<ArrowBackIcon />}
+                  backgroundColor="gray.100"
+                  _hover={{ backgroundColor: 'gray.200' }}
+                  mb="4"
+                  fontSize="sm"
+                >
+                  Book Notes
+                </Button>
+              </Link>
+              {note.image && (
+                <Image
+                  src={note.image}
+                  alt={note.title}
+                  boxShadow="md"
+                  maxH="200px"
+                />
+              )}
+              <Box mt="4">
+                {Array.from(Array(note.rating).keys()).map((num) => (
+                  <StarIcon color="primary.400" key={num} />
+                ))}
+              </Box>
+            </Box>
+            <Box>
+              <Text color="gray.400" fontSize="sm" fontWeight={'semibold'}>
+                {moment(note.lastUpdated).format('LL')}
+              </Text>
+              <Heading as="h1" fontSize="54px" mt="2" mb="4">
+                {note.title}
+              </Heading>
+              <Flex alignItems={'center'} gap="3">
                 {profile.photo ? (
                   <Image
                     src={profile.photo}
                     alt={profile.name}
-                    width="40px"
-                    height={'40px'}
+                    width="60px"
+                    height="60px"
                     borderRadius="full"
                   />
                 ) : (
                   <ImUser fontSize={'50px'} />
                 )}
-                <Text
-                  color="gray.400"
-                  fontWeight={'bold'}
-                  fontSize="14px"
-                  fontStyle={'italic'}
-                >
-                  Book Note by{' '}
-                  <Text color="gray.600" fontStyle={'normal'} display="inline">
-                    <Link href={`/${profile.username}`} passHref>
-                      <ChakraLink>{profile.name}</ChakraLink>
-                    </Link>
-                  </Text>{' '}
-                  on{' '}
-                  <Text
-                    display={'inline'}
-                    color="gray.600"
-                    fontStyle={'normal'}
-                  >
-                    {moment(note.lastUpdated).format('LL')}
+                <Flex flexDirection={'column'}>
+                  <Text fontSize={'large'} fontWeight={'bold'}>
+                    {profile.name}
                   </Text>
-                </Text>
+                  <Link href={`/${profile.username}`} passHref>
+                    <ChakraLink
+                      color="gray.400"
+                      fontWeight={'semibold'}
+                      fontSize={'sm'}
+                    >
+                      @{profile.username}
+                    </ChakraLink>
+                  </Link>
+                </Flex>
               </Flex>
-              <Heading as="h1" fontSize={'54px'} my="4">
-                {note.title}
-              </Heading>
-              {Array.from(Array(note.rating).keys()).map((num) => (
-                <StarIcon color="gray.500" key={num} />
-              ))}
             </Box>
           </Flex>
-        </Container>
-      </Box>
-      <Container mt="6">
+        </Box>
+      </Container>
+      <Box
+        backgroundColor="light.100"
+        width="container.lg"
+        height="5px"
+        m="0 auto"
+      />
+      <Container mt="16">
         <Box
           fontSize={'19px'}
           dangerouslySetInnerHTML={{ __html: note.content }}

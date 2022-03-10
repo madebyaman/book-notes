@@ -14,6 +14,12 @@ export type UserProfile = {
   email: string;
   name: string;
   photo?: string;
+  bio?: string;
+  twitterUrl?: string;
+  linkedInUrl?: string;
+  instagramUrl?: string;
+  facebookUrl?: string;
+  youtubeUrl?: string;
 };
 
 export type Book = {

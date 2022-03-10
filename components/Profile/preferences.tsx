@@ -52,7 +52,7 @@ function reducer(state: typeof initialState, action: ProfileActions) {
   }
 }
 
-export const Profile = () => {
+export const ProfilePreferences = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [profilePicture, setProfilePicture] = useState<File | undefined>();
   const user = useContext(AuthContext);

@@ -13,6 +13,9 @@ import {
   Box,
   Heading,
   Flex,
+  Stack,
+  HStack,
+  Textarea,
 } from '@chakra-ui/react';
 import {
   ChangeEvent,
@@ -144,7 +147,7 @@ export const ProfilePreferences = () => {
             This information will be displayed on your user profile page.
           </Text>
         </Box>
-        <Box rounded="md" px="8" py="6" backgroundColor={'white'}>
+        <Box rounded="md" shadow="md" px="8" py="6" backgroundColor={'white'}>
           <form onSubmit={handleSubmit}>
             <Flex gap="3" mt="4">
               {state.photoUrl ? (
@@ -176,7 +179,7 @@ export const ProfilePreferences = () => {
               )}
               <Box>
                 <FormLabel htmlFor="uploadImage">Profile Picture</FormLabel>
-                <Text fontSize={'sm'} my="1">
+                <Text fontSize={'sm'}>
                   Upload 150px * 150px photo to display in public profile.
                 </Text>
                 <Box pos="relative" overflow={'hidden'}>
@@ -228,45 +231,118 @@ export const ProfilePreferences = () => {
                 </Box>
               </Box>
             </Flex>
-            <FormControl mt="4">
-              <FormLabel>
-                Name
-                <Input
-                  value={state.name}
-                  placeholder="Your Name"
-                  onChange={(e) =>
-                    dispatch({ type: 'UPDATE_NAME', payload: e.target.value })
-                  }
-                />
-              </FormLabel>
-            </FormControl>
-            <FormControl>
-              <FormLabel>
-                Username
-                <InputGroup>
-                  <Input
-                    value={state.username}
-                    type="text"
+            <Stack spacing={10} mt="8">
+              <HStack spacing="24px">
+                <FormControl>
+                  <FormLabel>
+                    Name
+                    <Input
+                      value={state.name}
+                      placeholder="Your Name"
+                      onChange={(e) =>
+                        dispatch({
+                          type: 'UPDATE_NAME',
+                          payload: e.target.value,
+                        })
+                      }
+                    />
+                  </FormLabel>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>
+                    Username
+                    <InputGroup>
+                      <Input
+                        value={state.username}
+                        type="text"
+                        onChange={(e) =>
+                          dispatch({
+                            type: 'UPDATE_USERNAME',
+                            payload: e.target.value,
+                          })
+                        }
+                        onBlur={onUsernameBlur}
+                      />
+                      <InputRightElement>
+                        {state.usernameValid ? (
+                          <CheckCircleIcon color="green.500" />
+                        ) : (
+                          <WarningIcon color="red.500" />
+                        )}
+                      </InputRightElement>
+                    </InputGroup>
+                  </FormLabel>
+                </FormControl>
+              </HStack>
+
+              <FormControl>
+                <FormLabel>
+                  Your Bio
+                  <Textarea
+                    value={state.bio}
+                    placeholder="Your bio"
                     onChange={(e) =>
                       dispatch({
-                        type: 'UPDATE_USERNAME',
+                        type: 'UPDATE_BIO',
                         payload: e.target.value,
                       })
                     }
-                    onBlur={onUsernameBlur}
                   />
-                  <InputRightElement>
-                    {state.usernameValid ? (
-                      <CheckCircleIcon color="green.500" />
-                    ) : (
-                      <WarningIcon color="red.500" />
-                    )}
-                  </InputRightElement>
-                </InputGroup>
-              </FormLabel>
-            </FormControl>
-            <Button colorScheme="teal" type="submit" isLoading={state.loading}>
+                </FormLabel>
+              </FormControl>
+            </Stack>
+            <Button
+              colorScheme="teal"
+              type="submit"
+              isLoading={state.loading}
+              mt="6"
+            >
               Save Changes
+            </Button>
+          </form>
+        </Box>
+      </Grid>
+      <Grid templateColumns={{ base: '1fr', md: '1fr 3fr' }} gap="6" mt="10">
+        <Box>
+          <Heading as="h2" fontSize="30px" color="text.400">
+            Social Links
+          </Heading>
+          <Text>
+            Provide your social media links to display on your public profile
+            page.
+          </Text>
+        </Box>
+        <Box rounded="md" shadow="md" px="8" py="12" backgroundColor={'white'}>
+          <form>
+            <Stack spacing={10}>
+              <FormControl>
+                <FormLabel>Twitter</FormLabel>
+                <Input type="text" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>YouTube</FormLabel>
+                <Input type="text" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Facebook</FormLabel>
+                <Input type="text" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>LinkedIn</FormLabel>
+                <Input type="text" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Instagram</FormLabel>
+                <Input type="text" />
+              </FormControl>
+            </Stack>
+            <Button
+              colorScheme="teal"
+              type="submit"
+              isLoading={state.loading}
+              mt="6"
+            >
+              Save
             </Button>
           </form>
         </Box>

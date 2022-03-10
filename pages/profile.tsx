@@ -9,7 +9,7 @@ const Dashboard: NextPage = function () {
 
   return (
     <>
-      <Box backgroundColor={'white'} shadow="md" py="4">
+      <Box backgroundColor={'white'} shadow="lg" py="4">
         <Container maxW="container.lg">
           <Nav showFullNav={true} route={router.pathname} />
         </Container>

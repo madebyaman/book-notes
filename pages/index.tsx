@@ -9,13 +9,14 @@ const Home: NextPage = function () {
 
   return (
     <div>
-      <Container maxW="container.lg">
+      <Container maxW="container.lg" mt="8">
         <Nav />
         <Flex
           alignItems={'center'}
           justifyContent="space-between"
           gap="6"
           flexDirection={{ base: 'column', md: 'row' }}
+          mt="4"
         >
           <Box>
             <Heading as="h1" fontSize={'54px'} color="text.400">

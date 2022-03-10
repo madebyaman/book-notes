@@ -1,9 +1,7 @@
 import { Box, Container } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { AuthContext } from '../Auth';
 import { ErrorFallback } from '../Error';
 import { Nav } from '../nav';
 import { BookCards } from './BookCards';
@@ -14,17 +12,19 @@ export const DashboardLayout = ({
   children: React.ReactNode;
 }) => {
   const router = useRouter();
-  const isDashboardActive = router.pathname === '/dashboard'; // To figure whether the page is dashboard or profile page.
-  const userInfo = useContext(AuthContext);
 
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
-      <Box>
+      <Box backgroundColor={'white'} shadow="md" py="4">
         <Container maxW="container.lg">
-          <Nav showFullNav={true} />
+          <Nav showFullNav={true} route={router.pathname} />
         </Container>
       </Box>
-      <BookCards />
+      <Box backgroundColor="gray.100" py="16">
+        <Container maxW="container.lg">
+          <BookCards />
+        </Container>
+      </Box>
     </ErrorBoundary>
   );
 };

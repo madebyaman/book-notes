@@ -11,12 +11,14 @@ import { signout } from '../utils/auth';
 
 import { AuthContext } from './Auth';
 
-export const Nav = ({ showFullNav }: { showFullNav?: boolean }) => {
+type NavTypes = { showFullNav: true; route: string } | { showFullNav?: false };
+
+export const Nav = (props: NavTypes) => {
   const user = useContext(AuthContext);
 
   return (
     <header>
-      <Flex mt="4" mb="6" justify={'space-between'} alignItems="center">
+      <Flex justify={'space-between'} alignItems="center" gap="8">
         <Link href="/" passHref>
           <Image
             cursor="pointer"
@@ -27,18 +29,20 @@ export const Nav = ({ showFullNav }: { showFullNav?: boolean }) => {
           />
         </Link>
         <Spacer />
-        {user && showFullNav && (
+        {user && props.showFullNav && (
           <>
             <Link href={`/dashboard`} passHref>
               <ChakraLink
                 fontSize={'md'}
-                color="gray.600"
-                borderBottom={'2px'}
-                borderColor="transparent"
+                color={
+                  props.route === '/dashboard' ? 'primary.400' : 'gray.600'
+                }
+                display="flex"
+                flexDir={'column'}
+                alignItems={'center'}
                 transition={'all 200ms ease-out'}
                 _hover={{
                   textDecoration: 'none',
-                  borderColor: 'primary.700',
                   color: 'primary.400',
                 }}
               >
@@ -65,13 +69,13 @@ export const Nav = ({ showFullNav }: { showFullNav?: boolean }) => {
             <Link href="/profile" passHref>
               <ChakraLink
                 fontSize={'md'}
-                color="gray.600"
-                borderBottom={'2px'}
-                borderColor="transparent"
+                color={props.route === '/profile' ? 'primary.400' : 'gray.600'}
+                display="flex"
+                flexDir={'column'}
+                alignItems={'center'}
                 transition={'all 200ms ease-out'}
                 _hover={{
                   textDecoration: 'none',
-                  borderColor: 'primary.700',
                   color: 'primary.400',
                 }}
               >
@@ -92,7 +96,7 @@ export const Nav = ({ showFullNav }: { showFullNav?: boolean }) => {
                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
                   />
                 </svg>
-                Profile
+                Preferences
               </ChakraLink>
             </Link>
           </>
@@ -101,15 +105,12 @@ export const Nav = ({ showFullNav }: { showFullNav?: boolean }) => {
           <ChakraLink
             onClick={() => user && signout()}
             color="gray.600"
-            borderBottom={'2px'}
             display="flex"
             flexDir={'column'}
             alignItems={'center'}
-            borderColor="transparent"
             transition={'all 200ms ease-out'}
             _hover={{
               textDecoration: 'none',
-              borderColor: 'primary.700',
               color: 'primary.400',
             }}
           >

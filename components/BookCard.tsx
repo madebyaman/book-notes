@@ -15,16 +15,12 @@ import Link from 'next/link';
 import { DashboardNoteWithDate } from '../@types';
 import BookCover from './BookCover';
 
-const CardBadge = ({
-  isProfileCard,
-  isPublished,
-  lastUpdated,
-}: {
-  isProfileCard: boolean;
-  isPublished: boolean;
-  lastUpdated: Date;
-}) => {
-  if (isProfileCard) {
+type CardBadgeTypes =
+  | { isProfileCard: false; isPublished: boolean }
+  | { isProfileCard: true; lastUpdated: Date };
+
+const CardBadge = (props: CardBadgeTypes) => {
+  if (props.isProfileCard) {
     return (
       <Tag
         rounded={'none'}
@@ -33,13 +29,13 @@ const CardBadge = ({
         fontSize={'12px'}
         fontWeight="normal"
       >
-        {moment(lastUpdated).format('LL')}
+        {moment(props.lastUpdated).format('LL')}
       </Tag>
     );
   } else {
     return (
       <>
-        {isPublished ? (
+        {props.isPublished ? (
           <Badge variant={'subtle'} fontSize={'10px'} colorScheme="green">
             Published
           </Badge>
@@ -53,18 +49,18 @@ const CardBadge = ({
   }
 };
 
-interface BookCardInterface {
-  card: DashboardNoteWithDate;
-  isProfileCard: boolean;
-  username: string;
-}
+type DashboardNoteWithoutDate = Omit<DashboardNoteWithDate, 'lastUpdated'>;
+
+type BookCardInterface =
+  | { card: DashboardNoteWithDate; isProfileCard: true; username: string }
+  | { card: DashboardNoteWithoutDate; isProfileCard: false; username: string };
 
 export const BookCard = ({
   card,
   isProfileCard,
   username,
 }: BookCardInterface) => {
-  const { id, slug, isPublished, excerpt, title, bookId, lastUpdated } = card;
+  const { id, slug, isPublished, excerpt, title, bookId } = card;
 
   return (
     <GridItem
@@ -82,11 +78,17 @@ export const BookCard = ({
         )}
 
         <Box mt="auto">
-          <CardBadge
-            isProfileCard={isProfileCard}
-            isPublished={isPublished}
-            lastUpdated={lastUpdated}
-          />
+          {isProfileCard ? (
+            <CardBadge
+              isProfileCard={isProfileCard}
+              lastUpdated={card.lastUpdated}
+            />
+          ) : (
+            <CardBadge
+              isProfileCard={isProfileCard}
+              isPublished={isPublished}
+            />
+          )}
           <Heading as="h2" fontSize="30px" color="text.400" mt={0} mb={4}>
             {title}
           </Heading>
@@ -106,7 +108,7 @@ export const BookCard = ({
                   width="full"
                   _hover={{ backgroundColor: 'primary.700', color: 'white' }}
                 >
-                  View it live
+                  Continue Reading
                 </Button>
               </Link>
             ) : (
@@ -122,7 +124,25 @@ export const BookCard = ({
                   width="full"
                   borderRadius="sm"
                   mr="4"
-                  rightIcon={<EditIcon />}
+                  rightIcon={
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      style={{
+                        width: '16px',
+                        height: '16px',
+                      }}
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                      />
+                    </svg>
+                  }
                 >
                   Edit
                 </Button>

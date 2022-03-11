@@ -8,15 +8,18 @@ import {
   Box,
   Tag,
 } from '@chakra-ui/react';
+import { Timestamp } from 'firebase/firestore';
 import moment from 'moment';
 import Link from 'next/link';
 
-import { DashboardNoteWithDate } from '../@types';
+import { DashboardNote, DashboardNoteWithDate } from '../@types';
 import BookCover from './BookCover';
 
-type CardBadgeTypes =
-  | { isProfileCard: false; isPublished: boolean }
-  | { isProfileCard: true; lastUpdated: Date };
+type CardBadgeTypes = {
+  isProfileCard: boolean;
+  lastUpdated: Timestamp | Date;
+  isPublished: boolean;
+};
 
 const CardBadge = (props: CardBadgeTypes) => {
   if (props.isProfileCard) {
@@ -48,18 +51,16 @@ const CardBadge = (props: CardBadgeTypes) => {
   }
 };
 
-type DashboardNoteWithoutDate = Omit<DashboardNoteWithDate, 'lastUpdated'>;
-
-type BookCardInterface =
-  | { card: DashboardNoteWithDate; isProfileCard: true; username: string }
-  | { card: DashboardNoteWithoutDate; isProfileCard: false; username: string };
-
 export const BookCard = ({
   card,
   isProfileCard,
   username,
-}: BookCardInterface) => {
-  const { id, slug, isPublished, excerpt, title, bookId } = card;
+}: {
+  isProfileCard: boolean;
+  card: DashboardNoteWithDate | DashboardNote;
+  username: string;
+}) => {
+  const { id, slug, isPublished, excerpt, title, bookId, lastUpdated } = card;
 
   return (
     <GridItem
@@ -77,17 +78,11 @@ export const BookCard = ({
         )}
 
         <Box mt="auto">
-          {isProfileCard ? (
-            <CardBadge
-              isProfileCard={isProfileCard}
-              lastUpdated={card.lastUpdated}
-            />
-          ) : (
-            <CardBadge
-              isProfileCard={isProfileCard}
-              isPublished={isPublished}
-            />
-          )}
+          <CardBadge
+            isProfileCard={isProfileCard}
+            lastUpdated={lastUpdated}
+            isPublished={isPublished}
+          />
           <Heading as="h2" fontSize="30px" color="text.400" mt={0} mb={4}>
             {title}
           </Heading>

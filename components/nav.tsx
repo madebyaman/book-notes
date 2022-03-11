@@ -16,7 +16,7 @@ export const Nav = (props: NavTypes) => {
       <Flex justify={'space-between'} alignItems="center" gap="8">
         <Link href="/" passHref>
           <Image
-            src="/logo.svg"
+            src="/Logo.svg"
             alt="Bummaries App"
             width="135px"
             height="74px"

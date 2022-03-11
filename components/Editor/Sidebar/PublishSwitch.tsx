@@ -1,4 +1,4 @@
-import { Checkbox } from '@chakra-ui/react';
+import { Checkbox, Text } from '@chakra-ui/react';
 import { useStoreActions, useStoreState } from '../store';
 
 const PublishSwitch = () => {
@@ -12,8 +12,9 @@ const PublishSwitch = () => {
       isChecked={isPublished}
       onChange={(e) => updateIsPublished(e.target.checked)}
       colorScheme="teal"
+      color="gray.500"
     >
-      Published
+      <Text fontSize="sm">Published</Text>
     </Checkbox>
   );
 };

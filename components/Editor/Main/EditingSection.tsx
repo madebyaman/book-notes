@@ -32,7 +32,7 @@ export const EditingSection = () => {
 
   return (
     <Box>
-      <Box pos={'sticky'} top="73px" backgroundColor={'white'} zIndex="10">
+      <Box pos={'sticky'} top="0px" backgroundColor={'white'} zIndex="10">
         {/* Sticky bar for editor menu */}
         <EditorMenu isDisabled={!showMenu} editor={editor} />
       </Box>

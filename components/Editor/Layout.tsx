@@ -113,27 +113,18 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
 
   return (
     <Box backgroundColor="light.100">
+      <Box w="100%" shadow="md" px="2">
+        {/* Section for Top Bar */}
+        <EditorTopbar onSave={onSave} loading={loading} />
+      </Box>
       <Container maxW="container.lg">
-        <Box
-          w="100%"
-          pos={'fixed'}
-          top="0"
-          left={'0'}
-          right="0"
-          zIndex={10}
-          shadow="md"
-          px="2"
-        >
-          {/* Section for Top Bar */}
-          <EditorTopbar onSave={onSave} loading={loading} />
-        </Box>
-        <Flex margin="0 auto" mt={'80px'} w="100%">
+        <Flex margin="0 auto" w="100%">
           {/* EditingSection */}
-          <Box flex={1} pr={2}>
+          <Box flex={1} mt="2">
             <EditingSection />
           </Box>
           <Box w={'30%'}>
-            <Box pos={'sticky'} top="73px">
+            <Box pos={'sticky'} top="10px">
               {/* Sidebar sticky area */}
               <EditorSidebar docId={docId} />
             </Box>

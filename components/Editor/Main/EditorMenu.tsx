@@ -69,7 +69,7 @@ const EditorMenu = ({
       py="4"
       alignItems={'center'}
       pos={'sticky'}
-      top={'73px'}
+      top={'0px'}
       backgroundColor="light.100"
       zIndex={'10'}
     >

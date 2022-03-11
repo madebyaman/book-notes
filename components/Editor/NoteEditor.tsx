@@ -31,7 +31,6 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
         try {
           await fetchDocument({ docId, isSubscribed });
           dispatch({ type: 'LOADED' });
-          bookId && (await fetchBook({ bookId, isSubscribed }));
         } catch (e) {
           throw e;
         }

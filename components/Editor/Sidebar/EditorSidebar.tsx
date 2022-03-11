@@ -37,7 +37,7 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
       flexDir={'column'}
       zIndex={'10'}
       height={'calc(100vh - 80px)'}
-      gap="12"
+      gap="8"
     >
       <Flex
         textAlign="left"

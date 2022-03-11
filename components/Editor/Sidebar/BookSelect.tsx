@@ -102,6 +102,8 @@ const BookSelect = () => {
         onChange={handleSelectChange}
         value={selectedBook}
         placeholder="Select Book"
+        className="select-book-container"
+        classNamePrefix="select-book"
         filterOption={null}
       />
     </div>

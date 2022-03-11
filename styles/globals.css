@@ -188,3 +188,7 @@ h6 {
 .ProseMirror h4 {
   font-size: 20px;
 }
+
+.select-book__control {
+  border-color: #edf2f7 !important;
+}

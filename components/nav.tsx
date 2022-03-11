@@ -1,12 +1,7 @@
-import {
-  Image,
-  Flex,
-  Link as ChakraLink,
-  Spacer,
-  Text,
-} from '@chakra-ui/react';
+import { Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useContext } from 'react';
+import Image from 'next/image';
 import { signout } from '../utils/auth';
 
 import { AuthContext } from './Auth';
@@ -21,7 +16,6 @@ export const Nav = (props: NavTypes) => {
       <Flex justify={'space-between'} alignItems="center" gap="8">
         <Link href="/" passHref>
           <Image
-            cursor="pointer"
             src="/logo.svg"
             alt="Bummaries App"
             width="135px"

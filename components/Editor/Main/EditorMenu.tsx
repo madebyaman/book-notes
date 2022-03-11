@@ -67,11 +67,10 @@ const EditorMenu = ({
   return (
     <Flex
       py="4"
-      borderBottom={'1px solid #e9ebf0'}
       alignItems={'center'}
       pos={'sticky'}
       top={'73px'}
-      backgroundColor={'white'}
+      backgroundColor="light.100"
       zIndex={'10'}
     >
       <Select

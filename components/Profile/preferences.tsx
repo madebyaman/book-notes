@@ -27,17 +27,23 @@ import {
 import { ErrorBoundary } from 'react-error-boundary';
 import { AuthContext, checkUsernameExist, UsernameError } from '../Auth';
 import { ErrorFallback } from '../Error';
-import { getCurrentUserProfile } from './getCurrentUserProfile';
 import { updateCurrentUserInfo } from './updateCurrentUserInfo';
 import { uploadProfilePicture } from './uploadProfilePicture';
 import { useUserProfileHook } from './useUserProfileHook';
 
-const initialState = {
+const initialState: {
+  name: string;
+  username: string;
+  usernameValid: boolean;
+  bio: string;
+  photoUrl: null | string;
+  loading: boolean;
+} = {
   name: '',
   username: '',
   usernameValid: true,
   bio: '',
-  photoUrl: '',
+  photoUrl: null,
   loading: false,
 };
 
@@ -59,8 +65,12 @@ function reducer(state: typeof initialState, action: ProfileActions) {
       return { ...state, username: action.payload };
     case 'UPDATE_USERNAME_STATE':
       return { ...state, usernameValid: action.payload };
+    case 'UPDATE_BIO':
+      return { ...state, bio: action.payload };
+    case 'UPDATE_PHOTO':
+      return { ...state, photoUrl: action.payload };
     default:
-      return state;
+      throw new Error(`No action defined`);
   }
 }
 
@@ -102,9 +112,15 @@ export const ProfilePreferences = () => {
     dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
     try {
       const profilePhoto = await uploadProfilePicture(profilePicture);
-      const updates: { name: string; username: string; photo?: string } = {
+      const updates: {
+        name: string;
+        username: string;
+        photo?: string;
+        bio: string;
+      } = {
         name: state.name,
         username: state.username,
+        bio: state.bio,
       };
       if (profilePhoto) updates.photo = profilePhoto;
       await updateCurrentUserInfo(updates);
@@ -116,7 +132,7 @@ export const ProfilePreferences = () => {
       });
     } catch (e) {
       let message = 'Failed to save your profile';
-      if (e instanceof UsernameError) message = 'Username already exists.';
+      if (e instanceof UsernameError) message = 'Username already exists';
       else console.error(e);
       toast({
         title: message,
@@ -149,11 +165,13 @@ export const ProfilePreferences = () => {
         </Box>
         <Box rounded="md" shadow="md" px="8" py="6" backgroundColor={'white'}>
           <form onSubmit={handleSubmit}>
-            <Flex gap="3" mt="4">
+            <Flex gap="4" mt="4">
               {state.photoUrl ? (
                 <Image
                   src={state.photoUrl}
                   alt={state.name}
+                  rounded="full"
+                  shadow="md"
                   width="80px"
                   height="80px"
                 />
@@ -179,7 +197,7 @@ export const ProfilePreferences = () => {
               )}
               <Box>
                 <FormLabel htmlFor="uploadImage">Profile Picture</FormLabel>
-                <Text fontSize={'sm'}>
+                <Text fontSize={'sm'} mt="-2">
                   Upload 150px * 150px photo to display in public profile.
                 </Text>
                 <Box pos="relative" overflow={'hidden'}>
@@ -298,51 +316,6 @@ export const ProfilePreferences = () => {
               mt="6"
             >
               Save Changes
-            </Button>
-          </form>
-        </Box>
-      </Grid>
-      <Grid templateColumns={{ base: '1fr', md: '1fr 3fr' }} gap="6" mt="10">
-        <Box>
-          <Heading as="h2" fontSize="30px" color="text.400">
-            Social Links
-          </Heading>
-          <Text>
-            Provide your social media links to display on your public profile
-            page.
-          </Text>
-        </Box>
-        <Box rounded="md" shadow="md" px="8" py="12" backgroundColor={'white'}>
-          <form>
-            <Stack spacing={10}>
-              <FormControl>
-                <FormLabel>Twitter</FormLabel>
-                <Input type="text" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>YouTube</FormLabel>
-                <Input type="text" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Facebook</FormLabel>
-                <Input type="text" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>LinkedIn</FormLabel>
-                <Input type="text" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Instagram</FormLabel>
-                <Input type="text" />
-              </FormControl>
-            </Stack>
-            <Button
-              colorScheme="teal"
-              type="submit"
-              isLoading={state.loading}
-              mt="6"
-            >
-              Save
             </Button>
           </form>
         </Box>

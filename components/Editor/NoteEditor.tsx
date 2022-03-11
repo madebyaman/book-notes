@@ -1,5 +1,8 @@
 import React, { useContext, useEffect } from 'react';
 import { StoreProvider } from 'easy-peasy';
+import { Link } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { NoteEditorStore, useStoreActions, useStoreState } from './store';
 import { Layout } from './Layout';
@@ -7,10 +10,7 @@ import { useStatus, StatusWrapper } from '../Status';
 import ErrorFetchingNote from './ErrorFetchingNote';
 import { AuthContext } from '../Auth';
 import { CenteredLayout } from '../Layout';
-import { Link } from '@chakra-ui/react';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
-import { Router, useRouter } from 'next/router';
-import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../Error';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
@@ -26,7 +26,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
     if (docId) {
       dispatch({ type: 'LOADING' });
 
-      // First, fetch the document
+      // First, fetch the note and book
       (async function () {
         try {
           await fetchDocument({ docId, isSubscribed });

@@ -10,6 +10,7 @@ export const updateCurrentUserInfo = async (updates: {
   name: string;
   photo?: string;
   username: string;
+  bio: string;
 }) => {
   // 1. Check user is logged in.
   const currentUser = await getCurrentUser();
@@ -24,10 +25,12 @@ export const updateCurrentUserInfo = async (updates: {
   const updatedProfile: {
     name: string;
     username: string;
+    bio: string;
     photo?: string;
   } = {
     name: updates.name,
     username: updates.username,
+    bio: updates.bio,
   };
   if (updates.photo) updatedProfile['photo'] = updates.photo;
   await updateDoc(userRef, updatedProfile);

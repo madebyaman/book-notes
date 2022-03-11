@@ -105,7 +105,11 @@ export const BookCard = ({
                 <Button
                   as="a"
                   width="full"
-                  _hover={{ backgroundColor: 'primary.700', color: 'white' }}
+                  backgroundColor={'teal.50'}
+                  color="primary.700"
+                  _hover={{
+                    backgroundColor: 'teal.200',
+                  }}
                 >
                   Continue Reading
                 </Button>
@@ -121,6 +125,11 @@ export const BookCard = ({
                 <Button
                   as="a"
                   width="full"
+                  backgroundColor={'teal.50'}
+                  color="primary.700"
+                  _hover={{
+                    backgroundColor: 'teal.200',
+                  }}
                   borderRadius="sm"
                   mr="4"
                   rightIcon={

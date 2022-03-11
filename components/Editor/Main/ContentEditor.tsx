@@ -16,7 +16,14 @@ const ContentEditor = ({
   const updateTitle = useStoreActions((actions) => actions.updateTitle);
 
   return (
-    <Box minH={'16'} mt="8">
+    <Box
+      minH={'16'}
+      py="6"
+      px="4"
+      shadow="sm"
+      rounded="md"
+      backgroundColor="white"
+    >
       <Input
         placeholder="Title"
         size={'lg'}

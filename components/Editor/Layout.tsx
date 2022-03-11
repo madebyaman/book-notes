@@ -1,4 +1,4 @@
-import { Box, Flex, useToast } from '@chakra-ui/react';
+import { Box, Container, Flex, useToast } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 
 import { useStoreState } from './store';
@@ -112,31 +112,34 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
   };
 
   return (
-    <Box maxW={'1080px'} margin="0 auto">
-      <Box
-        w="100%"
-        pos={'fixed'}
-        top="0"
-        left={'0'}
-        right="0"
-        zIndex={10}
-        px="2"
-      >
-        {/* Section for Top Bar */}
-        <EditorTopbar onSave={onSave} loading={loading} />
-      </Box>
-      <Flex margin="0 auto" mt={'80px'} w="100%">
-        {/* EditingSection */}
-        <Box flex={1} pr={2}>
-          <EditingSection />
+    <Box backgroundColor="light.100">
+      <Container maxW="container.lg">
+        <Box
+          w="100%"
+          pos={'fixed'}
+          top="0"
+          left={'0'}
+          right="0"
+          zIndex={10}
+          shadow="md"
+          px="2"
+        >
+          {/* Section for Top Bar */}
+          <EditorTopbar onSave={onSave} loading={loading} />
         </Box>
-        <Box w={'30%'}>
-          <Box pos={'sticky'} top="73px">
-            {/* Sidebar sticky area */}
-            <EditorSidebar docId={docId} />
+        <Flex margin="0 auto" mt={'80px'} w="100%">
+          {/* EditingSection */}
+          <Box flex={1} pr={2}>
+            <EditingSection />
           </Box>
-        </Box>
-      </Flex>
+          <Box w={'30%'}>
+            <Box pos={'sticky'} top="73px">
+              {/* Sidebar sticky area */}
+              <EditorSidebar docId={docId} />
+            </Box>
+          </Box>
+        </Flex>
+      </Container>
     </Box>
   );
 };

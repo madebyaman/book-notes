@@ -17,6 +17,7 @@ import {
   UnorderedList,
   ListItem,
 } from '@chakra-ui/react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 
@@ -88,6 +89,9 @@ export default function Signup() {
 
   return (
     <>
+      <Head>
+        <title>Sign up</title>
+      </Head>
       <Flex
         minH={'100vh'}
         align={'center'}

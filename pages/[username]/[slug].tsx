@@ -10,6 +10,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import moment from 'moment';
+import Head from 'next/head';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { ImUser } from 'react-icons/im';
@@ -45,6 +46,9 @@ const BookNote = ({
   return (
     <>
       <Container maxW="container.lg">
+        <Head>
+          <title>{note.title}</title>
+        </Head>
         <Nav />
         <Box py="16">
           <Flex alignItems={'center'} justifyContent="center" gap="6">

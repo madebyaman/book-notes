@@ -1,5 +1,6 @@
 import { Box, Container } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 
 import { BookCards } from '../components/Dashboard';
@@ -10,6 +11,9 @@ const Dashboard: NextPage = function () {
 
   return (
     <>
+      <Head>
+        <title>Dashboard</title>
+      </Head>
       <Box backgroundColor={'white'} shadow="md" py="4">
         <Container maxW="container.lg">
           <Nav showFullNav={true} route={router.pathname} />

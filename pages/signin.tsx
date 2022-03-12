@@ -1,17 +1,18 @@
 import { Text, Heading, Link, Checkbox, Stack } from '@chakra-ui/react';
 import { NextPage } from 'next';
+import Head from 'next/head';
 import { Dispatch, SetStateAction, useState } from 'react';
 
 import AuthForm from '../components/AuthForm';
 
 const FormHeading = () => (
   <>
+    <Head>
+      <title>Sign in</title>
+    </Head>
     <Heading fontSize={'4xl'} as="h1">
       Sign in to your account
     </Heading>
-    <Text fontSize={'lg'} color={'gray.600'}>
-      to enjoy all of our cool <Link color={'blue.400'}>features</Link>
-    </Text>
   </>
 );
 

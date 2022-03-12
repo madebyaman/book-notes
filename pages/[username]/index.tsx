@@ -8,6 +8,7 @@ import { ProfileSidebar } from '../../components/Profile';
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '../../components/Error';
 import { BookCard } from '../../components/BookCard';
+import Head from 'next/head';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
@@ -17,6 +18,9 @@ interface UsernameNotesInterface {
 const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
+      <Head>
+        <title>Book notes by {profile.name}</title>
+      </Head>
       <SidebarLayout sidebar={<ProfileSidebar profile={profile} />}>
         <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={10}>
           {notes.map((note) => (

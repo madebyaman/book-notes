@@ -6,12 +6,21 @@ import '../styles/globals.css';
 import { AuthContextProvider } from '../components/Auth';
 import ErrorFallback from '../components/ErrorFallback';
 import { theme } from '../components';
+import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={theme}>
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <AuthContextProvider>
+          <Head>
+            <title>Bummaries App</title>
+            <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
+            <meta
+              name="viewport"
+              content="initial-scale=1.0, width=device-width"
+            />
+          </Head>
           <Component {...pageProps} />
         </AuthContextProvider>
       </ErrorBoundary>

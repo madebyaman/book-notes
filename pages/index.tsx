@@ -1,4 +1,12 @@
-import { Box, Button, Container, Flex, Heading, Text } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Container,
+  Flex,
+  Grid,
+  Heading,
+  Text,
+} from '@chakra-ui/react';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -11,14 +19,14 @@ const Home: NextPage = function () {
     <div>
       <Container maxW="container.lg" mt="8">
         <Nav />
-        <Flex
+        <Grid
+          templateColumns={'1fr'}
           alignItems={'center'}
-          justifyContent="space-between"
-          gap="6"
+          gap="12"
           flexDirection={{ base: 'column', md: 'row' }}
-          mt="4"
+          mt="20"
         >
-          <Box>
+          <Box textAlign={'center'}>
             <Heading as="h1" fontSize={'54px'} color="text.400">
               Write, publish, and share your book notes with ease
             </Heading>
@@ -35,7 +43,7 @@ const Home: NextPage = function () {
               fontWeight="bold"
               color="white"
               _hover={{
-                backgroundColor: 'teal.700',
+                backgroundColor: 'primary.400',
               }}
               // color="white"
               onClick={() => router.push('/signin')}
@@ -43,15 +51,15 @@ const Home: NextPage = function () {
               Start writing book notes
             </Button>
           </Box>
-          <Box>
-            <Box
-              backgroundColor={'gray.100'}
-              width="450px"
-              height="600px"
-              boxShadow={'md'}
+          <Box margin="0 auto">
+            <Image
+              src="/screenshot.png"
+              alt="Bummaries app"
+              width="900px"
+              height="561px"
             />
           </Box>
-        </Flex>
+        </Grid>
       </Container>
     </div>
   );

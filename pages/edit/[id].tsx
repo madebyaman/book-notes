@@ -3,6 +3,8 @@ import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from '../../components/Auth';
 import Head from 'next/head';
+import { CenteredLayout } from '../../components/Layout';
+import { CircularProgress } from '@chakra-ui/react';
 
 const EditBook = () => {
   const router = useRouter();
@@ -11,9 +13,19 @@ const EditBook = () => {
 
   useEffect(() => {
     if (!user) {
-      router.push('/signin');
+      const timer = setTimeout(() => {
+        router.push('/signin');
+      }, 2_000);
+
+      return () => clearTimeout(timer);
     }
   }, [router, user]);
+
+  if (!user) {
+    <CenteredLayout>
+      <CircularProgress isIndeterminate color="teal.300" />
+    </CenteredLayout>;
+  }
 
   return (
     <>

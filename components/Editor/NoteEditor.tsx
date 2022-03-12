@@ -45,7 +45,9 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
     return () => {
       isSubscribed = false;
     };
-  }, [bookId, dispatch, docId, fetchBook, fetchDocument, resetState]);
+    // We disable eslint rule b/c otherwise as soon as state changes, useEffect will fetch document which doesn't exist.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <ErrorBoundary
@@ -84,10 +86,5 @@ export const NoteEditor = ({ docId }: { docId?: string }) => {
       </CenteredLayout>
     );
   }
-  return (
-    <CenteredLayout>
-      You are not logged in.{' '}
-      <Link onClick={() => router.push('/signin')}>Sign in</Link>
-    </CenteredLayout>
-  );
+  return null;
 };

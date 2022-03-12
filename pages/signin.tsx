@@ -72,7 +72,7 @@ const Login: NextPage = () => {
               width="135px"
               height="74px"
             />
-            <Heading fontSize={'4xl'} as="h1">
+            <Heading fontSize={'4xl'} as="h1" color="text.400">
               Sign in to your account
             </Heading>
           </Stack>

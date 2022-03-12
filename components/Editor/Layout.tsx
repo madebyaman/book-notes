@@ -118,13 +118,18 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         <EditorTopbar onSave={onSave} loading={loading} />
       </Box>
       <Container maxW="container.lg">
-        <Flex margin="0 auto" w="100%">
+        <Flex
+          margin="0 auto"
+          w="100%"
+          flexDir={{ base: 'column', md: 'row' }}
+          gap="8"
+        >
           {/* EditingSection */}
           <Box flex={1} mt="2">
             <EditingSection />
           </Box>
-          <Box w={'30%'}>
-            <Box pos={'sticky'} top="10px">
+          <Box w={{ base: '100%', md: '30%' }}>
+            <Box pos={{ base: 'static', md: 'sticky' }}>
               {/* Sidebar sticky area */}
               <EditorSidebar docId={docId} />
             </Box>

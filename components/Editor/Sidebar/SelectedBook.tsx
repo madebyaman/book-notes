@@ -27,7 +27,8 @@ const SelectedBook = (): JSX.Element => {
     return () => {
       isSubscribed = false;
     };
-  }, [bookId, fetchBook]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (loading) {
     return <CircularProgress isIndeterminate color="primary.400" />;

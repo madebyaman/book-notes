@@ -32,8 +32,7 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
 
   return (
     <Flex
-      pl="8"
-      mt="20"
+      mt={{ base: '4', md: '20' }}
       flexDir={'column'}
       zIndex={'10'}
       height={'calc(100vh - 80px)'}
@@ -75,11 +74,12 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
               onBlur={onBlurSlug}
             />
             <InputRightElement>
-              {slugValid ? (
-                <CheckCircleIcon color="green.500" />
-              ) : (
-                <WarningIcon color="red.500" />
-              )}
+              {slug &&
+                (slugValid ? (
+                  <CheckCircleIcon color="green.500" />
+                ) : (
+                  <WarningIcon color="red.500" />
+                ))}
             </InputRightElement>
           </InputGroup>
         </FormLabel>

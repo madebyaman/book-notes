@@ -20,16 +20,18 @@ import {
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
+import Image from 'next/image';
 
 import { checkUsernameExist, signup, UsernameError } from '../components/Auth';
+import { useInput } from '../utils';
 
 export default function Signup() {
   const router = useRouter();
-  const [name, setName] = useState('');
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
+  const [nameProps, resetName] = useInput('');
+  const [usernameProps, resetUsername] = useInput('');
+  const [emailProps, resetEmail] = useInput('');
   const [isLoading, setIsLoading] = useState(false);
-  const [password, setPassword] = useState('');
+  const [passwordProps, resetPassword] = useInput('');
   const [errorState, setErrorState] = useState({
     usernameValid: false,
     passwordValid: false,
@@ -38,8 +40,8 @@ export default function Signup() {
   });
 
   const onBlurUsername = async () => {
-    if (username) {
-      (await checkUsernameExist(username))
+    if (usernameProps.value) {
+      (await checkUsernameExist(usernameProps.value))
         ? setErrorState((prevState) => ({ ...prevState, usernameValid: false }))
         : setErrorState((prevState) => ({
             ...prevState,
@@ -49,7 +51,7 @@ export default function Signup() {
   };
 
   const onBlurPassword = () => {
-    if (password.length <= 6) {
+    if (passwordProps.value.length <= 6) {
       setErrorState({ ...errorState, passwordValid: false });
     } else {
       setErrorState({ ...errorState, passwordValid: true });
@@ -69,7 +71,12 @@ export default function Signup() {
       return;
     }
     try {
-      await signup({ email, password, name, username });
+      await signup({
+        email: emailProps.value,
+        password: passwordProps.value,
+        name: nameProps.value,
+        username: usernameProps.value,
+      });
       router.push('/dashboard');
     } catch (e) {
       let message = 'Error signing up. Try again';
@@ -78,6 +85,10 @@ export default function Signup() {
       setErrorState({ ...errorState, customError: message, showErrors: true });
     } finally {
       setIsLoading(false);
+      resetEmail();
+      resetName();
+      resetPassword();
+      resetUsername();
     }
   };
 
@@ -92,20 +103,18 @@ export default function Signup() {
       <Head>
         <title>Sign up</title>
       </Head>
-      <Flex
-        minH={'100vh'}
-        align={'center'}
-        justify={'center'}
-        bg={useColorModeValue('gray.50', 'gray.800')}
-      >
+      <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'light.100'}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Stack align={'center'}>
-            <Heading fontSize={'4xl'} textAlign={'center'}>
+            <Image
+              src="/Logo.svg"
+              alt="Bummaries App"
+              width="135px"
+              height="74px"
+            />
+            <Heading fontSize={'4xl'} textAlign={'center'} color="text.400">
               Sign up
             </Heading>
-            <Text fontSize={'lg'} color={'gray.600'}>
-              to enjoy all of our cool features ✌️
-            </Text>
           </Stack>
           <Box
             rounded={'lg'}
@@ -119,11 +128,7 @@ export default function Signup() {
                   <Box>
                     <FormControl id="name" isRequired>
                       <FormLabel>Name</FormLabel>
-                      <Input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
+                      <Input type="text" {...nameProps} />
                     </FormControl>
                   </Box>
                   <Box>
@@ -132,11 +137,10 @@ export default function Signup() {
                       <InputGroup>
                         <Input
                           type="text"
-                          value={username}
-                          onChange={(e) => setUsername(e.target.value)}
+                          {...usernameProps}
                           onBlur={onBlurUsername}
                         />
-                        {username && (
+                        {usernameProps.value && (
                           <InputRightElement>
                             {ErrorIcon(errorState.usernameValid)}
                           </InputRightElement>
@@ -147,29 +151,24 @@ export default function Signup() {
                 </HStack>
                 <FormControl id="email" isRequired>
                   <FormLabel>Email address</FormLabel>
-                  <Input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
+                  <Input type="email" {...emailProps} />
                 </FormControl>
                 <FormControl mt={'6'} id="password" isRequired>
                   <FormLabel>Password</FormLabel>
                   <InputGroup>
                     <Input
                       type={'password'}
-                      value={password}
                       onBlur={onBlurPassword}
-                      onChange={(e) => setPassword(e.target.value)}
+                      {...passwordProps}
                     />
                   </InputGroup>
                 </FormControl>
                 <Stack spacing={10} py={2} mt={4}>
                   <Button
                     size="lg"
-                    bg={'blue.400'}
+                    bg={'primary.700'}
                     color={'white'}
-                    _hover={{ bg: 'blue.500' }}
+                    _hover={{ bg: 'primary.400' }}
                     type="submit"
                     isLoading={isLoading}
                     isDisabled={showErrors}
@@ -200,7 +199,7 @@ export default function Signup() {
               )}
               <Text align={'center'} display={'inline-block'}>
                 Not a user?{' '}
-                <Link color={'blue.400'} href={'/signin'}>
+                <Link color={'teal.700'} href={'/signin'}>
                   Log in
                 </Link>
               </Text>

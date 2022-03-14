@@ -1,7 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { StoreProvider } from 'easy-peasy';
-import { Link } from '@chakra-ui/react';
-import { useRouter } from 'next/router';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { NoteEditorStore, useStoreActions, useStoreState } from './store';
@@ -69,7 +67,6 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
 
 export const NoteEditor = ({ docId }: { docId?: string }) => {
   const user = useContext(AuthContext);
-  const router = useRouter();
 
   if (user) {
     if (user.emailVerified) {

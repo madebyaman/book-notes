@@ -16,6 +16,14 @@ interface UsernameNotesInterface {
 }
 
 const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
+  if (!profile) {
+    return 'User profile not found';
+  }
+
+  if (!notes) {
+    return 'No notes found for the user';
+  }
+
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Head>
@@ -43,8 +51,7 @@ export async function getServerSideProps(context: {
   const { username } = context.params;
   if (!username) return;
   const profile = await getUserProfileFromUsername(username);
-  if (!profile) throw new Error('profile not found');
-  const userNotes = await getUserNotes({ userId: profile.id });
+  const userNotes = profile && (await getUserNotes({ userId: profile.id }));
   return {
     props: {
       notes: JSON.parse(JSON.stringify(userNotes)),

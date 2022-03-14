@@ -1,4 +1,4 @@
-import { Box, Input, Text, Textarea } from '@chakra-ui/react';
+import { Box, Input } from '@chakra-ui/react';
 import { Editor, EditorContent } from '@tiptap/react';
 import { useStoreActions, useStoreState } from '../store';
 

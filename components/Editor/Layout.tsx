@@ -87,8 +87,6 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
             success: false,
             message: 'Error saving the selected book',
           });
-        } finally {
-          setLoading(false);
         }
       }
     }

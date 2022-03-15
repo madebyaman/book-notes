@@ -20,7 +20,7 @@ export const BookCards = () => {
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
-    const setBooks = async () => {
+    const getNotes = async () => {
       try {
         const unsub = await subscribeToCurrentUserNotes((result) => {
           dispatch({ type: 'LOADING' });
@@ -32,7 +32,7 @@ export const BookCards = () => {
         throw e;
       }
     };
-    setBooks();
+    getNotes();
   }, [dispatch]);
 
   return (

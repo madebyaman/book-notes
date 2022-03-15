@@ -110,6 +110,7 @@ export const ProfilePreferences = () => {
     e.preventDefault();
     if (!user) throw new Error('You are not logged in');
     dispatch({ type: 'UPDATE_LOADING_STATE', payload: true });
+    let message = 'Failed to save your profile';
     try {
       const profilePhoto = await uploadProfilePicture(profilePicture);
       const updates: {
@@ -123,15 +124,18 @@ export const ProfilePreferences = () => {
         bio: state.bio,
       };
       if (profilePhoto) updates.photo = profilePhoto;
-      await updateCurrentUserInfo(updates);
-      toast({
-        title: 'Successfully saved your profile',
-        status: 'success',
-        duration: 1_000,
-        isClosable: true,
-      });
+      if (userProfile) {
+        await updateCurrentUserInfo(updates, userProfile.id);
+        toast({
+          title: 'Successfully saved your profile',
+          status: 'success',
+          duration: 1_000,
+          isClosable: true,
+        });
+      } else {
+        message = 'User profile is not present';
+      }
     } catch (e) {
-      let message = 'Failed to save your profile';
       if (e instanceof UsernameError) message = 'Username already exists';
       else console.error(e);
       toast({

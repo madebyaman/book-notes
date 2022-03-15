@@ -6,12 +6,15 @@ import { checkUsernameExist } from '../Auth';
 
 export class UsernameError extends Error {}
 
-export const updateCurrentUserInfo = async (updates: {
-  name: string;
-  photo?: string;
-  username: string;
-  bio: string;
-}) => {
+export const updateCurrentUserInfo = async (
+  updates: {
+    name: string;
+    photo?: string;
+    username: string;
+    bio: string;
+  },
+  userId: string
+) => {
   // 1. Check user is logged in.
   const currentUser = await getCurrentUser();
   if (!currentUser) return;

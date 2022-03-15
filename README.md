@@ -1,6 +1,7 @@
 # README
 
 ![Logo of Bummaries App](./public/Logo.svg)
+
 A note taking app for book readers.
 
 ![Screenshot of Bummaries App](./public/screenshot.png)

@@ -20,7 +20,7 @@ export const updateCurrentUserInfo = async (
   if (!currentUser) return;
 
   // 2. Check if username is valid
-  if (await checkUsernameExist(updates.username)) {
+  if (await checkUsernameExist(updates.username, userId)) {
     throw new UsernameError('username already exists');
   }
 

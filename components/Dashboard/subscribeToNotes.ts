@@ -2,6 +2,7 @@ import {
   collection,
   DocumentData,
   onSnapshot,
+  orderBy,
   query,
   QuerySnapshot,
   where,
@@ -26,6 +27,12 @@ export const subscribeToNotes = (
   };
 
   const collectionRef = collection(db, 'book-notes');
-  const querySnap = query(collectionRef, where('userId', '==', userId));
+
+  const querySnap = query(
+    collectionRef,
+    where('userId', '==', userId),
+    orderBy('lastUpdated', 'desc')
+  );
+
   return onSnapshot(querySnap, callback);
 };

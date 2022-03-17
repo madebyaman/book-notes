@@ -15,6 +15,7 @@ import {
 import { AuthContext } from '../Auth';
 import { EditorTopbar } from './EditorTopbar';
 import { useRouter } from 'next/router';
+import { deleteBookNote } from './deleteBookNote';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished, slug } =
@@ -112,11 +113,33 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
     }
   };
 
+  const deleteCurrentNote = async () => {
+    if (!docId) return;
+    try {
+      await deleteBookNote(docId);
+      router.push('/dashboard');
+      showFlashMessage({
+        success: true,
+        message: 'Successfully deleted book note',
+      });
+    } catch (e) {
+      console.log(e);
+      showFlashMessage({
+        success: false,
+        message: 'Error deleting book note. Try again',
+      });
+    }
+  };
+
   return (
     <Box backgroundColor="light.100">
       <Box w="100%" shadow="md" px="2">
         {/* Section for Top Bar */}
-        <EditorTopbar onSave={onSave} loading={loading} />
+        <EditorTopbar
+          onSave={onSave}
+          loading={loading}
+          onDelete={deleteCurrentNote}
+        />
       </Box>
       <Container maxW="container.lg">
         <Flex

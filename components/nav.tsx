@@ -14,7 +14,7 @@ export const Nav = (props: NavTypes) => {
   return (
     <header>
       <Flex justify={'space-between'} alignItems="center" gap="8">
-        <Link href="/" passHref>
+        <Link passHref href="/">
           <Image
             src="/Logo.svg"
             alt="Bummaries App"
@@ -23,6 +23,7 @@ export const Nav = (props: NavTypes) => {
           />
         </Link>
         <Spacer />
+
         {user && props.showFullNav && (
           <>
             <Link href={`/dashboard`} passHref>

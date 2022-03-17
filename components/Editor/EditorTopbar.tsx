@@ -1,16 +1,26 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import { Box, Button, Flex, Heading, IconButton } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  Flex,
+  Heading,
+  IconButton,
+  useToast,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { FaSave } from 'react-icons/fa';
+import { deleteBookNote } from './deleteBookNote';
 
 export const EditorTopbar = ({
   onSave,
   isEditing = false,
   loading,
+  onDelete,
 }: {
   onSave: () => void;
   loading: boolean;
   isEditing?: boolean;
+  onDelete: () => Promise<void>;
 }) => {
   const router = useRouter();
 
@@ -35,7 +45,10 @@ export const EditorTopbar = ({
           {isEditing ? 'Add a New Book Note' : 'Edit Book Note'}
         </Heading>
       </Box>
-      <Box py="4" borderLeft={'1px solid #e9ebf0'} pl={4}>
+      <Flex py="4" borderLeft={'1px solid #e9ebf0'} pl={4} gap="6">
+        <Button onClick={onDelete} colorScheme={'red'} variant="ghost">
+          Delete
+        </Button>
         <Button
           leftIcon={
             <svg
@@ -63,7 +76,7 @@ export const EditorTopbar = ({
         >
           Save
         </Button>
-      </Box>
+      </Flex>
     </Flex>
   );
 };

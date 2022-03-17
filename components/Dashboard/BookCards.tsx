@@ -29,6 +29,7 @@ export const BookCards = () => {
         });
         return unsub;
       } catch (e) {
+        dispatch({ type: 'ERROR', payload: 'Error fetching your notes' });
         throw e;
       }
     };

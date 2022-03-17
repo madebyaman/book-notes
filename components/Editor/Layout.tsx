@@ -14,6 +14,7 @@ import {
 } from './createOrUpdateNote';
 import { AuthContext } from '../Auth';
 import { EditorTopbar } from './EditorTopbar';
+import { useRouter } from 'next/router';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished, slug } =
@@ -21,6 +22,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const user = useContext(AuthContext);
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   /**
    * Displays a flash message of success or failure
@@ -98,13 +100,14 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         docId,
       });
       showFlashMessage({ success: true });
+      setLoading(false);
+      router.push('/dashboard');
     } catch (error) {
       let message = 'Error saving your content';
       if (error instanceof SlugError || error instanceof RatingError) {
         message = error.message;
       }
       showFlashMessage({ success: false, message });
-    } finally {
       setLoading(false);
     }
   };

@@ -13,7 +13,7 @@ import { useStoreActions, useStoreState } from '../store';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
 import { checkNoteSlugExists } from '../../../utils/notes';
-import { useContext, useState } from 'react';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../../Auth';
 import SelectedBook from './SelectedBook';
 
@@ -21,13 +21,32 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
   const user = useContext(AuthContext);
   const slug = useStoreState((state) => state.slug);
   const updateSlug = useStoreActions((state) => state.updateSlug);
-  const [slugValid, setSlugValid] = useState(true);
-  const onBlurSlug = async () => {
-    if (user && (await checkNoteSlugExists({ slug, userId: user.id, docId }))) {
-      setSlugValid(false);
-    } else {
-      setSlugValid(true);
-    }
+  const [slugError, setSlugError] = useState('');
+
+  useEffect(() => {
+    let isSubscribed = true;
+    const timer = setTimeout(async () => {
+      if (slug && user) {
+        if (await checkNoteSlugExists({ slug, userId: user.id, docId })) {
+          isSubscribed && setSlugError('Slug already exists.');
+        } else {
+          isSubscribed && setSlugError('');
+        }
+      }
+    }, 1_000);
+
+    return () => {
+      clearTimeout(timer);
+      isSubscribed = false;
+    };
+  }, [docId, slug, user]);
+
+  const onChangeSlug = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.includes(' ')) {
+      setSlugError('Spaces are not allowed');
+      return;
+    } else setSlugError('');
+    updateSlug(e.target.value);
   };
 
   return (
@@ -67,21 +86,21 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
             Slug:
           </Text>
           <InputGroup>
-            <Input
-              value={slug}
-              onChange={(e) => updateSlug(e.target.value)}
-              placeholder={'Slug'}
-              onBlur={onBlurSlug}
-            />
+            <Input value={slug} onChange={onChangeSlug} placeholder={'Slug'} />
             <InputRightElement>
               {slug &&
-                (slugValid ? (
+                (!Boolean(slugError) ? (
                   <CheckCircleIcon color="green.500" />
                 ) : (
                   <WarningIcon color="red.500" />
                 ))}
             </InputRightElement>
           </InputGroup>
+          {slugError && (
+            <Text mt="2" fontSize={'sm'} d="block" color="red.500">
+              {slugError}
+            </Text>
+          )}
         </FormLabel>
         <Text fontSize={'sm'} color="gray.500" mb="2">
           Rating:

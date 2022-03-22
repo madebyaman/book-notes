@@ -1,6 +1,5 @@
 import { getBook } from '.';
 import { DashboardNoteWithDate, DashboardNoteWithImage } from '../../@types';
-import { mapAsync } from '../mapAsync';
 
 export const mapUserNotes = async (notes: DashboardNoteWithDate[]) => {
   const map = async (
@@ -14,12 +13,8 @@ export const mapUserNotes = async (notes: DashboardNoteWithDate[]) => {
     };
     return newNote;
   };
-  const mappedNotes = await mapAsync<
-    DashboardNoteWithDate,
-    DashboardNoteWithImage
-  >({
-    arr: notes,
-    func: map,
-  });
+
+  const mappedNotes = await Promise.all(notes.map(async (note) => map(note)));
+
   return mappedNotes;
 };

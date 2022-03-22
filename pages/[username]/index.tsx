@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 
 import { getUserProfileFromUsername } from '../../utils/auth';
-import { getUserNotes } from '../../utils/notes';
+import { getUsernames, getUserNotes } from '../../utils/notes';
 import { DashboardNoteWithDate, UserProfile } from '../../@types';
 import { SidebarLayout } from '../../components/Layout';
 import { ProfileSidebar } from '../../components/Profile';
@@ -45,12 +45,25 @@ const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
   );
 };
 
-export async function getServerSideProps(context: {
+export async function getStaticPaths() {
+  const usernames = await getUsernames();
+
+  const paths = usernames.map((username) => ({
+    params: {
+      username,
+    },
+  }));
+
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({
+  params,
+}: {
   params: { username: string };
 }) {
-  const { username } = context.params;
-  if (!username) return;
-  const profile = await getUserProfileFromUsername(username);
+  if (!params.username) return;
+  const profile = await getUserProfileFromUsername(params.username);
   const userNotes = profile && (await getUserNotes({ userId: profile.id }));
   return {
     props: {

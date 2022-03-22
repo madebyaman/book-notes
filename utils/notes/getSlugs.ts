@@ -8,7 +8,6 @@ import {
 import { DashboardNote } from '../../@types';
 import db from '../../firebase';
 import { getUserProfileFromUsername } from '../auth';
-import { mapAsync } from '../mapAsync';
 
 export async function getSlugs(usernames: string[]) {
   const noteSlugs = async (username: string) => {

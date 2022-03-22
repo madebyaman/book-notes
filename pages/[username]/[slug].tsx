@@ -12,14 +12,13 @@ import {
 import moment from 'moment';
 import Head from 'next/head';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { ImUser } from 'react-icons/im';
 
 import { DashboardNoteWithImage, UserProfile } from '../../@types';
 import { CenteredLayout } from '../../components/Layout';
 import { Nav } from '../../components/nav';
 import { getUserProfileFromUsername } from '../../utils/auth';
-import { mapUserNote } from '../../utils/notes';
+import { getSlugs, getUsernames, mapUserNote } from '../../utils/notes';
 import { getNoteFromSlug } from '../../utils/notes/getNoteFromSlug';
 
 const BookNote = ({
@@ -29,8 +28,6 @@ const BookNote = ({
   note: DashboardNoteWithImage | null;
   profile: UserProfile | null;
 }) => {
-  const router = useRouter();
-
   if (!note) {
     return (
       <CenteredLayout>
@@ -132,15 +129,27 @@ const BookNote = ({
   );
 };
 
-export async function getServerSideProps(context: {
-  params: { username: any; slug: any };
+export async function getStaticPaths() {
+  const usernames = await getUsernames();
+  const userNotes = await getSlugs(usernames);
+
+  return {
+    paths: userNotes,
+    fallback: false,
+  };
+}
+
+export async function getStaticProps({
+  params,
+}: {
+  params: { slug: string; username: string };
 }) {
-  // two things we will get {username: '', slug: ''}
-  const { username, slug } = context.params;
   // 1. Check user profile with username exists.
-  const profile = await getUserProfileFromUsername(username);
+  const profile = await getUserProfileFromUsername(params.username);
   // 2. Check if note with given slug exists.
-  const note = profile && (await getNoteFromSlug({ slug, userId: profile.id }));
+  const note =
+    profile &&
+    (await getNoteFromSlug({ slug: params.slug, userId: profile.id }));
   const mappedNote = note ? await mapUserNote({ note }) : null;
   return {
     props: {

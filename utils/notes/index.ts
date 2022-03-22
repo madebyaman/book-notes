@@ -5,3 +5,5 @@ export { getNoteFromSlug } from './getNoteFromSlug';
 export { mapUserNotes } from './mapUserNotes';
 export { mapUserNote } from './mapUserNote';
 export { checkNoteSlugExists } from './checkNoteSlugExists';
+export { getSlugs } from './getSlugs';
+export { getUsernames } from './getUsernames';

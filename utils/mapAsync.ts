@@ -1,9 +1,9 @@
-interface MapAsyncPropsInterface<T> {
+interface MapAsyncPropsInterface<T, R> {
   arr: T[];
-  func: (arg1: T) => any;
+  func: (arg1: T) => Promise<R>;
 }
 
-async function mapAsync<T>({ arr, func }: MapAsyncPropsInterface<T>) {
+async function mapAsync<T, R>({ arr, func }: MapAsyncPropsInterface<T, R>) {
   return Promise.all(arr.map((item) => func(item)));
 }
 

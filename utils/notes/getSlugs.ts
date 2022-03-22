@@ -22,21 +22,27 @@ export async function getSlugs(usernames: string[]) {
       where('isPublished', '==', true)
     );
 
+    // { params: { slug: string; username: string } }[]
+
     const notesSnap = (await getDocs(q)) as QuerySnapshot<DashboardNote>;
-    let slugs: { params: { slug: string; username: string } }[] = [];
+    let slugsWithUsername: any = [];
 
     notesSnap.forEach((doc) => {
-      slugs.push({ params: { slug: doc.data().slug, username } });
-      return;
+      const newSlug = {
+        params: { slug: doc.data().slug, username },
+      };
+      const oldSlugs = [...slugsWithUsername];
+      slugsWithUsername = [...oldSlugs, newSlug];
     });
 
-    return slugs;
+    return slugsWithUsername;
   };
 
-  const mapUsernameWithSlugs = await Promise.all(
-    usernames.map((username) => noteSlugs(username))
+  const usernameWithSlugs = await Promise.all(
+    usernames.map(async (username) => {
+      return await noteSlugs(username);
+    })
   );
-  console.log('===========here=============', mapUsernameWithSlugs);
 
-  return mapUsernameWithSlugs;
+  return usernameWithSlugs.flat();
 }

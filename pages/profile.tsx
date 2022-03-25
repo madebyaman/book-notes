@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { Nav } from '../components/nav';
 import { ProfilePreferences as Profile } from '../components/Profile';
 
-const Dashboard: NextPage = function () {
+const ProfilePage: NextPage = function () {
   const router = useRouter();
 
   return (
@@ -27,4 +27,4 @@ const Dashboard: NextPage = function () {
   );
 };
 
-export default Dashboard;
+export default ProfilePage;

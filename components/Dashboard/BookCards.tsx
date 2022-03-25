@@ -1,4 +1,3 @@
-import { AddIcon } from '@chakra-ui/icons';
 import { Text, Grid, Flex } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -29,7 +28,6 @@ export const BookCards = () => {
         });
         return unsub;
       } catch (e) {
-        dispatch({ type: 'ERROR', payload: 'Error fetching your notes' });
         throw e;
       }
     };
@@ -40,15 +38,11 @@ export const BookCards = () => {
     <ErrorBoundary
       FallbackComponent={ErrorFallback}
       onReset={() => {
-        setCards([]);
+        router.reload();
       }}
       resetKeys={[cards]}
     >
-      <StatusWrapper
-        status={state.status}
-        loading={<div>Loading...</div>}
-        error={<div>{state.error}</div>}
-      >
+      <StatusWrapper status={state.status} loading={<div>Loading...</div>}>
         <Grid
           templateColumns="repeat(auto-fit, minmax(400px, 1fr))"
           columnGap={12}

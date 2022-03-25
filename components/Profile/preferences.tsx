@@ -17,6 +17,7 @@ import {
   HStack,
   Textarea,
 } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
 import {
   ChangeEvent,
   useContext,
@@ -80,6 +81,7 @@ export const ProfilePreferences = () => {
   const userProfile = useUserProfileHook();
   const user = useContext(AuthContext);
   const toast = useToast();
+  const router = useRouter();
 
   useEffect(() => {
     let isSubscribed = true;
@@ -124,22 +126,19 @@ export const ProfilePreferences = () => {
         bio: state.bio,
       };
       if (profilePhoto) updates.photo = profilePhoto;
-      if (userProfile) {
-        await updateCurrentUserInfo(updates, userProfile.id);
-        toast({
-          title: 'Successfully saved your profile',
-          status: 'success',
-          duration: 1_000,
-          isClosable: true,
-        });
-      } else {
-        message = 'User profile is not present';
-      }
+      if (!userProfile) return;
+      await updateCurrentUserInfo(updates, userProfile.id);
+      toast({
+        title: 'Successfully saved your profile',
+        status: 'success',
+        duration: 1_000,
+        isClosable: true,
+      });
     } catch (e) {
       if (e instanceof UsernameError) message = 'Username already exists';
-      else console.error(e);
+      else if (e instanceof Error) message = e.message;
       toast({
-        title: message,
+        title: message || 'Failed to save your profile',
         status: 'error',
         duration: 1_000,
         isClosable: true,
@@ -157,7 +156,10 @@ export const ProfilePreferences = () => {
   };
 
   return (
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onReset={() => router.reload()}
+    >
       <Grid templateColumns={{ base: '1fr', md: '1fr 3fr' }} gap="6">
         <Box>
           <Heading as="h2" fontSize="30px" color="text.400">

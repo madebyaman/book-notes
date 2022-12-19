@@ -9,7 +9,7 @@ import {
 } from '@chakra-ui/react';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 
-import { useStoreActions, useStoreState } from '../store';
+import { useStoreActions, useStoreState } from '../../../utils/store';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
 import { checkNoteSlugExists } from '../../../utils/notes';

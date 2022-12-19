@@ -1,14 +1,21 @@
-import { Text, Grid, Flex } from '@chakra-ui/react';
+import {
+  Text,
+  Grid,
+  Flex,
+  Box,
+  SkeletonCircle,
+  SkeletonText,
+} from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { DashboardNote } from '../../@types';
+import { DashboardNote } from '@/@types';
 import { ErrorFallback } from '../Error';
 import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
 import { BookCard } from '../BookCard';
-import { subscribeToCurrentUserNotes } from './subscribeToCurrentUserNotes';
+import { subscribeToCurrentUserNotes } from '@/utils/notes';
 import { EmptyState } from './EmptyState';
 import { useUserProfileHook } from '../Profile';
 
@@ -20,6 +27,7 @@ export const BookCards = () => {
 
   useEffect(() => {
     const getNotes = async () => {
+      dispatch({ type: 'LOADING' });
       try {
         const unsub = await subscribeToCurrentUserNotes((result) => {
           dispatch({ type: 'LOADING' });
@@ -42,7 +50,14 @@ export const BookCards = () => {
       }}
       resetKeys={[cards]}
     >
-      <StatusWrapper status={state.status} loading={<div>Loading...</div>}>
+      <StatusWrapper
+        status={state.status}
+        loading={
+          <div>
+            <LoadingBookNote />
+          </div>
+        }
+      >
         <Grid
           templateColumns="repeat(auto-fit, minmax(400px, 1fr))"
           columnGap={12}
@@ -105,3 +120,12 @@ export const BookCards = () => {
     </ErrorBoundary>
   );
 };
+
+function LoadingBookNote() {
+  return (
+    <Box padding="6" boxShadow="lg" bg="white">
+      <SkeletonCircle size="10" />
+      <SkeletonText mt="4" noOfLines={4} spacing="4" skeletonHeight="2" />
+    </Box>
+  );
+}

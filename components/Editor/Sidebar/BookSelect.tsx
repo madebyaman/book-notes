@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Book, BookJSON } from '../../../@types';
 import Select from 'react-select';
-import { useStoreActions, useStoreState } from '../store';
+import { useStoreActions, useStoreState } from '../../../utils/store';
 import { useStatus } from '../../Status';
 
 /**

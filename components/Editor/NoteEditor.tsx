@@ -2,7 +2,11 @@ import React, { useContext, useEffect } from 'react';
 import { StoreProvider } from 'easy-peasy';
 import { ErrorBoundary } from 'react-error-boundary';
 
-import { NoteEditorStore, useStoreActions, useStoreState } from './store';
+import {
+  NoteEditorStore,
+  useStoreActions,
+  useStoreState,
+} from '../../utils/store';
 import { Layout } from './Layout';
 import { useStatus, StatusWrapper } from '../Status';
 import ErrorFetchingNote from './ErrorFetchingNote';
@@ -15,15 +19,15 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const bookId = useStoreState((state) => state.bookId);
   const fetchDocument = useStoreActions((state) => state.fetchDocument);
   const fetchBook = useStoreActions((state) => state.fetchBook);
+  const fetchContent = useStoreState((state) => state.content);
   const resetState = useStoreActions((actions) => actions.resetState);
   const { state: status, dispatch } = useStatus();
 
   useEffect(() => {
     let isSubscribed = true;
 
+    dispatch({ type: 'LOADING' });
     if (docId) {
-      dispatch({ type: 'LOADING' });
-
       // First, fetch the note and book
       (async function () {
         try {
@@ -34,8 +38,6 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
         }
       })();
     } else {
-      // If no docId, meaning it is inside add page, then reset state
-      // If you don't reset state, then new document starts with already loaded state
       resetState();
       dispatch({ type: 'LOADED' });
     }

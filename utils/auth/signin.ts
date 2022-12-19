@@ -22,7 +22,7 @@ export const signin = async ({
       remember ? browserLocalPersistence : browserSessionPersistence
     );
     const result = await signInWithEmailAndPassword(auth, email, password);
-    return {};
+    return {}; // Firebase automatically sets the user in useEffect
   } catch (e) {
     throw new Error('Error signing in');
   }

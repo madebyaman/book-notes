@@ -7,8 +7,8 @@ import {
   Thunk,
 } from 'easy-peasy';
 
-import { Book, BookNoteState } from '../../@types';
-import { getNote, getBook } from '../../utils/notes';
+import { Book, BookNoteState } from '../@types';
+import { getNote, getBook } from './notes';
 
 type StoreModel = BookNoteState & {
   updateContent: Action<StoreModel, string>;
@@ -55,12 +55,12 @@ export const NoteEditorStore = createStore<StoreModel>(
     }),
     resetState: action((state) => {
       state.selectedBook = null;
-      state.content = '';
       state.rating = 0;
       state.title = '';
       state.bookId = undefined;
       state.isPublished = false;
       state.slug = '';
+      state.content = '';
     }),
     /**
      * Fetch a document with a url. It should update the note state if everything went well.

@@ -7,8 +7,8 @@ import {
   QuerySnapshot,
   where,
 } from 'firebase/firestore';
-import { DashboardNote } from '../../@types';
-import db from '../../firebase';
+import { DashboardNote } from '@/@types';
+import db from '@/firebase';
 
 export const subscribeToNotes = (
   userId: string,

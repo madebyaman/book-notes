@@ -5,7 +5,7 @@ import {
 import { doc, setDoc } from 'firebase/firestore';
 
 import db, { auth } from '../../firebase';
-import { checkUsernameExist } from './checkUsernameExist';
+import { checkUsernameExist } from '../../utils/auth/checkUsernameExist';
 
 export class UsernameError extends Error {}
 
@@ -38,7 +38,6 @@ export const signup = async ({
       });
     }
   } catch (e) {
-    console.log(e); // Should I rethrow it?
     throw new Error('Error signing up');
   }
 };

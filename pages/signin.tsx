@@ -12,6 +12,7 @@ import {
   Input,
   InputGroup,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { NextPage } from 'next';
@@ -22,34 +23,60 @@ import { useInput } from '../utils';
 import { signin } from '../components/Auth';
 import Image from 'next/image';
 
+interface FormState {
+  remember: boolean;
+  email: string;
+  password: string;
+  status: 'INIT' | 'LOADING' | 'SUCCESS';
+}
+
 const Login: NextPage = () => {
-  const [rememberMe, setRememberMe] = useState(false);
-  const [emailProps, resetEmail] = useInput('');
-  const [passwordProps, resetPassword] = useInput('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [formState, setFormState] = useState<FormState>({
+    remember: false,
+    email: '',
+    password: '',
+    status: 'INIT',
+  });
+  const toast = useToast();
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    setFormState({ ...formState, status: 'LOADING' });
 
     try {
       await signin({
-        email: emailProps.value,
-        password: passwordProps.value,
-        remember: rememberMe,
+        email: formState.email,
+        password: formState.password,
+        remember: formState.remember,
+      });
+      setFormState({ ...formState, status: 'SUCCESS' });
+      toast({
+        title: 'Logged in ✅',
+        description: 'You have successfully logged in',
+        status: 'success',
+        duration: 5000,
+        isClosable: true,
       });
       router.push('/dashboard');
     } catch (e) {
-      let message = 'Error signin up.';
+      let message = 'Error signin in.';
       if (e instanceof Error) message = e.message;
-      setError(message);
+      toast({
+        title: '⚠️ Login unsuccessful',
+        description: message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     } finally {
-      setLoading(false);
-      setRememberMe(false);
-      resetEmail();
-      resetPassword();
+      setFormState({
+        ...formState,
+        remember: false,
+        email: '',
+        password: '',
+        status: 'SUCCESS',
+      });
     }
   };
 
@@ -93,17 +120,37 @@ const Login: NextPage = () => {
                 >
                   <FormControl id="email" isRequired>
                     <FormLabel>Email address</FormLabel>
-                    <Input type="email" {...emailProps} />
+                    <Input
+                      type="email"
+                      value={formState.email}
+                      onChange={(e) =>
+                        setFormState({ ...formState, email: e.target.value })
+                      }
+                    />
                   </FormControl>
                   <FormControl mt={'6'} id="password" isRequired>
                     <FormLabel>Password</FormLabel>
                     <InputGroup>
-                      <Input type={'password'} {...passwordProps} />
+                      <Input
+                        type="password"
+                        value={formState.password}
+                        onChange={(e) =>
+                          setFormState({
+                            ...formState,
+                            password: e.target.value,
+                          })
+                        }
+                      />
                     </InputGroup>
                   </FormControl>
                   <Checkbox
-                    isChecked={rememberMe}
-                    onChange={() => setRememberMe((rememberMe) => !rememberMe)}
+                    isChecked={formState.remember}
+                    onChange={() =>
+                      setFormState({
+                        ...formState,
+                        remember: !formState.remember,
+                      })
+                    }
                     colorScheme="teal"
                   >
                     Remember me
@@ -117,13 +164,13 @@ const Login: NextPage = () => {
                     color={'white'}
                     _hover={{ bg: 'primary.400' }}
                     type="submit"
-                    isLoading={loading}
+                    isLoading={formState.status === 'LOADING'}
+                    loadingText={'Logging in'}
                   >
                     Log in
                   </Button>
                 </Stack>
               </form>
-              {error !== '' && <Text color={'tomato'}>{error}</Text>}
               <Text align={'center'} display={'inline-block'}>
                 Not a user?{' '}
                 <Link href="/signup" passHref>

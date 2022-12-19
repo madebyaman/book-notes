@@ -8,11 +8,11 @@ import {
   query,
   where,
 } from 'firebase/firestore';
-import db from '../../firebase';
+import db from '@/firebase';
 
 /**
  * Method of check whether a given username exists
- * @param userId if userId is given, it means user is already signed up. Now we need to additionally check the current username.
+ * @param userId if userId is given, it means a user is already signed up. Then check the current username.
  * @returns true if username exists. False otherwise.
  */
 export const checkUsernameExist = async (username: string, userId?: string) => {
@@ -39,7 +39,6 @@ export const checkUsernameExist = async (username: string, userId?: string) => {
       return true;
     }
   } catch (e) {
-    console.error(e);
     return true;
   }
 };

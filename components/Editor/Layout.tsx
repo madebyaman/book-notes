@@ -1,25 +1,22 @@
 import { Box, Container, Flex, useToast } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 
-import { useStoreState } from './store';
+import { useStoreActions, useStoreState } from '../../utils/store';
 import { EditingSection } from './Main';
 import { EditorSidebar } from './Sidebar';
 import { getBook } from '../../utils/notes';
 import { uploadBookCover } from './uploadBookCover';
-import { addBook } from './addBook';
-import {
-  createOrUpdateNote,
-  RatingError,
-  SlugError,
-} from './createOrUpdateNote';
+import { addBook } from '../../utils/notes/addBook';
+import { createOrUpdateNote, RatingError, SlugError } from '@/utils/notes';
 import { AuthContext } from '../Auth';
 import { EditorTopbar } from './EditorTopbar';
 import { useRouter } from 'next/router';
-import { deleteBookNote } from './deleteBookNote';
+import { deleteBookNote } from '@/utils/notes';
 
 export const Layout = ({ docId = undefined }: { docId?: string }) => {
   const { content, rating, title, selectedBook, bookId, isPublished, slug } =
     useStoreState((state) => state);
+  const resetState = useStoreActions((actions) => actions.resetState);
   const user = useContext(AuthContext);
   const toast = useToast();
   const [loading, setLoading] = useState(false);
@@ -103,6 +100,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
       showFlashMessage({ success: true });
       setLoading(false);
       router.push('/dashboard');
+      resetState();
     } catch (error) {
       let message = 'Error saving your content';
       if (error instanceof SlugError || error instanceof RatingError) {

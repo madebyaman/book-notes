@@ -7,7 +7,7 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from '../store';
+import { useStoreActions, useStoreState } from '../../../utils/store';
 import BookSelect from './BookSelect';
 
 const SelectedBook = (): JSX.Element => {

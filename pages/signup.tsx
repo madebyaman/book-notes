@@ -40,7 +40,7 @@ export default function Signup() {
   });
 
   const onBlurUsername = async () => {
-    if (usernameProps.value) {
+    if (usernameProps.value && usernameProps.value.length > 3) {
       (await checkUsernameExist(usernameProps.value))
         ? setErrorState((prevState) => ({ ...prevState, usernameValid: false }))
         : setErrorState((prevState) => ({
@@ -66,6 +66,7 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (!errorState.usernameValid || !errorState.passwordValid) {
       setErrorState({ ...errorState, showErrors: true });
       return;

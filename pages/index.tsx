@@ -11,6 +11,7 @@ import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { Nav } from '@/components/nav';
+import { Logo } from '@/components/Logo';
 
 const Home: NextPage = function () {
   const router = useRouter();
@@ -52,12 +53,7 @@ const Home: NextPage = function () {
             </Button>
           </Box>
           <Box margin="0 auto">
-            <Image
-              src="/screenshot.png"
-              alt="Bummaries app"
-              width="900px"
-              height="561px"
-            />
+            <Logo />
           </Box>
         </Grid>
       </Container>

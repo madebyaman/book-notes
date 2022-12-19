@@ -5,7 +5,7 @@ import {
 import { doc, setDoc } from 'firebase/firestore';
 
 import db, { auth } from '../../firebase';
-import { checkUsernameExist } from '../../utils/auth/checkUsernameExist';
+import { checkUsernameExist } from './checkUsernameExist';
 
 export class UsernameError extends Error {}
 

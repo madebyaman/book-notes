@@ -1,8 +1,7 @@
 import { doc, updateDoc } from 'firebase/firestore';
 
 import db from '../../firebase';
-import { getCurrentUser } from '../../utils/auth';
-import { checkUsernameExist } from '../Auth';
+import { checkUsernameExist, getCurrentUser } from '../../utils/auth';
 
 export class UsernameError extends Error {}
 

@@ -21,6 +21,7 @@ import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import Image from 'next/image';
 import { signin } from '@/utils/auth';
+import { Logo } from '@/components/Logo';
 
 interface FormState {
   remember: boolean;
@@ -92,12 +93,7 @@ const Login: NextPage = () => {
             <title>Sign in</title>
           </Head>
           <Stack align={'center'} my="4" spacing="4">
-            <Image
-              src="/Logo.svg"
-              alt="Bummaries App"
-              width="135px"
-              height="74px"
-            />
+            <Logo />
             <Heading fontSize={'4xl'} as="h1" color="text.400">
               Sign in to your account
             </Heading>

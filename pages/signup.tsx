@@ -1,4 +1,5 @@
 import { CheckCircleIcon, WarningTwoIcon } from '@chakra-ui/icons';
+
 import {
   Box,
   FormControl,
@@ -24,6 +25,7 @@ import Image from 'next/image';
 
 import { checkUsernameExist, signup, UsernameError } from '@/utils/auth';
 import { useInput } from '@/utils';
+import { Logo } from '@/components/Logo';
 
 export default function Signup() {
   const router = useRouter();
@@ -107,12 +109,7 @@ export default function Signup() {
       <Flex minH={'100vh'} align={'center'} justify={'center'} bg={'light.100'}>
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Stack align={'center'}>
-            <Image
-              src="/Logo.svg"
-              alt="Bummaries App"
-              width="135px"
-              height="74px"
-            />
+            <Logo />
             <Heading fontSize={'4xl'} textAlign={'center'} color="text.400">
               Sign up
             </Heading>

@@ -1,13 +1,13 @@
 import { Grid } from '@chakra-ui/react';
 
-import { getUserProfileFromUsername } from '../../utils/auth';
-import { getUsernames, getUserNotes } from '../../utils/notes';
-import { DashboardNoteWithDate, UserProfile } from '../../@types';
-import { SidebarLayout } from '../../components/Layout';
-import { ProfileSidebar } from '../../components/Profile';
+import { getUserProfileFromUsername } from '@/utils/auth';
+import { getUsernames, getUserNotes } from '@/utils/notes';
+import { DashboardNoteWithDate, UserProfile } from '@/@types';
+import { SidebarLayout } from '@/components/Layout';
+import { ProfileSidebar } from '@/components/Profile';
 import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '../../components/Error';
-import { BookCard } from '../../components/BookCard';
+import { ErrorFallback } from '@/components/Error';
+import { BookCard } from '@/components/BookCard';
 import Head from 'next/head';
 
 interface UsernameNotesInterface {

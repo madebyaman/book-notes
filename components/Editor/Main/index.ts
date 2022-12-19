@@ -1,1 +1,1 @@
-export { EditingSection } from './EditingSection';
+export { ContentEditorWrapper } from './ContentEditorWrapper';

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Book, BookJSON } from '../../../@types';
+import { Book, BookJSON } from '@/@types';
 import Select from 'react-select';
-import { useStoreActions, useStoreState } from '../../../utils/store';
-import { useStatus } from '../../Status';
+import { useStoreActions, useStoreState } from '@/utils/store';
+import { useStatus } from '@/utils';
 
 /**
  * Convert space inside a string to +

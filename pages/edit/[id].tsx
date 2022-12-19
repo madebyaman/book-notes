@@ -1,9 +1,9 @@
-import { NoteEditor } from '../../components/Editor';
+import { NoteEditor } from '@/components/Editor';
 import { useRouter } from 'next/router';
 import { useContext, useEffect } from 'react';
-import { AuthContext } from '../../components/Auth';
+import { AuthContext } from '@/components/Auth';
 import Head from 'next/head';
-import { CenteredLayout } from '../../components/Layout';
+import { CenteredLayout } from '@/components/Layout';
 import { CircularProgress } from '@chakra-ui/react';
 
 const EditBook = () => {

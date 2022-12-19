@@ -12,7 +12,7 @@ import { Timestamp } from 'firebase/firestore';
 import moment from 'moment';
 import Link from 'next/link';
 
-import { DashboardNote, DashboardNoteWithDate } from '../@types';
+import { DashboardNote, DashboardNoteWithDate } from '@/@types';
 import BookCover from './BookCover';
 
 type CardBadgeTypes = {

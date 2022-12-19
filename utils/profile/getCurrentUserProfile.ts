@@ -1,4 +1,4 @@
-import { getUserProfile, getCurrentUser } from '../../utils/auth';
+import { getUserProfile, getCurrentUser } from '../auth';
 
 export const getCurrentUserProfile = async () => {
   const user = await getCurrentUser();

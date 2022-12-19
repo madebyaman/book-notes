@@ -1,4 +1,4 @@
-import { uploadImage } from '../../utils';
+import { uploadImage } from '..';
 
 /**
  * Upload an image to cloudinary with the given coverId.

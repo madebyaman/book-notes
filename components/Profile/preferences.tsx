@@ -1,21 +1,27 @@
+import { checkUsernameExist, UsernameError } from '@/utils/auth';
+import {
+  updateCurrentUserInfo,
+  uploadProfilePicture,
+  useUserProfileHook,
+} from '@/utils/profile';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 import {
+  Box,
   Button,
+  Flex,
   FormControl,
   FormLabel,
-  Input,
+  Grid,
+  Heading,
+  HStack,
   Image,
-  useToast,
-  Text,
+  Input,
   InputGroup,
   InputRightElement,
-  Grid,
-  Box,
-  Heading,
-  Flex,
   Stack,
-  HStack,
+  Text,
   Textarea,
+  useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import {
@@ -26,11 +32,8 @@ import {
   useState,
 } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { AuthContext, checkUsernameExist, UsernameError } from '../Auth';
+import { AuthContext } from '../Auth';
 import { ErrorFallback } from '../Error';
-import { updateCurrentUserInfo } from './updateCurrentUserInfo';
-import { uploadProfilePicture } from './uploadProfilePicture';
-import { useUserProfileHook } from './useUserProfileHook';
 
 const initialState: {
   name: string;

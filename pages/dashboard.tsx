@@ -3,8 +3,8 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 
-import { BookCards } from '../components/Dashboard';
-import { Nav } from '../components/nav';
+import { BookCards } from '@/components/Dashboard';
+import { Nav } from '@/components/nav';
 
 const Dashboard: NextPage = function () {
   const router = useRouter();

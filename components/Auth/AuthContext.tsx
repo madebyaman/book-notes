@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { createContext, ReactNode, useEffect } from 'react';
-import { useAuth } from '../../utils/auth';
+import { useAuth } from '@/utils/auth';
 
 export const AuthContext = createContext<{
   id: string;

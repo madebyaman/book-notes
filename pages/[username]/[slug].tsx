@@ -14,12 +14,16 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { ImUser } from 'react-icons/im';
 
-import { DashboardNoteWithImage, UserProfile } from '../../@types';
-import { CenteredLayout } from '../../components/Layout';
-import { Nav } from '../../components/nav';
-import { getUserProfileFromUsername } from '../../utils/auth';
-import { getSlugs, getUsernames, mapUserNote } from '../../utils/notes';
-import { getNoteFromSlug } from '../../utils/notes/getNoteFromSlug';
+import { DashboardNoteWithImage, UserProfile } from '@/@types';
+import { CenteredLayout } from '@/components/Layout';
+import { Nav } from '@/components/nav';
+import { getUserProfileFromUsername } from '@/utils/auth';
+import {
+  getSlugs,
+  getUsernames,
+  mapUserNote,
+  getNoteFromSlug,
+} from '@/utils/notes';
 
 const BookNote = ({
   note,

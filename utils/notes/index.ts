@@ -16,3 +16,4 @@ export {
   RatingError,
 } from './createOrUpdateNote';
 export { deleteBookNote } from './deleteBookNote';
+export { uploadBookCover } from './uploadBookCover';

@@ -2,8 +2,8 @@ import { Box, Container } from '@chakra-ui/react';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { Nav } from '../components/nav';
-import { ProfilePreferences as Profile } from '../components/Profile';
+import { Nav } from '@/components/nav';
+import { ProfilePreferences as Profile } from '@/components/Profile';
 
 const ProfilePage: NextPage = function () {
   const router = useRouter();

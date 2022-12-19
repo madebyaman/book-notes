@@ -10,7 +10,7 @@ import {
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { Nav } from '../components/nav';
+import { Nav } from '@/components/nav';
 
 const Home: NextPage = function () {
   const router = useRouter();

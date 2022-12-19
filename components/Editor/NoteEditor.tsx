@@ -8,7 +8,8 @@ import {
   useStoreState,
 } from '../../utils/store';
 import { Layout } from './Layout';
-import { useStatus, StatusWrapper } from '../Status';
+import { StatusWrapper } from '../Status';
+import { useStatus } from '@/utils';
 import ErrorFetchingNote from './ErrorFetchingNote';
 import { AuthContext } from '../Auth';
 import { CenteredLayout } from '../Layout';

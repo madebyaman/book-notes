@@ -1,6 +1,6 @@
 import { Link } from '@chakra-ui/react';
 import { sendEmailVerification } from '@firebase/auth';
-import { auth } from '../../firebase';
+import { auth } from '@/firebase';
 
 export const ResendVerificationEmail = ({ ...props }) => {
   return (

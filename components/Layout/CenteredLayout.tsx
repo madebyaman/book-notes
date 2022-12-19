@@ -1,4 +1,4 @@
-import { Container, Flex } from '@chakra-ui/react';
+import { Container } from '@chakra-ui/react';
 import { ReactNode } from 'react';
 
 export const CenteredLayout = ({ children }: { children: ReactNode }) => {

@@ -8,12 +8,12 @@ import {
   Heading,
 } from '@chakra-ui/react';
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
+import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
-import { useStoreActions, useStoreState } from '../../../utils/store';
+import { useStoreActions, useStoreState } from '@/utils/store';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
-import { checkNoteSlugExists } from '../../../utils/notes';
-import { ChangeEvent, useContext, useEffect, useState } from 'react';
+import { checkNoteSlugExists } from '@/utils/notes';
 import { AuthContext } from '../../Auth';
 import SelectedBook from './SelectedBook';
 

@@ -1,5 +1,5 @@
 import { Checkbox, Text } from '@chakra-ui/react';
-import { useStoreActions, useStoreState } from '../../../utils/store';
+import { useStoreActions, useStoreState } from '@/utils/store';
 
 const PublishSwitch = () => {
   const isPublished = useStoreState((state) => state.isPublished);

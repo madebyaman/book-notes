@@ -2,10 +2,10 @@ import { Box, Container, Flex, useToast } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 
 import { useStoreActions, useStoreState } from '../../utils/store';
-import { EditingSection } from './Main';
+import { ContentEditorWrapper } from './Main';
 import { EditorSidebar } from './Sidebar';
 import { getBook } from '../../utils/notes';
-import { uploadBookCover } from './uploadBookCover';
+import { uploadBookCover } from '../../utils/notes/uploadBookCover';
 import { addBook } from '../../utils/notes/addBook';
 import { createOrUpdateNote, RatingError, SlugError } from '@/utils/notes';
 import { AuthContext } from '../Auth';
@@ -148,7 +148,7 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         >
           {/* EditingSection */}
           <Box flex={1} mt="2">
-            <EditingSection />
+            <ContentEditorWrapper />
           </Box>
           <Box w={{ base: '100%', md: '30%' }}>
             <Box pos={{ base: 'static', md: 'sticky' }}>

@@ -3,9 +3,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import '../styles/globals.css';
-import { AuthContextProvider } from '../components/Auth';
-import ErrorFallback from '../components/ErrorFallback';
-import { theme } from '../components';
+import { AuthContextProvider } from '@/components/Auth';
+import ErrorFallback from '@/components/ErrorFallback';
+import { theme } from '@/components';
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {

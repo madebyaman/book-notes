@@ -22,8 +22,8 @@ import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import Image from 'next/image';
 
-import { checkUsernameExist, signup, UsernameError } from '../components/Auth';
-import { useInput } from '../utils';
+import { checkUsernameExist, signup, UsernameError } from '@/utils/auth';
+import { useInput } from '@/utils';
 
 export default function Signup() {
   const router = useRouter();

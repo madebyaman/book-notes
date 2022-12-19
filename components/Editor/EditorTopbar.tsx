@@ -8,8 +8,6 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { FaSave } from 'react-icons/fa';
-import { deleteBookNote } from './deleteBookNote';
 
 export const EditorTopbar = ({
   onSave,

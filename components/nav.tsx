@@ -2,7 +2,7 @@ import { Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useContext } from 'react';
 import Image from 'next/image';
-import { signout } from '../utils/auth';
+import { signout } from '@/utils/auth';
 
 import { AuthContext } from './Auth';
 

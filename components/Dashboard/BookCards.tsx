@@ -12,12 +12,12 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 import { DashboardNote } from '@/@types';
 import { ErrorFallback } from '../Error';
-import { useStatus } from '../Status';
 import { StatusWrapper } from '../Status';
 import { BookCard } from '../BookCard';
 import { subscribeToCurrentUserNotes } from '@/utils/notes';
 import { EmptyState } from './EmptyState';
-import { useUserProfileHook } from '../Profile';
+import { useUserProfileHook } from '@/utils/profile';
+import { useStatus } from '@/utils';
 
 export const BookCards = () => {
   const router = useRouter();

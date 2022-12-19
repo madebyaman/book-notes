@@ -8,7 +8,7 @@ import {
 } from 'react-icons/fa';
 import { ImUser } from 'react-icons/im';
 
-import { UserProfile } from '../../@types';
+import { UserProfile } from '@/@types';
 import { Nav } from '../nav';
 
 interface ProfileSidebarPropsInterface {

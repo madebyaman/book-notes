@@ -19,9 +19,8 @@ import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { useInput } from '../utils';
-import { signin } from '../components/Auth';
 import Image from 'next/image';
+import { signin } from '@/utils/auth';
 
 interface FormState {
   remember: boolean;

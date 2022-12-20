@@ -168,7 +168,7 @@ const Login: NextPage = () => {
               </form>
               <Text align={'center'} display={'inline-block'}>
                 Not a user?{' '}
-                <Link href="/signup" passHref>
+                <Link href="/signup" legacyBehavior passHref>
                   <ChakraLink color={'teal.600'}>Sign up</ChakraLink>
                 </Link>
               </Text>

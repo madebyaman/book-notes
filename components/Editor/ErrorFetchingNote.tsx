@@ -7,7 +7,7 @@ const ErrorFetchingNote = () => {
       <Heading mb={4}>Your book note was not found</Heading>
       <Text>
         Wanna add a new note?{' '}
-        <Link href="/add" passHref>
+        <Link href="/add" legacyBehavior passHref>
           <ChakraLink color={'teal.500'}>Add a new note</ChakraLink>
         </Link>
       </Text>

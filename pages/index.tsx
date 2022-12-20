@@ -53,7 +53,12 @@ const Home: NextPage = function () {
             </Button>
           </Box>
           <Box margin="0 auto">
-            <Logo />
+            <Image
+              src="/screenshot.png"
+              width={2760 / 2}
+              height={1720 / 2}
+              alt={'App screenshot'}
+            />
           </Box>
         </Grid>
       </Container>

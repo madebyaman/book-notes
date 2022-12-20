@@ -44,7 +44,12 @@ export const EditorTopbar = ({
         </Heading>
       </Box>
       <Flex py="4" borderLeft={'1px solid #e9ebf0'} pl={4} gap="6">
-        <Button onClick={onDelete} colorScheme={'red'} variant="ghost">
+        <Button
+          onClick={onDelete}
+          colorScheme={'red'}
+          variant="ghost"
+          isLoading={loading}
+        >
           Delete
         </Button>
         <Button

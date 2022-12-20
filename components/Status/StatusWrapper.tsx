@@ -9,10 +9,10 @@ export const StatusWrapper = ({
 }: {
   children: ReactNode;
   status: StatusType;
-  loading: ReactNode;
+  loading?: ReactNode;
   error?: ReactNode;
 }): JSX.Element => {
-  if (status === 'LOADING') {
+  if (status === 'LOADING' && loading) {
     return <>{loading}</>;
   }
   if (status === 'ERROR' && error) {

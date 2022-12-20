@@ -96,60 +96,55 @@ export const BookCard = ({
           )}
           <Box mt="4">
             {isProfileCard ? (
-              <Link href={`/${username}/${slug}`} passHref>
-                <Button
-                  as="a"
-                  width="full"
-                  backgroundColor={'teal.50'}
-                  color="primary.700"
-                  _hover={{
-                    backgroundColor: 'teal.200',
-                  }}
-                >
-                  Continue Reading
-                </Button>
-              </Link>
+              <Button
+                as={Link}
+                href={`/${username}/${slug}`}
+                width="full"
+                backgroundColor={'teal.50'}
+                color="primary.700"
+                _hover={{
+                  backgroundColor: 'teal.200',
+                }}
+              >
+                Continue Reading
+              </Button>
             ) : (
-              <Link
+              <Button
+                as={Link}
                 href={{
                   pathname: '/edit/[id]',
                   query: { id: id },
                 }}
-                passHref
+                width="full"
+                backgroundColor={'teal.50'}
+                color="primary.700"
+                _hover={{
+                  backgroundColor: 'teal.200',
+                }}
+                borderRadius="sm"
+                mr="4"
+                rightIcon={
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    style={{
+                      width: '16px',
+                      height: '16px',
+                    }}
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                    />
+                  </svg>
+                }
               >
-                <Button
-                  as="a"
-                  width="full"
-                  backgroundColor={'teal.50'}
-                  color="primary.700"
-                  _hover={{
-                    backgroundColor: 'teal.200',
-                  }}
-                  borderRadius="sm"
-                  mr="4"
-                  rightIcon={
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      style={{
-                        width: '16px',
-                        height: '16px',
-                      }}
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth={2}
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                      />
-                    </svg>
-                  }
-                >
-                  Edit
-                </Button>
-              </Link>
+                Edit
+              </Button>
             )}
           </Box>
         </Box>

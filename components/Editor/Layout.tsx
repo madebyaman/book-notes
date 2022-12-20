@@ -1,19 +1,36 @@
-import { Box, Container, Flex, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Container,
+  Flex,
+  Skeleton,
+  Stack,
+  useToast,
+} from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 
-import { useStoreActions, useStoreState } from '../../utils/store';
+import { useStoreActions, useStoreState } from '@/utils/store';
 import { ContentEditorWrapper } from './Main';
 import { EditorSidebar } from './Sidebar';
-import { getBook } from '../../utils/notes';
-import { uploadBookCover } from '../../utils/notes/uploadBookCover';
-import { addBook } from '../../utils/notes/addBook';
-import { createOrUpdateNote, RatingError, SlugError } from '@/utils/notes';
+import {
+  deleteBookNote,
+  uploadBookCover,
+  getBook,
+  addBook,
+  createOrUpdateNote,
+  RatingError,
+  SlugError,
+} from '@/utils/notes';
 import { AuthContext } from '../Auth';
 import { EditorTopbar } from './EditorTopbar';
 import { useRouter } from 'next/router';
-import { deleteBookNote } from '@/utils/notes';
 
-export const Layout = ({ docId = undefined }: { docId?: string }) => {
+export const Layout = ({
+  pageLoading,
+  docId = undefined,
+}: {
+  pageLoading: boolean;
+  docId?: string;
+}) => {
   const { content, rating, title, selectedBook, bookId, isPublished, slug } =
     useStoreState((state) => state);
   const resetState = useStoreActions((actions) => actions.resetState);
@@ -135,29 +152,45 @@ export const Layout = ({ docId = undefined }: { docId?: string }) => {
         {/* Section for Top Bar */}
         <EditorTopbar
           onSave={onSave}
-          loading={loading}
+          loading={loading || pageLoading}
           onDelete={deleteCurrentNote}
         />
       </Box>
       <Container maxW="container.lg">
-        <Flex
-          margin="0 auto"
-          w="100%"
-          flexDir={{ base: 'column', md: 'row' }}
-          gap="8"
-        >
-          {/* EditingSection */}
-          <Box flex={1} mt="2">
-            <ContentEditorWrapper />
-          </Box>
-          <Box w={{ base: '100%', md: '30%' }}>
-            <Box pos={{ base: 'static', md: 'sticky' }}>
-              {/* Sidebar sticky area */}
-              <EditorSidebar docId={docId} />
-            </Box>
-          </Box>
-        </Flex>
+        {pageLoading ? (
+          <LoadingComponent />
+        ) : (
+          <>
+            <Flex
+              margin="0 auto"
+              w="100%"
+              flexDir={{ base: 'column', md: 'row' }}
+              gap="8"
+            >
+              {/* EditingSection */}
+              <Box flex={1} mt="2">
+                <ContentEditorWrapper />
+              </Box>
+              <Box w={{ base: '100%', md: '30%' }}>
+                <Box pos={{ base: 'static', md: 'sticky' }}>
+                  {/* Sidebar sticky area */}
+                  <EditorSidebar docId={docId} />
+                </Box>
+              </Box>
+            </Flex>
+          </>
+        )}
       </Container>
     </Box>
   );
 };
+
+const LoadingComponent = () => (
+  <Stack mt={20}>
+    <Skeleton height="10px" />
+    <Skeleton height="10px" />
+    <Skeleton height="10px" />
+    <Skeleton height="10px" />
+    <Skeleton height="10px" />
+  </Stack>
+);

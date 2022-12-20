@@ -54,7 +54,7 @@ const BookNote = ({
         <Box py="16">
           <Flex alignItems={'center'} justifyContent="center" gap="6">
             <Box>
-              <Link passHref href={`/${profile.username}`}>
+              <Link legacyBehavior passHref href={`/${profile.username}`}>
                 <Button
                   leftIcon={<ArrowBackIcon />}
                   backgroundColor="gray.100"
@@ -102,7 +102,7 @@ const BookNote = ({
                   <Text fontSize={'large'} fontWeight={'bold'}>
                     {profile.name}
                   </Text>
-                  <Link href={`/${profile.username}`} passHref>
+                  <Link href={`/${profile.username}`} legacyBehavior passHref>
                     <ChakraLink
                       color="gray.400"
                       fontWeight={'semibold'}

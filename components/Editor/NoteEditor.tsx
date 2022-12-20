@@ -15,16 +15,15 @@ import { AuthContext } from '../Auth';
 import { CenteredLayout } from '../Layout';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
 import { ErrorFallback } from '../Error';
+import { Skeleton, Stack } from '@chakra-ui/react';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
-  const bookId = useStoreState((state) => state.bookId);
   const fetchDocument = useStoreActions((state) => state.fetchDocument);
-  const fetchBook = useStoreActions((state) => state.fetchBook);
-  const fetchContent = useStoreState((state) => state.content);
   const resetState = useStoreActions((actions) => actions.resetState);
   const { state: status, dispatch } = useStatus();
 
   useEffect(() => {
+    console.log('fetching');
     let isSubscribed = true;
 
     dispatch({ type: 'LOADING' });
@@ -47,8 +46,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       isSubscribed = false;
     };
     // We disable eslint rule b/c otherwise as soon as state changes, useEffect will fetch document which doesn't exist.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, docId, fetchDocument, resetState]);
 
   return (
     <ErrorBoundary
@@ -57,12 +55,8 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
         resetState();
       }}
     >
-      <StatusWrapper
-        loading={<div>Loading...</div>}
-        error={<ErrorFetchingNote />}
-        status={status.status}
-      >
-        <Layout docId={docId} />
+      <StatusWrapper error={<ErrorFetchingNote />} status={status.status}>
+        <Layout docId={docId} pageLoading={status.status === 'LOADING'} />
       </StatusWrapper>
     </ErrorBoundary>
   );

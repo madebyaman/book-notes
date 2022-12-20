@@ -1,10 +1,10 @@
 import { Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useContext } from 'react';
-import Image from 'next/image';
 import { signout } from '@/utils/auth';
 
 import { AuthContext } from './Auth';
+import { Logo } from './Logo';
 
 type NavTypes = { showFullNav: true; route: string } | { showFullNav?: false };
 
@@ -14,54 +14,47 @@ export const Nav = (props: NavTypes) => {
   return (
     <header>
       <Flex justify={'space-between'} alignItems="center" gap="8">
-        <Link passHref href="/">
-          <Image
-            src="/Logo.svg"
-            alt="Bummaries App"
-            width="135px"
-            height="74px"
-          />
+        <Link href="/">
+          <Logo />
         </Link>
         <Spacer />
 
         {user && props.showFullNav && (
           <>
-            <Link href={`/dashboard`} passHref>
-              <ChakraLink
-                fontSize={'md'}
-                color={
-                  props.route === '/dashboard' ? 'primary.400' : 'gray.600'
-                }
-                display="flex"
-                flexDir={'column'}
-                alignItems={'center'}
-                transition={'all 200ms ease-out'}
-                _hover={{
-                  textDecoration: 'none',
-                  color: 'primary.400',
+            <ChakraLink
+              as={Link}
+              href="/dashboard"
+              fontSize={'md'}
+              color={props.route === '/dashboard' ? 'primary.400' : 'gray.600'}
+              display="flex"
+              flexDir={'column'}
+              alignItems={'center'}
+              transition={'all 200ms ease-out'}
+              _hover={{
+                textDecoration: 'none',
+                color: 'primary.400',
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  width: '22px',
+                  height: '22px',
                 }}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  style={{
-                    width: '22px',
-                    height: '22px',
-                  }}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
-                  />
-                </svg>
-                Dashboard
-              </ChakraLink>
-            </Link>
-            <Link href="/profile" passHref>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                />
+              </svg>
+              Dashboard
+            </ChakraLink>
+            <Link href="/profile" legacyBehavior passHref>
               <ChakraLink
                 fontSize={'md'}
                 color={props.route === '/profile' ? 'primary.400' : 'gray.600'}
@@ -96,7 +89,7 @@ export const Nav = (props: NavTypes) => {
             </Link>
           </>
         )}
-        <Link href={user ? '#' : '/signin'} passHref>
+        <Link href={user ? '#' : '/signin'} legacyBehavior passHref>
           <ChakraLink
             onClick={() => user && signout()}
             color="gray.600"

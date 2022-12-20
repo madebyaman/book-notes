@@ -9,25 +9,26 @@ import {
   startAt,
   where,
 } from 'firebase/firestore';
-import { DashboardNote, DashboardNoteWithDate } from '../../@types';
-import db from '../../firebase';
+import { DashboardNote } from '../../@types';
+import db from '@/firebase';
+import { totalNotesInOnePage } from './constants';
 
 export const getUserNotes = async ({
   userId,
-  start,
+  page,
 }: {
   userId: string;
-  start?: DashboardNote;
+  page?: number;
 }) => {
   const bookNotesCollectionRef = collection(db, 'book-notes');
-  const order = start ? startAt(start) : endAt(5);
+  const order = page ? startAt(page) : endAt(totalNotesInOnePage);
 
   const q = query(
     bookNotesCollectionRef,
     where('userId', '==', userId),
     where('isPublished', '==', true),
     orderBy('lastUpdated', 'desc'),
-    start ? startAt(start) : limit(5)
+    order
   );
   try {
     const docSnap = (await getDocs(q)) as QuerySnapshot<DashboardNote>;

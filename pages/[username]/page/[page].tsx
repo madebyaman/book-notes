@@ -1,7 +1,7 @@
 import { Grid } from '@chakra-ui/react';
 
 import { getUserProfileFromUsername } from '@/utils/auth';
-import { getTotalNotes, getUsernames, getUserNotes } from '@/utils/notes';
+import { getUsernames, getUserNotes } from '@/utils/notes';
 import { DashboardNoteWithDate, UserProfile } from '@/@types';
 import { SidebarLayout } from '@/components/Layout';
 import { ProfileSidebar } from '@/components/Profile';
@@ -13,15 +13,9 @@ import Head from 'next/head';
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
   profile: UserProfile;
-  totalNotes: number;
 }
 
-const UsernameNotes = ({
-  notes,
-  profile,
-  totalNotes,
-}: UsernameNotesInterface) => {
-  console.log(totalNotes);
+const UsernameNotes = ({ notes, profile }: UsernameNotesInterface) => {
   if (!profile) {
     return 'User profile not found';
   }
@@ -33,7 +27,7 @@ const UsernameNotes = ({
   return (
     <ErrorBoundary FallbackComponent={ErrorFallback}>
       <Head>
-        <title>Book notes</title>
+        <title>Book notes by {profile.name}</title>
       </Head>
       <SidebarLayout sidebar={<ProfileSidebar profile={profile} />}>
         <Grid templateColumns="repeat(auto-fit, minmax(300px, 1fr))" gap={10}>
@@ -70,26 +64,11 @@ export async function getStaticProps({
 }) {
   if (!params.username) return;
   const profile = await getUserProfileFromUsername(params.username);
-  let userNotes = null;
-  let totalNotes = null;
-  if (profile) {
-    await Promise.all([
-      getUserNotes({ userId: profile.id }),
-      getTotalNotes({ userId: profile.id }),
-    ]).then((values) => {
-      if (values[0]) {
-        userNotes = values[0];
-      }
-      if (values[1]) {
-        totalNotes = values[1];
-      }
-    });
-  }
+  const userNotes = profile && (await getUserNotes({ userId: profile.id }));
   return {
     props: {
       notes: JSON.parse(JSON.stringify(userNotes)),
       profile: JSON.parse(JSON.stringify(profile)),
-      totalNotes: totalNotes ? Number(totalNotes) : null,
     },
   };
 }

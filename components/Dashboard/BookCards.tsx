@@ -30,7 +30,6 @@ export const BookCards = () => {
       dispatch({ type: 'LOADING' });
       try {
         const unsub = await subscribeToCurrentUserNotes((result) => {
-          dispatch({ type: 'LOADING' });
           setCards(result);
           dispatch({ type: 'LOADED' });
         });

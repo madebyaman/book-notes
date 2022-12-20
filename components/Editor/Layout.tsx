@@ -38,6 +38,7 @@ export const Layout = ({
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const [key, setKey] = useState(0);
 
   /**
    * Displays a flash message of success or failure
@@ -67,6 +68,7 @@ export const Layout = ({
   };
 
   const onSave = async () => {
+    console.log('content inside onSave', content, rating);
     if (!user || !user.emailVerified) return;
     setLoading(true);
     const firstParagraphElement = content.split('</p>', 1)[0];
@@ -137,8 +139,8 @@ export const Layout = ({
         success: true,
         message: 'Successfully deleted book note',
       });
+      resetState();
     } catch (e) {
-      console.log(e);
       showFlashMessage({
         success: false,
         message: 'Error deleting book note. Try again',

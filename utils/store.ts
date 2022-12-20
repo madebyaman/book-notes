@@ -42,6 +42,7 @@ export const NoteEditorStore = createStore<StoreModel>(
       state.bookId = payload;
     }),
     updateContent: action((state, payload) => {
+      console.log('1');
       state.content = payload;
     }),
     updateSelectedBook: action((state, payload) => {
@@ -54,6 +55,7 @@ export const NoteEditorStore = createStore<StoreModel>(
       state.title = payload;
     }),
     resetState: action((state) => {
+      console.log('11');
       state.selectedBook = null;
       state.rating = 0;
       state.title = '';

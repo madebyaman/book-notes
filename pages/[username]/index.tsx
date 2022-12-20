@@ -21,7 +21,6 @@ const UsernameNotes = ({
   profile,
   totalNotes,
 }: UsernameNotesInterface) => {
-  console.log(totalNotes);
   if (!profile) {
     return 'User profile not found';
   }
@@ -68,7 +67,7 @@ export async function getStaticProps({
 }: {
   params: { username: string };
 }) {
-  if (!params.username) return;
+  if (!params.username) return { props: null };
   const profile = await getUserProfileFromUsername(params.username);
   let userNotes = null;
   let totalNotes = null;

@@ -1,4 +1,4 @@
-import { Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react';
+import { Box, Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useContext } from 'react';
 import { signout } from '@/utils/auth';
@@ -12,7 +12,7 @@ export const Nav = (props: NavTypes) => {
   const user = useContext(AuthContext);
 
   return (
-    <header>
+    <Box as="header" mt={4}>
       <Flex justify={'space-between'} alignItems="center" gap="8">
         <Link href="/">
           <Logo />
@@ -143,6 +143,6 @@ export const Nav = (props: NavTypes) => {
           </ChakraLink>
         </Link>
       </Flex>
-    </header>
+    </Box>
   );
 };

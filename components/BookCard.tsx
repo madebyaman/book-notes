@@ -98,7 +98,7 @@ export const BookCard = ({
             {isProfileCard ? (
               <Button
                 as={Link}
-                href={`/${username}/${slug}`}
+                href={`/${username}/note/${slug}`}
                 width="full"
                 backgroundColor={'teal.50'}
                 color="primary.700"

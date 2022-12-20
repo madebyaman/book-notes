@@ -46,25 +46,25 @@ const BookNote = ({
 
   return (
     <>
+      <Head>
+        <title>{note.title}</title>
+      </Head>
       <Container maxW="container.lg">
-        <Head>
-          <title>{note.title}</title>
-        </Head>
         <Nav />
         <Box py="16">
           <Flex alignItems={'center'} justifyContent="center" gap="6">
             <Box>
-              <Link legacyBehavior passHref href={`/${profile.username}`}>
-                <Button
-                  leftIcon={<ArrowBackIcon />}
-                  backgroundColor="gray.100"
-                  _hover={{ backgroundColor: 'gray.200' }}
-                  mb="4"
-                  fontSize="sm"
-                >
-                  Book Notes
-                </Button>
-              </Link>
+              <Button
+                leftIcon={<ArrowBackIcon />}
+                as={Link}
+                href={`/${profile.username}`}
+                backgroundColor="gray.100"
+                _hover={{ backgroundColor: 'gray.200' }}
+                mb="4"
+                fontSize="sm"
+              >
+                Book Notes
+              </Button>
               {note.image && (
                 <Image
                   src={note.image}

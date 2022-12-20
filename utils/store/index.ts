@@ -11,3 +11,4 @@ export {
   resetState,
 } from './noteSlice';
 export { useAppDispatch, useAppSelector } from './hooks';
+export { saveBook, saveData, fetchDocument } from './noteSlice';

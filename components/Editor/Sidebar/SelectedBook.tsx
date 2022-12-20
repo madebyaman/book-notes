@@ -27,13 +27,11 @@ const SelectedBook = (): JSX.Element => {
     (async function () {
       setLoading(true);
       if (!bookId) {
-        return () => {
-          isSubscribed = false;
-        };
+        setLoading(false);
+        return;
       }
       const book = await getBook(bookId);
       dispatch(updateSelectedBook(book));
-
       setLoading(false);
     })();
 

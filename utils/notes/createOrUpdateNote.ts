@@ -13,6 +13,7 @@ export const createOrUpdateNote = async ({
   newDoc: BookNote;
   docId?: string;
 }) => {
+  console.log('Doc', newDoc);
   // First, check if slug is valid
   if (
     newDoc.slug &&

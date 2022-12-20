@@ -2,12 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Provider } from 'react-redux';
 
-import store from '@/utils/store/store';
-import {
-  NoteEditorStore,
-  useStoreActions,
-  useStoreState,
-} from '../../utils/store_old';
 import { Layout } from './Layout';
 import { StatusWrapper } from '../Status';
 import { useStatus } from '@/utils';
@@ -16,10 +10,15 @@ import { AuthContext } from '../Auth';
 import { CenteredLayout } from '../Layout';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
 import { ErrorFallback } from '../Error';
+import {
+  fetchDocument,
+  resetState,
+  useAppDispatch,
+  store,
+} from '@/utils/store';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
-  const fetchDocument = useStoreActions((state) => state.fetchDocument);
-  const resetState = useStoreActions((actions) => actions.resetState);
+  const noteStateDispatch = useAppDispatch();
   const { state: status, dispatch } = useStatus();
 
   useEffect(() => {
@@ -31,14 +30,14 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       // First, fetch the note and book
       (async function () {
         try {
-          await fetchDocument({ docId, isSubscribed });
+          await noteStateDispatch(fetchDocument({ docId }));
           dispatch({ type: 'LOADED' });
         } catch (e) {
           throw e;
         }
       })();
     } else {
-      resetState();
+      noteStateDispatch(resetState());
       dispatch({ type: 'LOADED' });
     }
 
@@ -46,7 +45,7 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
       isSubscribed = false;
     };
     // We disable eslint rule b/c otherwise as soon as state changes, useEffect will fetch document which doesn't exist.
-  }, [dispatch, docId, fetchDocument, resetState]);
+  }, [dispatch, docId, noteStateDispatch]);
 
   return (
     <ErrorBoundary

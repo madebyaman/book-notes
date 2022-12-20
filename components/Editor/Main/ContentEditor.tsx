@@ -1,6 +1,6 @@
+import { updateTitle, useAppDispatch, useAppSelector } from '@/utils/store';
 import { Box, Input } from '@chakra-ui/react';
 import { Editor, EditorContent } from '@tiptap/react';
-import { useStoreActions, useStoreState } from '@/utils/store';
 
 /**
  * Tiptap editor component. It also displays title.
@@ -12,8 +12,8 @@ const ContentEditor = ({
   editor: Editor | null;
   setShowMenu: (value: React.SetStateAction<boolean>) => void;
 }) => {
-  const title = useStoreState((state) => state.title);
-  const updateTitle = useStoreActions((actions) => actions.updateTitle);
+  const title = useAppSelector((state) => state.note.title);
+  const dispatch = useAppDispatch();
 
   return (
     <Box
@@ -33,7 +33,7 @@ const ContentEditor = ({
         value={title}
         onFocus={() => setShowMenu(false)}
         onChange={(e) => {
-          updateTitle(e.target.value);
+          dispatch(updateTitle(e.target.value));
         }}
       />
       <EditorContent editor={editor} />

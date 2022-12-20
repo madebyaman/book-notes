@@ -1,16 +1,18 @@
+import {
+  updateIsPublished,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/store';
 import { Checkbox, Text } from '@chakra-ui/react';
-import { useStoreActions, useStoreState } from '@/utils/store';
 import { ChangeEvent } from 'react';
 
 const PublishSwitch = () => {
-  const isPublished = useStoreState((state) => state.isPublished);
-  const updateIsPublished = useStoreActions(
-    (actions) => actions.updateIsPublished
-  );
+  const isPublished = useAppSelector((state) => state.note.isPublished);
+  const dispatch = useAppDispatch();
 
   const handleChecked = (e: ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.checked);
-    updateIsPublished(e.target.checked);
+    dispatch(updateIsPublished(e.target.checked));
   };
 
   return (

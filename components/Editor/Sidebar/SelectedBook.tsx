@@ -1,3 +1,9 @@
+import { getBook } from '@/utils/notes';
+import {
+  updateSelectedBook,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/store';
 import {
   Box,
   CircularProgress,
@@ -7,20 +13,27 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
-import { useStoreActions, useStoreState } from '@/utils/store';
 import BookSelect from './BookSelect';
 
 const SelectedBook = (): JSX.Element => {
-  const { bookId, selectedBook } = useStoreState((state) => state);
-  const fetchBook = useStoreActions((state) => state.fetchBook);
+  const bookId = useAppSelector((state) => state.note.bookId);
+  const selectedBook = useAppSelector((state) => state.note.selectedBook);
   const [loading, setLoading] = useState(true);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     let isSubscribed = true;
 
     (async function () {
       setLoading(true);
-      bookId && (await fetchBook({ bookId, isSubscribed }));
+      if (!bookId) {
+        return () => {
+          isSubscribed = false;
+        };
+      }
+      const book = await getBook(bookId);
+      dispatch(updateSelectedBook(book));
+
       setLoading(false);
     })();
 

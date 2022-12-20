@@ -1,12 +1,5 @@
 import { ArrowBackIcon } from '@chakra-ui/icons';
-import {
-  Box,
-  Button,
-  Flex,
-  Heading,
-  IconButton,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Button, Flex, Heading, IconButton } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 export const EditorTopbar = ({

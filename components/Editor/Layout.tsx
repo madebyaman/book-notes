@@ -8,7 +8,6 @@ import {
 } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
 
-import { useStoreActions, useStoreState } from '@/utils/store';
 import { ContentEditorWrapper } from './Main';
 import { EditorSidebar } from './Sidebar';
 import {

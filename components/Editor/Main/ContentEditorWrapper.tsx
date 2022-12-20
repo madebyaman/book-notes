@@ -1,17 +1,17 @@
+import { updateContent, useAppDispatch, useAppSelector } from '@/utils/store';
 import { Box } from '@chakra-ui/react';
 import Placeholder from '@tiptap/extension-placeholder';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useState } from 'react';
 
-import { useStoreActions, useStoreState } from '@/utils/store';
 import ContentEditor from './ContentEditor';
 import EditorMenu from './EditorMenu';
 
-export const ContentEditorWrapper = ({}) => {
+export const ContentEditorWrapper = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const content = useStoreState((state) => state.content);
-  const updateContent = useStoreActions((actions) => actions.updateContent);
+  const content = useAppSelector((state) => state.note.content);
+  const dispatch = useAppDispatch();
 
   const editor = useEditor({
     extensions: [
@@ -25,7 +25,7 @@ export const ContentEditorWrapper = ({}) => {
       setShowMenu(true);
     },
     onBlur({ editor }) {
-      editor && updateContent(editor.getHTML());
+      editor && dispatch(updateContent(editor.getHTML()));
     },
   });
 

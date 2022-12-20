@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Book, BookJSON } from '@/@types';
 import Select from 'react-select';
-import { useStoreActions, useStoreState } from '@/utils/store';
 import { useStatus } from '@/utils';
+import {
+  updateBookId,
+  updateSelectedBook,
+  useAppDispatch,
+  useAppSelector,
+} from '@/utils/store';
 
 /**
  * Convert space inside a string to +
@@ -21,9 +26,8 @@ function convertSlashToPlus(str: string) {
 const BookSelect = () => {
   const [bookSearchString, setBookSearchString] = React.useState('');
   const [books, setBooks] = useState<Book[]>([]);
-  const selectedBook = useStoreState((state) => state.selectedBook);
-  const setSelectedBook = useStoreActions((state) => state.updateSelectedBook);
-  const updateBookId = useStoreActions((state) => state.updateBookId);
+  const selectedBook = useAppSelector((state) => state.note.selectedBook);
+  const noteDispatch = useAppDispatch();
   const { state, dispatch } = useStatus();
 
   useEffect(() => {
@@ -80,11 +84,11 @@ const BookSelect = () => {
   const handleSelectChange = (newVal: Book | null) => {
     if (newVal) {
       const value = { ...newVal, key: convertSlashToPlus(newVal.key) };
-      setSelectedBook(value);
-      updateBookId(value.key);
+      noteDispatch(updateSelectedBook(value));
+      noteDispatch(updateBookId(value.key));
       return;
     }
-    setSelectedBook(newVal);
+    noteDispatch(updateSelectedBook(newVal));
   };
 
   return (

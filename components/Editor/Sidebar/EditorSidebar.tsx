@@ -10,17 +10,17 @@ import {
 import { CheckCircleIcon, WarningIcon } from '@chakra-ui/icons';
 import { ChangeEvent, useContext, useEffect, useState } from 'react';
 
-import { useStoreActions, useStoreState } from '@/utils/store';
 import Ratings from './Ratings';
 import PublishSwitch from './PublishSwitch';
 import { checkNoteSlugExists } from '@/utils/notes';
 import { AuthContext } from '../../Auth';
 import SelectedBook from './SelectedBook';
+import { updateSlug, useAppDispatch, useAppSelector } from '@/utils/store';
 
 export const EditorSidebar = ({ docId }: { docId?: string }) => {
   const user = useContext(AuthContext);
-  const slug = useStoreState((state) => state.slug);
-  const updateSlug = useStoreActions((state) => state.updateSlug);
+  const slug = useAppSelector((state) => state.note.slug);
+  const dispatch = useAppDispatch();
   const [slugError, setSlugError] = useState('');
 
   useEffect(() => {
@@ -46,7 +46,7 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
       setSlugError('Spaces are not allowed');
       return;
     } else setSlugError('');
-    updateSlug(e.target.value);
+    dispatch(updateSlug(e.target.value));
   };
 
   return (

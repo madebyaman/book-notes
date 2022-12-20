@@ -1,10 +1,10 @@
 import { FaStar } from 'react-icons/fa';
 import { Box, IconButton } from '@chakra-ui/react';
-import { useStoreState, useStoreActions } from '@/utils/store';
+import { updateRating, useAppDispatch, useAppSelector } from '@/utils/store';
 
 const Ratings = () => {
-  const rating = useStoreState((state) => state.rating);
-  const updateRating = useStoreActions((state) => state.updateRating);
+  const rating = useAppSelector((state) => state.note.rating);
+  const dispatch = useAppDispatch();
 
   return (
     <Box mb="6">
@@ -15,7 +15,7 @@ const Ratings = () => {
           <IconButton
             aria-label={`Set rating: ${id}`}
             key={id}
-            onClick={() => updateRating(Number(id))}
+            onClick={() => dispatch(updateRating(Number(id)))}
             isActive={id <= stars ? true : false}
             variant={'unstyled'}
             icon={

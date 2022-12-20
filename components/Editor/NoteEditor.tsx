@@ -1,12 +1,13 @@
 import React, { useContext, useEffect } from 'react';
-import { StoreProvider } from 'easy-peasy';
 import { ErrorBoundary } from 'react-error-boundary';
+import { Provider } from 'react-redux';
 
+import store from '@/utils/store/store';
 import {
   NoteEditorStore,
   useStoreActions,
   useStoreState,
-} from '../../utils/store';
+} from '../../utils/store_old';
 import { Layout } from './Layout';
 import { StatusWrapper } from '../Status';
 import { useStatus } from '@/utils';
@@ -15,7 +16,6 @@ import { AuthContext } from '../Auth';
 import { CenteredLayout } from '../Layout';
 import { ResendVerificationEmail } from '../Layout/ResendVerificationEmail';
 import { ErrorFallback } from '../Error';
-import { Skeleton, Stack } from '@chakra-ui/react';
 
 const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const fetchDocument = useStoreActions((state) => state.fetchDocument);
@@ -68,9 +68,9 @@ export const NoteEditor = ({ docId }: { docId?: string }) => {
   if (user) {
     if (user.emailVerified) {
       return (
-        <StoreProvider store={NoteEditorStore}>
+        <Provider store={store}>
           <NoteEditorConsumer docId={docId} />
-        </StoreProvider>
+        </Provider>
       );
     }
     return (

@@ -89,59 +89,60 @@ export const Nav = (props: NavTypes) => {
             </Link>
           </>
         )}
-        <Link href={user ? '#' : '/signin'} legacyBehavior passHref>
-          <ChakraLink
-            onClick={() => user && signout()}
-            color="gray.600"
-            display="flex"
-            flexDir={'column'}
-            alignItems={'center'}
-            transition={'all 200ms ease-out'}
-            _hover={{
-              textDecoration: 'none',
-              color: 'primary.400',
-            }}
-          >
-            {user ? (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                style={{
-                  width: '22px',
-                  height: '22px',
-                }}
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                />
-              </svg>
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                style={{
-                  width: '22px',
-                  height: '22px',
-                }}
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-                />
-              </svg>
-            )}
-            <Text fontSize="md">{user ? 'Sign out' : 'Sign in'}</Text>
-          </ChakraLink>
-        </Link>
+        <ChakraLink
+          as={Link}
+          href={user ? '#' : '/signin'}
+          onClick={() => user && signout()}
+          color="gray.600"
+          display="flex"
+          flexDir={'column'}
+          alignItems={'center'}
+          transition={'all 200ms ease-out'}
+          _hover={{
+            textDecoration: 'none',
+            color: 'primary.400',
+          }}
+        >
+          {user ? (
+            <Box
+              as={'svg'}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              style={{
+                width: '22px',
+                height: '22px',
+              }}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </Box>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              style={{
+                width: '22px',
+                height: '22px',
+              }}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+              />
+            </svg>
+          )}
+          <Text fontSize="md">{user ? 'Sign out' : 'Sign in'}</Text>
+        </ChakraLink>
       </Flex>
     </Box>
   );

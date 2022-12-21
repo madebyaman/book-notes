@@ -12,14 +12,13 @@ import {
   Input,
   InputGroup,
   Button,
-  useToast,
+  createStandaloneToast,
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { NextPage } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import Image from 'next/image';
 import { signin } from '@/utils/auth';
 import { Logo } from '@/components/Logo';
 
@@ -37,7 +36,7 @@ const Login: NextPage = () => {
     password: '',
     status: 'INIT',
   });
-  const toast = useToast();
+  const { toast } = createStandaloneToast();
   const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {

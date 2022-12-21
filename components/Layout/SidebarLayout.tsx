@@ -9,7 +9,7 @@ export const SidebarLayout = ({
   children: ReactNode;
 }) => {
   return (
-    <Grid templateColumns={{ base: '1fr', lg: '3fr 5fr' }}>
+    <Grid templateColumns={{ base: '1fr', lg: '1fr 2fr' }}>
       <Box as="section" py="3" px="8">
         <Container maxW="container.lg">{sidebar}</Container>
       </Box>

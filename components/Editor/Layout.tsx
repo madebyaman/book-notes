@@ -1,12 +1,6 @@
-import {
-  Box,
-  Container,
-  Flex,
-  Skeleton,
-  Stack,
-  useToast,
-} from '@chakra-ui/react';
+import { Box, Container, Flex, Skeleton, Stack } from '@chakra-ui/react';
 import { useContext, useState } from 'react';
+import { createStandaloneToast } from '@chakra-ui/toast';
 
 import { ContentEditorWrapper } from './Main';
 import { EditorSidebar } from './Sidebar';
@@ -24,7 +18,7 @@ export const Layout = ({
   docId?: string;
 }) => {
   const user = useContext(AuthContext);
-  const toast = useToast();
+  const { toast } = createStandaloneToast();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const dispatch = useAppDispatch();

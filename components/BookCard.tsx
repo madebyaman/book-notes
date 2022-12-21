@@ -87,7 +87,8 @@ export const BookCard = ({
             {title}
           </Heading>
           {excerpt && (
-            <Text
+            <Box
+              as="div"
               color="gray.700"
               lineHeight={'1.7'}
               fontSize={'18px'}

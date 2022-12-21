@@ -1,6 +1,7 @@
 import type { AppProps } from 'next/app';
 import { ChakraProvider } from '@chakra-ui/react';
 import { ErrorBoundary } from 'react-error-boundary';
+import { createStandaloneToast } from '@chakra-ui/react';
 
 import '../styles/globals.css';
 import { AuthContextProvider } from '@/components/Auth';
@@ -9,8 +10,10 @@ import { theme } from '@/components';
 import Head from 'next/head';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { ToastContainer } = createStandaloneToast();
   return (
     <ChakraProvider theme={theme}>
+      <ToastContainer />
       <ErrorBoundary FallbackComponent={ErrorFallback}>
         <AuthContextProvider>
           <Head>

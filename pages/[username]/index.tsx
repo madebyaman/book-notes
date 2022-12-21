@@ -72,17 +72,8 @@ export async function getStaticProps({
   let userNotes = null;
   let totalNotes = null;
   if (profile) {
-    await Promise.all([
-      getUserNotes({ userId: profile.id }),
-      getTotalNotes({ userId: profile.id }),
-    ]).then((values) => {
-      if (values[0]) {
-        userNotes = values[0];
-      }
-      if (values[1]) {
-        totalNotes = values[1];
-      }
-    });
+    userNotes = await getUserNotes({ userId: profile.id });
+    totalNotes = getTotalNotes({ userId: profile.id });
   }
   return {
     props: {

@@ -7,3 +7,5 @@ export { getUserProfileFromUsername } from './getUserProfileFromUsername';
 export { checkUsernameExist } from './checkUsernameExist';
 export { signin } from './signin';
 export { signup, UsernameError } from './signup';
+export { sendResetPasswordEmail } from './sendResetPasswordEmail';
+export { updateUserPassword } from './updateUserPassword';

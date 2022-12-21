@@ -1,69 +1,52 @@
+import { Logo } from '@/components/Logo';
+import { sendResetPasswordEmail } from '@/utils/auth';
 import {
-  Text,
-  Heading,
-  Link as ChakraLink,
-  Checkbox,
-  Stack,
-  Flex,
-  useColorModeValue,
   Box,
-  FormControl,
-  FormLabel,
-  Input,
-  InputGroup,
   Button,
   createStandaloneToast,
+  Flex,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Link as ChakraLink,
+  Stack,
+  Text,
+  useColorModeValue,
 } from '@chakra-ui/react';
-import Link from 'next/link';
 import { NextPage } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import { signin } from '@/utils/auth';
-import { Logo } from '@/components/Logo';
 
 interface FormState {
-  remember: boolean;
   email: string;
-  password: string;
   status: 'INIT' | 'LOADING' | 'SUCCESS';
 }
 
-const Login: NextPage = () => {
+const ForgotPassword: NextPage = () => {
   const [formState, setFormState] = useState<FormState>({
-    remember: false,
     email: '',
-    password: '',
     status: 'INIT',
   });
   const { toast } = createStandaloneToast();
-  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setFormState({ ...formState, status: 'LOADING' });
 
     try {
-      await signin({
-        email: formState.email,
-        password: formState.password,
-        remember: formState.remember,
-      });
+      await sendResetPasswordEmail(formState.email);
       setFormState({ ...formState, status: 'SUCCESS' });
       toast({
-        title: 'Logged in ✅',
-        description: 'You have successfully logged in',
+        title: '🍺 Email sent',
+        description: 'Email has been sent. Check your inbox.',
         status: 'success',
         duration: 5000,
         isClosable: true,
       });
-      router.push('/dashboard');
     } catch (e) {
-      let message = 'Error signin in.';
-      if (e instanceof Error) message = e.message;
       toast({
-        title: '⚠️ Login unsuccessful',
-        description: message,
+        title: '⚠️ Unable to send email',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -71,9 +54,7 @@ const Login: NextPage = () => {
     } finally {
       setFormState({
         ...formState,
-        remember: false,
         email: '',
-        password: '',
         status: 'SUCCESS',
       });
     }
@@ -89,12 +70,12 @@ const Login: NextPage = () => {
       >
         <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
           <Head>
-            <title>Sign in</title>
+            <title>Reset your password</title>
           </Head>
           <Stack align={'center'} my="4" spacing="4">
             <Logo />
             <Heading fontSize={'4xl'} as="h1" color="text.400">
-              Sign in to your account
+              Reset your password
             </Heading>
           </Stack>
           <Box
@@ -122,33 +103,6 @@ const Login: NextPage = () => {
                       }
                     />
                   </FormControl>
-                  <FormControl mt={'6'} id="password" isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <InputGroup>
-                      <Input
-                        type="password"
-                        value={formState.password}
-                        onChange={(e) =>
-                          setFormState({
-                            ...formState,
-                            password: e.target.value,
-                          })
-                        }
-                      />
-                    </InputGroup>
-                  </FormControl>
-                  <Checkbox
-                    isChecked={formState.remember}
-                    onChange={() =>
-                      setFormState({
-                        ...formState,
-                        remember: !formState.remember,
-                      })
-                    }
-                    colorScheme="teal"
-                  >
-                    Remember me
-                  </Checkbox>
                 </Stack>
 
                 <Stack spacing={10} py={2} mt={4}>
@@ -161,24 +115,14 @@ const Login: NextPage = () => {
                     isLoading={formState.status === 'LOADING'}
                     loadingText={'Logging in'}
                   >
-                    Log in
+                    Send reset email
                   </Button>
                 </Stack>
               </form>
               <Text align={'center'} display={'inline-block'}>
-                Not a user?{' '}
-                <ChakraLink href="/signup" color={'teal.600'}>
-                  Sign up
-                </ChakraLink>
-              </Text>
-              <Text align={'center'} display={'inline-block'}>
-                Forgot Password?{' '}
-                <ChakraLink
-                  as={Link}
-                  href="/forgot-password"
-                  color={'teal.600'}
-                >
-                  Reset
+                Want to sign in?{' '}
+                <ChakraLink href="/signin" color={'teal.600'}>
+                  Sign in
                 </ChakraLink>
               </Text>
             </Stack>
@@ -189,4 +133,4 @@ const Login: NextPage = () => {
   );
 };
 
-export default Login;
+export default ForgotPassword;

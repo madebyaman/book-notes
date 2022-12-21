@@ -1,4 +1,4 @@
-import { Button, Grid, Stack } from '@chakra-ui/react';
+import { Link as ChakraLink, Grid, Link, Stack } from '@chakra-ui/react';
 
 import { getUserProfileFromUsername } from '@/utils/auth';
 import { getTotalPages, getUsernames, getUserNotes } from '@/utils/notes';
@@ -9,6 +9,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorFallback } from '@/components/Error';
 import { BookCard } from '@/components/BookCard';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
@@ -17,6 +18,9 @@ interface UsernameNotesInterface {
 }
 
 const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
+  const router = useRouter();
+  const { username } = router.query;
+  if (typeof username !== 'string') return 'User not found';
   if (!profile) {
     return 'User profile not found';
   }
@@ -42,14 +46,26 @@ const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
           ))}
         </Grid>
         {pages > 1 && (
-          <Stack direction={'row'} spacing={4} align="center">
-            <Button colorScheme="teal" variant="solid">
+          <Stack
+            direction={'row'}
+            spacing={4}
+            mt={8}
+            textAlign="center"
+            align="center"
+          >
+            <ChakraLink colorScheme="teal" variant="solid">
               1
-            </Button>
+            </ChakraLink>
             {Array.from(Array(pages - 1).keys()).map((page) => (
-              <Button colorScheme="teal" variant="outline" key={page}>
+              <ChakraLink
+                as={Link}
+                colorScheme="teal"
+                variant={'solid'}
+                key={page}
+                href={`/${username}/page/${page + 2}`}
+              >
                 {page + 2}
-              </Button>
+              </ChakraLink>
             ))}
           </Stack>
         )}

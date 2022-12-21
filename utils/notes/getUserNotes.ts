@@ -1,11 +1,14 @@
 import {
   collection,
+  doc,
   endAt,
+  getDoc,
   getDocs,
   limit,
   orderBy,
   query,
   QuerySnapshot,
+  startAfter,
   startAt,
   where,
 } from 'firebase/firestore';
@@ -21,15 +24,36 @@ export const getUserNotes = async ({
   page?: number;
 }) => {
   const bookNotesCollectionRef = collection(db, 'book-notes');
-  const order = page ? startAt(page) : limit(totalNotesInOnePage);
+  let lastVisible = null;
+  if (page && page > 1) {
+    const q = query(
+      bookNotesCollectionRef,
+      where('userId', '==', userId),
+      where('isPublished', '==', true),
+      orderBy('lastUpdated', 'desc'),
+      limit((page - 1) * totalNotesInOnePage)
+    );
+    const documentSnapshots = await getDocs(q);
+    lastVisible = documentSnapshots.docs[documentSnapshots.docs.length - 1];
+  }
 
-  const q = query(
-    bookNotesCollectionRef,
-    where('userId', '==', userId),
-    where('isPublished', '==', true),
-    orderBy('lastUpdated', 'desc'),
-    order
-  );
+  const q = lastVisible
+    ? query(
+        bookNotesCollectionRef,
+        where('userId', '==', userId),
+        where('isPublished', '==', true),
+        orderBy('lastUpdated', 'desc'),
+        startAfter(lastVisible),
+        limit(totalNotesInOnePage)
+      )
+    : query(
+        bookNotesCollectionRef,
+        where('userId', '==', userId),
+        where('isPublished', '==', true),
+        orderBy('lastUpdated', 'desc'),
+        limit(totalNotesInOnePage)
+      );
+
   try {
     const docSnap = (await getDocs(q)) as QuerySnapshot<DashboardNote>;
     const notes = docSnap.docs.map((note) => ({

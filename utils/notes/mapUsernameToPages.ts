@@ -8,16 +8,19 @@ export async function mapUsernameToPages(usernames: string[]) {
 
     if (!userProfile) return null;
     const pages = await getTotalPages({ userId: userProfile.id });
-    return pages;
+    return {
+      params: {
+        username,
+        page: pages ? pages.toString() : '1',
+      },
+    };
   };
 
-  return await Promise.all(
+  const userNameWithPages = await Promise.all(
     usernames.map(async (username) => {
-      const pages = await getPages(username);
-      return {
-        username,
-        page: pages,
-      };
+      return await getPages(username);
     })
   );
+
+  return userNameWithPages;
 }

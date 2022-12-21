@@ -1,4 +1,4 @@
-import { Button, Grid, Stack } from '@chakra-ui/react';
+import { Link as ChakraLink, Grid, Stack } from '@chakra-ui/react';
 
 import { getUserProfileFromUsername } from '@/utils/auth';
 import { getTotalPages, getUsernames, getUserNotes } from '@/utils/notes';
@@ -10,6 +10,8 @@ import { ErrorFallback } from '@/components/Error';
 import { BookCard } from '@/components/BookCard';
 import Head from 'next/head';
 import { mapUsernameToPages } from '@/utils/notes/mapUsernameToPages';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
@@ -18,6 +20,13 @@ interface UsernameNotesInterface {
 }
 
 const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
+  const router = useRouter();
+  const { page, username } = router.query;
+  const numberedPage = Number(page);
+
+  if (Number.isNaN(numberedPage)) return 'Invalid page number';
+  if (typeof username !== 'string') return 'User not found';
+
   if (!profile) {
     return 'User profile not found';
   }
@@ -42,11 +51,27 @@ const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
             />
           ))}
         </Grid>
-        <Stack direction={'row'} spacing={4} align="center">
-          <Button colorScheme="teal" variant="solid">
-            Page 1
-          </Button>
-        </Stack>
+        {pages > 1 && (
+          <Stack
+            direction={'row'}
+            spacing={4}
+            mt={8}
+            textAlign="center"
+            align="center"
+          >
+            {Array.from(Array(pages).keys()).map((page) => (
+              <ChakraLink
+                as={Link}
+                colorScheme="teal"
+                variant={page + 1 === numberedPage ? 'solid' : 'outline'}
+                key={page}
+                href={`/${username}/page/${page + 1}`}
+              >
+                {page + 1}
+              </ChakraLink>
+            ))}
+          </Stack>
+        )}
       </SidebarLayout>
     </ErrorBoundary>
   );
@@ -55,14 +80,7 @@ const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
 export async function getStaticPaths() {
   const usernames = await getUsernames();
   const usernameWithPages = await mapUsernameToPages(usernames);
-
-  const paths = usernames.map((username) => {
-    return {
-      params: usernameWithPages,
-    };
-  });
-
-  return { paths, fallback: 'blocking' };
+  return { paths: usernameWithPages, fallback: 'blocking' };
 }
 
 export async function getStaticProps({
@@ -71,7 +89,14 @@ export async function getStaticProps({
   params: { username: string; page: string };
 }) {
   const numberedPage = Number(params.page);
-  if (!params.username || Number.isNaN(numberedPage)) return;
+  if (!params.username || Number.isNaN(numberedPage))
+    return {
+      props: {
+        notes: null,
+        profile: null,
+        pages: null,
+      },
+    };
   const profile = await getUserProfileFromUsername(params.username);
   let userNotes = null;
   let pages = null;

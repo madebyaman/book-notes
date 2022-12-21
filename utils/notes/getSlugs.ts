@@ -21,10 +21,9 @@ export async function getSlugs(usernames: string[]) {
       where('isPublished', '==', true)
     );
 
-    // { params: { slug: string; username: string } }[]
-
     const notesSnap = (await getDocs(q)) as QuerySnapshot<DashboardNote>;
-    let slugsWithUsername: any = [];
+    let slugsWithUsername: { params: { slug: string; username: string } }[] =
+      [];
 
     notesSnap.forEach((doc) => {
       const newSlug = {

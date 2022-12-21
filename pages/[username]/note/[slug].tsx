@@ -126,6 +126,7 @@ const BookNote = ({
       <Container mt="16">
         <Box
           fontSize={'19px'}
+          className={`typography`}
           dangerouslySetInnerHTML={{ __html: note.content }}
         ></Box>
       </Container>

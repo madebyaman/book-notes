@@ -1,0 +1,144 @@
+.typography {
+  --background-body: #fff;
+  --text-main: #363636;
+  --links: #0076d1;
+  --text-bright: #000;
+  --focus: #0096bfab;
+  --highlight: #ff0;
+  --background: #efefef;
+}
+
+.typography {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+  line-height: 1.4;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 0 10px;
+  word-wrap: break-word;
+  color: var(--text-main);
+  background: var(--background-body);
+  text-rendering: optimizeLegibility;
+}
+
+.typography a {
+    text-decoration: none;
+    color: var(--links);
+  }
+
+  .typography a:hover {
+    text-decoration: underline;
+  }
+
+  .typography h1 {
+    font-size: 2.2em;
+    margin-top: 0;
+  }
+  .typography h2 {
+    font-size: 1.8em;
+    margin-top: 0;
+  }
+  .typography h3 {
+    font-size: 1.6em;
+    margin-top: 0;
+  }
+  .typography h4 {
+    font-size: 1.3em;
+    margin-top: 0;
+  }
+
+  .typography h1,
+  .typography h2,
+  .typography h3,
+  .typography h4,
+  .typography h5,
+  .typography h6 {
+    margin-bottom: 12px;
+    margin-top: 24px;
+  }
+
+  .typography h1,
+  .typography h2,
+  .typography h3,
+  .typography h4,
+  .typography h5,
+  .typography h6,
+  .typography strong {
+    color: var(--text-bright);
+  }
+
+  .typography h1,
+  .typography h2,
+  .typography h3,
+  .typography h4,
+  .typography h5,
+  .typography h6,
+  .typography b,
+  .typography strong,
+  .typography th {
+    font-weight: 600;
+  }
+
+  .typography q::before {
+    content: none;
+  }
+
+  .typography q::after {
+    content: none;
+  }
+
+  .typography blockquote,
+  .typography q {
+    border-left: 4px solid var(--focus);
+    margin: 1.5em 0;
+    padding: 0.5em 1em;
+    font-style: italic;
+  }
+
+  .typography blockquote > footer {
+    font-style: normal;
+    border: 0;
+  }
+
+  .typography blockquote cite {
+    font-style: normal;
+  }
+
+  .typography address {
+    font-style: normal;
+  }
+
+  .typography a[href^='mailto\:']::before {
+    content: '📧 ';
+  }
+
+  .typography a[href^='tel\:']::before {
+    content: '📞 ';
+  }
+
+  .typography a[href^='sms\:']::before {
+    content: '💬 ';
+  }
+
+  .typography mark {
+    background-color: var(--highlight);
+    border-radius: 2px;
+    padding: 0 2px 0 2px;
+    color: #000;
+  }
+
+  .typography a > code,
+  .typography a > strong {
+    color: inherit;
+  }
+
+  .typography p + p {
+    margin-top: 1.5rem;
+  }
+
+  .typography ul {
+    margin: 1rem 1.5rem;
+  }
+
+  .typography li {
+    margin: 0.5rem 0;
+  }

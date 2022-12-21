@@ -4,6 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { createStandaloneToast } from '@chakra-ui/react';
 
 import '../styles/globals.css';
+import '../styles/typography.css';
 import { AuthContextProvider } from '@/components/Auth';
 import ErrorFallback from '@/components/ErrorFallback';
 import { theme } from '@/components';

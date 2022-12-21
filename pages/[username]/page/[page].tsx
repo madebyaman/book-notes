@@ -1,17 +1,17 @@
-import { Link as ChakraLink, Grid, Stack } from '@chakra-ui/react';
+import { Button, Grid, Stack } from '@chakra-ui/react';
 
-import { getUserProfileFromUsername } from '@/utils/auth';
-import { getTotalPages, getUsernames, getUserNotes } from '@/utils/notes';
 import { DashboardNoteWithDate, UserProfile } from '@/@types';
+import { BookCard } from '@/components/BookCard';
+import { ErrorFallback } from '@/components/Error';
 import { SidebarLayout } from '@/components/Layout';
 import { ProfileSidebar } from '@/components/Profile';
-import { ErrorBoundary } from 'react-error-boundary';
-import { ErrorFallback } from '@/components/Error';
-import { BookCard } from '@/components/BookCard';
-import Head from 'next/head';
+import { getUserProfileFromUsername } from '@/utils/auth';
+import { getTotalPages, getUsernames, getUserNotes } from '@/utils/notes';
 import { mapUsernameToPages } from '@/utils/notes/mapUsernameToPages';
-import { useRouter } from 'next/router';
+import Head from 'next/head';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { ErrorBoundary } from 'react-error-boundary';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
@@ -60,15 +60,16 @@ const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
             align="center"
           >
             {Array.from(Array(pages).keys()).map((page) => (
-              <ChakraLink
+              <Button
                 as={Link}
                 colorScheme="teal"
                 variant={page + 1 === numberedPage ? 'solid' : 'outline'}
+                disabled={page + 1 === numberedPage}
                 key={page}
                 href={`/${username}/page/${page + 1}`}
               >
                 {page + 1}
-              </ChakraLink>
+              </Button>
             ))}
           </Stack>
         )}

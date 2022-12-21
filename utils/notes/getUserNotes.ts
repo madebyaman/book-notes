@@ -21,7 +21,7 @@ export const getUserNotes = async ({
   page?: number;
 }) => {
   const bookNotesCollectionRef = collection(db, 'book-notes');
-  const order = page ? startAt(page) : endAt(totalNotesInOnePage);
+  const order = page ? startAt(page) : limit(totalNotesInOnePage);
 
   const q = query(
     bookNotesCollectionRef,

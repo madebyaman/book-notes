@@ -1,7 +1,8 @@
 import db from '@/firebase';
 import { collection, orderBy, query, where, getDocs } from 'firebase/firestore';
+import { totalNotesInOnePage } from './constants';
 
-export async function getTotalNotes({
+export async function getTotalPages({
   userId,
 }: {
   userId: string;
@@ -15,7 +16,8 @@ export async function getTotalNotes({
   );
   try {
     const snapshot = await getDocs(q);
-    return snapshot.size;
+    const totalNotes = snapshot.size;
+    return Math.ceil(totalNotes / totalNotesInOnePage);
   } catch (e) {
     return null;
   }

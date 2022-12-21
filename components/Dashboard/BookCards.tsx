@@ -63,10 +63,10 @@ export const BookCards = () => {
           rowGap="16"
         >
           {cards.length > 0 && user ? (
-            cards.map((card) => {
+            cards.map((card, id) => {
               return (
                 <BookCard
-                  key={card.slug}
+                  key={card.slug || id}
                   card={card}
                   isProfileCard={false}
                   username={user?.username}

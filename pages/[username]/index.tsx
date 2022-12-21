@@ -1,7 +1,7 @@
-import { Grid } from '@chakra-ui/react';
+import { Button, Grid, Stack } from '@chakra-ui/react';
 
 import { getUserProfileFromUsername } from '@/utils/auth';
-import { getTotalNotes, getUsernames, getUserNotes } from '@/utils/notes';
+import { getTotalPages, getUsernames, getUserNotes } from '@/utils/notes';
 import { DashboardNoteWithDate, UserProfile } from '@/@types';
 import { SidebarLayout } from '@/components/Layout';
 import { ProfileSidebar } from '@/components/Profile';
@@ -13,14 +13,10 @@ import Head from 'next/head';
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
   profile: UserProfile;
-  totalNotes: number;
+  pages: number;
 }
 
-const UsernameNotes = ({
-  notes,
-  profile,
-  totalNotes,
-}: UsernameNotesInterface) => {
+const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
   if (!profile) {
     return 'User profile not found';
   }
@@ -45,6 +41,18 @@ const UsernameNotes = ({
             />
           ))}
         </Grid>
+        {pages > 1 && (
+          <Stack direction={'row'} spacing={4} align="center">
+            <Button colorScheme="teal" variant="solid">
+              1
+            </Button>
+            {Array.from(Array(pages - 1).keys()).map((page) => (
+              <Button colorScheme="teal" variant="outline" key={page}>
+                {page + 2}
+              </Button>
+            ))}
+          </Stack>
+        )}
       </SidebarLayout>
     </ErrorBoundary>
   );
@@ -70,16 +78,16 @@ export async function getStaticProps({
   if (!params.username) return { props: null };
   const profile = await getUserProfileFromUsername(params.username);
   let userNotes = null;
-  let totalNotes = null;
+  let pages = null;
   if (profile) {
     userNotes = await getUserNotes({ userId: profile.id });
-    totalNotes = getTotalNotes({ userId: profile.id });
+    pages = await getTotalPages({ userId: profile.id });
   }
   return {
     props: {
       notes: JSON.parse(JSON.stringify(userNotes)),
       profile: JSON.parse(JSON.stringify(profile)),
-      totalNotes: totalNotes ? Number(totalNotes) : null,
+      pages: pages ? Number(pages) : null,
     },
   };
 }

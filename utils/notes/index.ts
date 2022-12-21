@@ -17,4 +17,5 @@ export {
 } from './createOrUpdateNote';
 export { deleteBookNote } from './deleteBookNote';
 export { uploadBookCover } from './uploadBookCover';
-export { getTotalNotes } from './getTotalNotes';
+export { getTotalPages } from './getTotalPages';
+export { mapUsernameToPages } from './mapUsernameToPages';

@@ -1,3 +1,6 @@
 {
+  "rules": {
+    "no-console": "warn"
+  },
   "extends": "next/core-web-vitals"
 }

@@ -119,11 +119,11 @@ const BookNote = ({
       </Container>
       <Box
         backgroundColor="light.100"
-        width="container.lg"
+        width="container.xl"
         height="5px"
         m="0 auto"
       />
-      <Container mt="16">
+      <Container maxW="2xl" mt="16">
         <Box
           fontSize={'19px'}
           className={`typography`}
@@ -140,7 +140,7 @@ export async function getStaticPaths() {
 
   return {
     paths: userNotes,
-    fallback: false,
+    fallback: 'blocking',
   };
 }
 

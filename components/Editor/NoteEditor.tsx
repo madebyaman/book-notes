@@ -22,7 +22,6 @@ const NoteEditorConsumer = ({ docId }: { docId?: string }) => {
   const { state: status, dispatch } = useStatus();
 
   useEffect(() => {
-    console.log('fetching');
     let isSubscribed = true;
 
     dispatch({ type: 'LOADING' });

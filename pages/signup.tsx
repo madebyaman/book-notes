@@ -21,7 +21,6 @@ import {
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
-import Image from 'next/image';
 
 import { checkUsernameExist, signup, UsernameError } from '@/utils/auth';
 import { useInput } from '@/utils';
@@ -68,6 +67,7 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    console.log('submitting');
     e.preventDefault();
     if (!errorState.usernameValid || !errorState.passwordValid) {
       setErrorState({ ...errorState, showErrors: true });
@@ -84,7 +84,6 @@ export default function Signup() {
     } catch (e) {
       let message = 'Error signing up. Try again';
       if (e instanceof UsernameError) message = e.message;
-      else console.error(e);
       setErrorState({ ...errorState, customError: message, showErrors: true });
     } finally {
       setIsLoading(false);
@@ -126,7 +125,13 @@ export default function Signup() {
                   <Box>
                     <FormControl id="name" isRequired>
                       <FormLabel>Name</FormLabel>
-                      <Input type="text" {...nameProps} />
+                      <Input
+                        type="text"
+                        {...nameProps}
+                        onBlur={() =>
+                          setErrorState({ ...errorState, customError: '' })
+                        }
+                      />
                     </FormControl>
                   </Box>
                   <Box>

@@ -9,3 +9,4 @@ export { signin } from './signin';
 export { signup, UsernameError } from './signup';
 export { sendResetPasswordEmail } from './sendResetPasswordEmail';
 export { updateUserPassword } from './updateUserPassword';
+export { verifyEmail } from './verifyEmail';

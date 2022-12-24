@@ -81,7 +81,7 @@ function reducer(state: typeof initialState, action: ProfileActions) {
 export const ProfilePreferences = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [profilePicture, setProfilePicture] = useState<File | undefined>();
-  const userProfile = useUserProfileHook();
+  const { profile, loading } = useUserProfileHook();
   const user = useContext(AuthContext);
   const toast = useToast();
   const router = useRouter();
@@ -89,17 +89,21 @@ export const ProfilePreferences = () => {
   useEffect(() => {
     let isSubscribed = true;
 
-    if (userProfile && isSubscribed) {
-      dispatch({ type: 'UPDATE_NAME', payload: userProfile.name });
-      dispatch({ type: 'UPDATE_USERNAME', payload: userProfile.username });
-      dispatch({ type: 'UPDATE_BIO', payload: userProfile.bio || '' });
-      dispatch({ type: 'UPDATE_PHOTO', payload: userProfile.photo || null });
+    if (profile && isSubscribed) {
+      dispatch({ type: 'UPDATE_NAME', payload: profile.name });
+      dispatch({ type: 'UPDATE_USERNAME', payload: profile.username });
+      dispatch({ type: 'UPDATE_BIO', payload: profile.bio || '' });
+      dispatch({ type: 'UPDATE_PHOTO', payload: profile.photo || null });
+    }
+
+    if (!profile && !loading) {
+      router.push('/signin');
     }
 
     return () => {
       isSubscribed = false;
     };
-  }, [userProfile]);
+  }, [profile, loading, router]);
 
   const onUsernameBlur = async () => {
     if (state.username) {
@@ -129,8 +133,8 @@ export const ProfilePreferences = () => {
         bio: state.bio,
       };
       if (profilePhoto) updates.photo = profilePhoto;
-      if (!userProfile) return;
-      await updateCurrentUserInfo(updates, userProfile.id);
+      if (!profile) return;
+      await updateCurrentUserInfo(updates, profile.id);
       toast({
         title: 'Successfully saved your profile',
         status: 'success',

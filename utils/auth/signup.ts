@@ -32,12 +32,13 @@ export const signup = async ({
     );
     if (userCredential.user) {
       sendEmailVerification(userCredential.user);
-      await setDoc(doc(db, 'users', username), {
-        name: name,
-        userId: userCredential.user.uid,
+      await setDoc(doc(db, 'users', userCredential.user.uid), {
+        name,
+        username,
+        email,
       });
     }
   } catch (e) {
-    throw new Error('Error signing up');
+    throw e;
   }
 };

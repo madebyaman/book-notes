@@ -161,6 +161,7 @@ export async function getStaticProps({
       note: JSON.parse(JSON.stringify(mappedNote)),
       profile: JSON.parse(JSON.stringify(profile)),
     },
+    revalidate: 60,
   };
 }
 

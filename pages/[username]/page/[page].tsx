@@ -120,6 +120,7 @@ export async function getStaticProps({
       profile: JSON.parse(JSON.stringify(profile)),
       pages: pages ? Number(pages) : null,
     },
+    revalidate: 60,
   };
 }
 

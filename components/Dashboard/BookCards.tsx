@@ -21,7 +21,7 @@ import { useStatus } from '@/utils';
 
 export const BookCards = () => {
   const router = useRouter();
-  const user = useUserProfileHook();
+  const { profile } = useUserProfileHook();
   const [cards, setCards] = useState<DashboardNote[]>([]);
   const { state, dispatch } = useStatus();
 
@@ -62,14 +62,14 @@ export const BookCards = () => {
           columnGap={12}
           rowGap="16"
         >
-          {cards.length > 0 && user ? (
+          {cards.length > 0 && profile ? (
             cards.map((card, id) => {
               return (
                 <BookCard
                   key={card.slug || id}
                   card={card}
                   isProfileCard={false}
-                  username={user?.username}
+                  username={profile.username}
                 />
               );
             })

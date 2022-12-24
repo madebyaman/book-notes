@@ -97,7 +97,7 @@ export const EditorSidebar = ({ docId }: { docId?: string }) => {
             </InputRightElement>
           </InputGroup>
           {slugError && (
-            <Text mt="2" fontSize={'sm'} d="block" color="red.500">
+            <Text mt="2" fontSize={'sm'} display="block" color="red.500">
               {slugError}
             </Text>
           )}

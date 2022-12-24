@@ -11,7 +11,6 @@ const PublishSwitch = () => {
   const dispatch = useAppDispatch();
 
   const handleChecked = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked);
     dispatch(updateIsPublished(e.target.checked));
   };
 

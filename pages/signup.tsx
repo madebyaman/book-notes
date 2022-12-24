@@ -67,7 +67,6 @@ export default function Signup() {
   };
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    console.log('submitting');
     e.preventDefault();
     if (!errorState.usernameValid || !errorState.passwordValid) {
       setErrorState({ ...errorState, showErrors: true });

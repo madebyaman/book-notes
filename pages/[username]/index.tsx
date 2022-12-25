@@ -1,4 +1,4 @@
-import { Button, Grid, Link, Stack } from '@chakra-ui/react';
+import { Button, Grid, Stack } from '@chakra-ui/react';
 
 import { DashboardNoteWithDate, UserProfile } from '@/@types';
 import { BookCard } from '@/components/BookCard';
@@ -10,6 +10,7 @@ import { getTotalPages, getUsernames, getUserNotes } from '@/utils/notes';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { ErrorBoundary } from 'react-error-boundary';
+import Link from 'next/link';
 
 interface UsernameNotesInterface {
   notes: DashboardNoteWithDate[];
@@ -58,6 +59,7 @@ const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
               as={Link}
               colorScheme="teal"
               variant="solid"
+              href={'#'}
             >
               1
             </Button>

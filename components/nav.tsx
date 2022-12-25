@@ -1,7 +1,6 @@
 import { Box, Flex, Link as ChakraLink, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useContext } from 'react';
-import { signout } from '@/utils/auth';
 
 import { AuthContext } from './Auth';
 import { Logo } from './Logo';
@@ -54,7 +53,7 @@ export const Nav = (props: NavTypes) => {
                   d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
                 />
               </svg>
-              Dashboard
+              <Text size="md">Dashboard</Text>
             </ChakraLink>
             <Link href="/profile" legacyBehavior passHref>
               <ChakraLink
@@ -91,7 +90,7 @@ export const Nav = (props: NavTypes) => {
                     d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
                   />
                 </svg>
-                Preferences
+                <Text size="md">Preferences</Text>
               </ChakraLink>
             </Link>
             {profile && !loading && (
@@ -126,15 +125,14 @@ export const Nav = (props: NavTypes) => {
                     d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
                   />
                 </svg>
-                Profile
+                <Text size="md">Profile</Text>
               </ChakraLink>
             )}
           </>
         )}
         <ChakraLink
           as={Link}
-          href={user ? '#' : '/signin'}
-          onClick={() => user && signout()}
+          href={user ? '/dashboard' : '/signin'}
           color="gray.600"
           display="flex"
           flexDir={'column'}
@@ -161,7 +159,7 @@ export const Nav = (props: NavTypes) => {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
               />
             </Box>
           ) : (
@@ -183,7 +181,7 @@ export const Nav = (props: NavTypes) => {
               />
             </svg>
           )}
-          <Text fontSize="md">{user ? 'Sign out' : 'Sign in'}</Text>
+          <Text fontSize="md">{user ? 'Dashboard' : 'Sign in'}</Text>
         </ChakraLink>
       </Flex>
     </Box>

@@ -53,14 +53,19 @@ const UsernameNotes = ({ notes, profile, pages }: UsernameNotesInterface) => {
             textAlign="center"
             align="center"
           >
-            <Button as={Link} colorScheme="teal" variant="solid">
+            <Button
+              disabled={true}
+              as={Link}
+              colorScheme="teal"
+              variant="solid"
+            >
               1
             </Button>
             {Array.from(Array(pages - 1).keys()).map((page) => (
               <Button
                 as={Link}
                 colorScheme="teal"
-                variant={'solid'}
+                variant={'outline'}
                 key={page}
                 href={`/${username}/page/${page + 2}`}
               >

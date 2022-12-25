@@ -1,18 +1,17 @@
 import {
   Badge,
-  Text,
+  Box,
   Button,
   Flex,
-  Heading,
   GridItem,
-  Box,
+  Heading,
   Tag,
 } from '@chakra-ui/react';
 import { Timestamp } from 'firebase/firestore';
-import moment from 'moment';
 import Link from 'next/link';
 
 import { DashboardNote, DashboardNoteWithDate } from '@/@types';
+import { format } from 'date-fns';
 import BookCover from './BookCover';
 
 type CardBadgeTypes = {
@@ -31,7 +30,7 @@ const CardBadge = (props: CardBadgeTypes) => {
         fontSize={'12px'}
         fontWeight="normal"
       >
-        {moment(props.lastUpdated).format('LL')}
+        {format(new Date(props.lastUpdated.toString()), 'MMMM d, Y')}
       </Tag>
     );
   } else {

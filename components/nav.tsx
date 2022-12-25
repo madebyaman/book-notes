@@ -11,7 +11,7 @@ type NavTypes = { showFullNav: true; route: string } | { showFullNav?: false };
 
 export const Nav = (props: NavTypes) => {
   const user = useContext(AuthContext);
-  const { profile } = useUserProfileHook();
+  const { profile, loading } = useUserProfileHook();
 
   return (
     <Box as="header" mt={4}>
@@ -75,7 +75,10 @@ export const Nav = (props: NavTypes) => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  style={{
+                    width: '22px',
+                    height: '22px',
+                  }}
                 >
                   <path
                     strokeLinecap="round"
@@ -91,7 +94,7 @@ export const Nav = (props: NavTypes) => {
                 Preferences
               </ChakraLink>
             </Link>
-            {profile && (
+            {profile && !loading && (
               <ChakraLink
                 as={Link}
                 href={`https://bummaries.app/${profile.username}`}
@@ -112,7 +115,10 @@ export const Nav = (props: NavTypes) => {
                   viewBox="0 0 24 24"
                   stroke-width="1.5"
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  style={{
+                    width: '22px',
+                    height: '22px',
+                  }}
                 >
                   <path
                     stroke-linecap="round"

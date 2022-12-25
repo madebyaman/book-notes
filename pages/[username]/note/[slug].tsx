@@ -9,7 +9,6 @@ import {
   Link as ChakraLink,
   Text,
 } from '@chakra-ui/react';
-import moment from 'moment';
 import Head from 'next/head';
 import Link from 'next/link';
 import { ImUser } from 'react-icons/im';
@@ -19,11 +18,12 @@ import { CenteredLayout } from '@/components/Layout';
 import { Nav } from '@/components/nav';
 import { getUserProfileFromUsername } from '@/utils/auth';
 import {
+  getNoteFromSlug,
   getSlugs,
   getUsernames,
   mapUserNote,
-  getNoteFromSlug,
 } from '@/utils/notes';
+import { format } from 'date-fns';
 
 const BookNote = ({
   note,
@@ -81,7 +81,7 @@ const BookNote = ({
             </Box>
             <Box>
               <Text color="gray.400" fontSize="sm" fontWeight={'semibold'}>
-                {moment(note.lastUpdated).format('LL')}
+                {format(note.lastUpdated, 'MMMM d, Y')}
               </Text>
               <Heading as="h1" fontSize="54px" mt="2" mb="4">
                 {note.title}

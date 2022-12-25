@@ -21,41 +21,61 @@ export const Nav = (props: NavTypes) => {
         </Link>
         <Spacer />
 
+        <ChakraLink
+          as={Link}
+          href={user ? '/dashboard' : '/signin'}
+          color="gray.600"
+          display="flex"
+          flexDir={'column'}
+          alignItems={'center'}
+          transition={'all 200ms ease-out'}
+          _hover={{
+            textDecoration: 'none',
+            color: 'primary.400',
+          }}
+        >
+          {user ? (
+            <Box
+              as={'svg'}
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              style={{
+                width: '22px',
+                height: '22px',
+              }}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+              />
+            </Box>
+          ) : (
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              style={{
+                width: '22px',
+                height: '22px',
+              }}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
+              />
+            </svg>
+          )}
+          <Text fontSize="md">{user ? 'Dashboard' : 'Sign in'}</Text>
+        </ChakraLink>
         {user && props.showFullNav && (
           <>
-            <ChakraLink
-              as={Link}
-              href="/dashboard"
-              fontSize={'md'}
-              color={props.route === '/dashboard' ? 'primary.400' : 'gray.600'}
-              display="flex"
-              flexDir={'column'}
-              alignItems={'center'}
-              transition={'all 200ms ease-out'}
-              _hover={{
-                textDecoration: 'none',
-                color: 'primary.400',
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                style={{
-                  width: '22px',
-                  height: '22px',
-                }}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
-                />
-              </svg>
-              <Text size="md">Dashboard</Text>
-            </ChakraLink>
             <Link href="/profile" legacyBehavior passHref>
               <ChakraLink
                 fontSize={'md'}
@@ -164,59 +184,6 @@ export const Nav = (props: NavTypes) => {
             </ChakraLink>
           </>
         )}
-        <ChakraLink
-          as={Link}
-          href={user ? '/dashboard' : '/signin'}
-          color="gray.600"
-          display="flex"
-          flexDir={'column'}
-          alignItems={'center'}
-          transition={'all 200ms ease-out'}
-          _hover={{
-            textDecoration: 'none',
-            color: 'primary.400',
-          }}
-        >
-          {user ? (
-            <Box
-              as={'svg'}
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              style={{
-                width: '22px',
-                height: '22px',
-              }}
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
-              />
-            </Box>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              style={{
-                width: '22px',
-                height: '22px',
-              }}
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"
-              />
-            </svg>
-          )}
-          <Text fontSize="md">{user ? 'Dashboard' : 'Sign in'}</Text>
-        </ChakraLink>
       </Flex>
     </Box>
   );

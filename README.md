@@ -1,16 +1,14 @@
 # README
 
-![Logo of Bummaries App](./public/Logo.svg)
-
 A note taking app for book readers.
 
 ![Screenshot of Bummaries App](./public/screenshot.png)
 
 ## Features
 
-- Take notes in WYSIWYG editor
-- See all your notes in public profile page
-- Format your notes easily with support for rich text editing
+- Take book notes in WYSIWYG editor
+- See all your book notes in public profile page
+- Edit your profile to
 - Save your notes in Firebase firestore
 
 ## About
@@ -26,7 +24,7 @@ Clone and install
 ```bash
 npx degit madebyaman/book-notes
 cd book-notes
-npm i
+yarn
 ```
 
 Copy `.env.example` file, and create your own `.env` file. You'll need to provide:

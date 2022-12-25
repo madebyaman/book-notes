@@ -23,7 +23,7 @@ import {
   getUsernames,
   mapUserNote,
 } from '@/utils/notes';
-import { format } from 'date-fns';
+import moment from 'moment';
 
 const BookNote = ({
   note,
@@ -81,7 +81,7 @@ const BookNote = ({
             </Box>
             <Box>
               <Text color="gray.400" fontSize="sm" fontWeight={'semibold'}>
-                {format(note.lastUpdated, 'MMMM d, Y')}
+                {moment(note.lastUpdated).format('LL')}
               </Text>
               <Heading as="h1" fontSize="54px" mt="2" mb="4">
                 {note.title}

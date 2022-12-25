@@ -1,12 +1,11 @@
-import { Text, Link } from '@chakra-ui/react';
+import { Text, Link, createStandaloneToast } from '@chakra-ui/react';
 import { sendEmailVerification } from '@firebase/auth';
 import { auth } from '@/firebase';
 import { MouseEvent, useState } from 'react';
 
 export const ResendVerificationEmail = ({ ...props }) => {
-  const [status, setStatus] = useState<
-    'INIT' | 'LOADING' | 'SUCCESS' | 'FAILED'
-  >('INIT');
+  const [status, setStatus] = useState<'INIT' | 'LOADING' | 'SUCCESS'>('INIT');
+  const { toast } = createStandaloneToast();
 
   async function sendEmail(e: MouseEvent) {
     e.preventDefault();
@@ -15,25 +14,22 @@ export const ResendVerificationEmail = ({ ...props }) => {
       try {
         await sendEmailVerification(auth.currentUser);
         setStatus('SUCCESS');
+        toast({
+          title: '🍺 Email sent',
+          description: 'Email has been sent. Check your inbox or spam folder.',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        });
       } catch (error) {
-        setStatus('FAILED');
+        toast({
+          title: '⚠️ Unable to send email',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        });
       }
     }
-  }
-
-  if (status === 'SUCCESS') {
-    return <Text>Email has been sent successfully</Text>;
-  }
-
-  if (status === 'FAILED') {
-    return (
-      <Text>
-        Failed to send email.{' '}
-        <Link onClick={sendEmail} {...props}>
-          Try again
-        </Link>
-      </Text>
-    );
   }
 
   return (

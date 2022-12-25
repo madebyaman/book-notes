@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import { AuthContext } from './Auth';
 import { Logo } from './Logo';
 import { useUserProfileHook } from '@/utils/profile';
+import { signout } from '@/utils/auth';
 
 type NavTypes = { showFullNav: true; route: string } | { showFullNav?: false };
 
@@ -128,6 +129,39 @@ export const Nav = (props: NavTypes) => {
                 <Text size="md">Profile</Text>
               </ChakraLink>
             )}
+            <ChakraLink
+              as={Link}
+              href="#"
+              onClick={() => signout()}
+              color="gray.600"
+              display={'flex'}
+              flexDir={'column'}
+              alignItems={'center'}
+              transition={'all 200ms ease-out'}
+              _hover={{
+                textDecoration: 'none',
+                color: 'primary.400',
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                style={{
+                  width: '22px',
+                  height: '22px',
+                }}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75"
+                />
+              </svg>
+              <Text size="md">Signout</Text>
+            </ChakraLink>
           </>
         )}
         <ChakraLink

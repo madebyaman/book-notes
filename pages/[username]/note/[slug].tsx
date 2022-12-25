@@ -123,7 +123,7 @@ const BookNote = ({
         height="5px"
         m="0 auto"
       />
-      <Container maxW="2xl" mt="16">
+      <Container maxW="2xl" my="16">
         <Box
           fontSize={'19px'}
           className={`typography`}

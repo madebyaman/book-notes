@@ -86,13 +86,9 @@ export const BookCard = ({
             {title}
           </Heading>
           {excerpt && (
-            <Box
-              as="div"
-              color="gray.700"
-              lineHeight={'1.7'}
-              fontSize={'18px'}
-              dangerouslySetInnerHTML={{ __html: excerpt }}
-            />
+            <Box as="div" color="gray.700" lineHeight={'1.7'} fontSize={'18px'}>
+              <div dangerouslySetInnerHTML={{ __html: excerpt }} />
+            </Box>
           )}
           <Box mt="4">
             {isProfileCard ? (

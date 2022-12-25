@@ -11,7 +11,7 @@ import { Timestamp } from 'firebase/firestore';
 import Link from 'next/link';
 
 import { DashboardNote, DashboardNoteWithDate } from '@/@types';
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 import BookCover from './BookCover';
 
 type CardBadgeTypes = {
@@ -30,7 +30,7 @@ const CardBadge = (props: CardBadgeTypes) => {
         fontSize={'12px'}
         fontWeight="normal"
       >
-        {format(new Date(props.lastUpdated.toString()), 'MMMM d, Y')}
+        {format(parseISO(props.lastUpdated.toString()), 'MMMM d, Y')}
       </Tag>
     );
   } else {

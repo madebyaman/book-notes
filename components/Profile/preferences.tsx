@@ -54,7 +54,7 @@ const initialState: {
 type ProfileActions =
   | { type: 'UPDATE_NAME'; payload: string }
   | { type: 'UPDATE_USERNAME'; payload: string }
-  | { type: 'UPDATE_USERNAME_STATE'; payload: boolean }
+  | { type: 'UPDAE_IS_USERNAME_VALID'; payload: boolean }
   | { type: 'UPDATE_BIO'; payload: string }
   | { type: 'UPDATE_PHOTO'; payload: string | null }
   | { type: 'UPDATE_LOADING_STATE'; payload: boolean };
@@ -67,7 +67,7 @@ function reducer(state: typeof initialState, action: ProfileActions) {
       return { ...state, loading: action.payload };
     case 'UPDATE_USERNAME':
       return { ...state, username: action.payload };
-    case 'UPDATE_USERNAME_STATE':
+    case 'UPDAE_IS_USERNAME_VALID':
       return { ...state, usernameValid: action.payload };
     case 'UPDATE_BIO':
       return { ...state, bio: action.payload };
@@ -108,9 +108,9 @@ export const ProfilePreferences = () => {
   const onUsernameBlur = async () => {
     if (state.username) {
       if (await checkUsernameExist(state.username, user?.id)) {
-        dispatch({ type: 'UPDATE_USERNAME_STATE', payload: false });
+        dispatch({ type: 'UPDAE_IS_USERNAME_VALID', payload: false });
       } else {
-        dispatch({ type: 'UPDATE_USERNAME_STATE', payload: true });
+        dispatch({ type: 'UPDAE_IS_USERNAME_VALID', payload: true });
       }
     }
   };
@@ -326,6 +326,7 @@ export const ProfilePreferences = () => {
               colorScheme="teal"
               type="submit"
               isLoading={state.loading}
+              disabled={!state.usernameValid}
               mt="6"
             >
               Save Changes

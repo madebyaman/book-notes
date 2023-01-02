@@ -34,7 +34,7 @@ export const checkUsernameExist = async (username: string, userId?: string) => {
       if (!currentUserSnap.exists()) return false;
       if (currentUserSnap.data().username === username) {
         return false;
-      }
+      } else return true;
     } else {
       return true;
     }

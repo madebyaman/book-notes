@@ -12,9 +12,14 @@ export const useUserProfileHook = () => {
     let isSubscribed = true;
 
     (async function () {
-      const userProfile = await getCurrentUserProfile();
-      isSubscribed &&
-        setUser({ profile: userProfile || undefined, loading: false });
+      try {
+        const userProfile = await getCurrentUserProfile();
+        if (isSubscribed) {
+          setUser({ profile: userProfile || undefined, loading: false });
+        }
+      } catch (error) {
+        setUser({ profile: undefined, loading: false });
+      }
     })();
 
     return () => {

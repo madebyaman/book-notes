@@ -15,10 +15,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const protectedRoutes = ['/dashboard', '/add', '/profile'];
     if (!isLoading && !user && protectedRoutes.includes(router.pathname)) {
-      const timerId = setTimeout(() => {
-        router.push('/signin');
-      }, 3_000);
-      return () => clearTimeout(timerId);
+      router.push('/signin');
     }
   }, [isLoading, user, router]);
 
